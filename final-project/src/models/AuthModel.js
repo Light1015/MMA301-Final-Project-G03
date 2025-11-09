@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { mockUsers, DEFAULT_PASSWORD } from '../database/db';
+import { mockUsers } from '../database/db';
 
 // Simple AuthModel - mock implementation but persists user using AsyncStorage
 // Methods: login(email, password), getCurrentUser(), logout()
@@ -10,14 +10,22 @@ const AuthModel = {
     // Simulate network latency
     return new Promise((resolve, reject) => {
       setTimeout(async () => {
-        if (password === DEFAULT_PASSWORD && mockUsers[email]) {
-          const user = mockUsers[email];
+        const user = mockUsers[email];
+        if (user && user.password === password) {
+          // Check if user is available
+          if (user.status === 'unavailable') {
+            reject({ message: 'Account is unavailable. Please contact administrator.' });
+            return;
+          }
           try {
-            await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+            // Remove password from user object before storing
+            const { password: _, ...userWithoutPassword } = user;
+            await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(userWithoutPassword));
           } catch (e) {
             // ignore storage error for now
           }
-          resolve(user);
+          const { password: _, ...userWithoutPassword } = user;
+          resolve(userWithoutPassword);
         } else {
           reject({ message: 'Invalid credentials' });
         }

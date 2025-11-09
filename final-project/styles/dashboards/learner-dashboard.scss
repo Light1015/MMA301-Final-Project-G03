@@ -1,0 +1,92 @@
+/* SCSS styling for Learner Dashboard (web only) */
+
+$primary: #4F46E5;
+$secondary: #10B981;
+$accent: #F59E0B;
+$danger: #EF4444;
+$bg: #F8FAFC;
+$card-bg: #FFFFFF;
+$text: #1F2937;
+$subtext: #6B7280;
+
+.learner-dashboard {
+  padding: 20px;
+
+  .section-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-align: center;
+    color: $primary;
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    gap: 8px;
+  }
+
+  .stat-card {
+    background: $card-bg;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: 800;
+      color: $primary;
+      margin-top: 8px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: $subtext;
+      margin-top: 4px;
+    }
+  }
+
+  .card-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .card {
+    background: $card-bg;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    text-align: center;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+      font-weight: 700;
+      margin-top: 8px;
+      margin-bottom: 6px;
+      color: $text;
+    }
+
+    .card-text {
+      color: $subtext;
+      font-size: 14px;
+    }
+  }
+}
+

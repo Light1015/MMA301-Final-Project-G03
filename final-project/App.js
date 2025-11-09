@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, SafeAreaView, ActivityIndicator } from 'react-native';
 import LoginView from './src/views/LoginView';
+import PublicHomeView from './src/views/PublicHomeView';
 import HomeView from './src/views/HomeView';
+import UserManagementView from './src/views/UserManagementView';
 import AuthModel from './src/models/AuthModel';
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [loadingInit, setLoadingInit] = useState(true);
+  const [currentView, setCurrentView] = useState('publicHome'); // 'publicHome', 'login', 'home', 'userManagement'
 
   useEffect(() => {
     let mounted = true;
     (async () => {
       const u = await AuthModel.getCurrentUser();
-      if (mounted) setUser(u);
+      if (mounted) {
+        setUser(u);
+        setCurrentView(u ? 'home' : 'publicHome');
+      }
       setLoadingInit(false);
     })();
     return () => (mounted = false);
@@ -22,6 +28,7 @@ export default function App() {
   const handleLogout = async () => {
     await AuthModel.logout();
     setUser(null);
+    setCurrentView('publicHome');
   };
 
   if (loadingInit) {
@@ -37,10 +44,32 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       {!user ? (
-        <LoginView onLogin={(u) => setUser(u)} />
+        currentView === 'publicHome' ? (
+          <PublicHomeView onNavigateToLogin={() => setCurrentView('login')} />
+        ) : (
+          <LoginView
+            onLogin={(u) => {
+              setUser(u);
+              setCurrentView('home');
+            }}
+            onBack={() => setCurrentView('publicHome')}
+          />
+        )
       ) : (
         <View style={{ flex: 1 }}>
-          <HomeView user={user} onLogout={handleLogout} />
+          {currentView === 'home' && (
+            <HomeView
+              user={user}
+              onLogout={handleLogout}
+              onNavigateToUserManagement={() => setCurrentView('userManagement')}
+            />
+          )}
+          {currentView === 'userManagement' && (
+            <UserManagementView
+              user={user}
+              onBack={() => setCurrentView('home')}
+            />
+          )}
         </View>
       )}
       <StatusBar style="auto" />

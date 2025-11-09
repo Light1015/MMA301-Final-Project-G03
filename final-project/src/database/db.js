@@ -1,34 +1,20 @@
 // Database mock data for Eduling Go app
 
 export const mockUsers = {
-  'guest@example.com': {
-    id: 1,
-    name: 'Guest User',
-    email: 'guest@example.com',
-    role: 'Guest',
-    avatar: 'https://via.placeholder.com/100x100.png?text=G',
-    joinedDate: '2023-01-01',
-  },
-  'interviewer@example.com': {
-    id: 2,
-    name: 'Interviewer User',
-    email: 'interviewer@example.com',
-    role: 'Interviewer',
-    avatar: 'https://via.placeholder.com/100x100.png?text=I',
-    joinedDate: '2023-02-01',
-  },
   'learner@example.com': {
-    id: 3,
+    id: 1,
     name: 'Learner User',
     email: 'learner@example.com',
-    role: 'Homepage Learner',
+    role: 'Learner',
     avatar: 'https://via.placeholder.com/100x100.png?text=L',
     joinedDate: '2023-03-01',
     enrolledCourses: 5,
     completedCourses: 2,
+    status: 'available',
+    password: 'learner123', // Password riêng cho learner
   },
   'teacher@example.com': {
-    id: 4,
+    id: 2,
     name: 'Teacher User',
     email: 'teacher@example.com',
     role: 'Teacher',
@@ -36,14 +22,18 @@ export const mockUsers = {
     joinedDate: '2023-04-01',
     coursesTaught: 3,
     students: 150,
+    status: 'available',
+    password: 'teacher123', // Password riêng cho teacher
   },
   'admin@example.com': {
-    id: 5,
+    id: 3,
     name: 'Admin User',
     email: 'admin@example.com',
     role: 'Admin',
     avatar: 'https://via.placeholder.com/100x100.png?text=A',
     joinedDate: '2023-05-01',
+    status: 'available',
+    password: 'admin123', // Password riêng cho admin
   },
 };
 
@@ -113,6 +103,3 @@ export const mockAssignments = [
     status: 'completed',
   },
 ];
-
-// Default password for all mock users
-export const DEFAULT_PASSWORD = 'password123';

@@ -12,7 +12,7 @@ if (Platform.OS === 'web') {
   }
 }
 
-export default function LoginView({ onLogin }) {
+export default function LoginView({ onLogin, onBack }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -38,6 +38,11 @@ export default function LoginView({ onLogin }) {
   return (
     <View style={styles.container}>
       <View style={styles.form}>
+        {onBack && (
+          <TouchableOpacity onPress={onBack} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#4F46E5" />
+          </TouchableOpacity>
+        )}
         <Ionicons name="school" size={40} color="#4F46E5" />
         <Text style={styles.title}>Login</Text>
         <Text style={styles.subtitle}>Welcome back to Eduling Go</Text>
@@ -68,7 +73,10 @@ export default function LoginView({ onLogin }) {
           </TouchableOpacity>
         )}
         <Text style={styles.hint}>
-          Test accounts: guest@example.com, interviewer@example.com, learner@example.com, teacher@example.com, admin@example.com (password: password123)
+          Test accounts:{'\n'}
+          learner@example.com (password: learner123){'\n'}
+          teacher@example.com (password: teacher123){'\n'}
+          admin@example.com (password: admin123)
         </Text>
       </View>
     </View>
@@ -94,6 +102,14 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 400,
     alignItems: 'center',
+    position: 'relative',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    padding: 8,
+    zIndex: 1,
   },
   title: {
     fontSize: 32,
