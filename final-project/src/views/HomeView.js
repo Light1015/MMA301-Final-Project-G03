@@ -110,7 +110,7 @@ const BottomNavbar = ({
         name: "Users",
         icon: "people-outline",
         iconActive: "people",
-        action: onNavigateToUserManagement,
+        action: onNavigateToUserManagement || undefined,
       },
       {
         id: "reports",
@@ -179,7 +179,7 @@ const DashboardContent = ({
     case "Admin":
       return (
         <AdminDashboard
-          onNavigateToUserManagement={onNavigateToUserManagement}
+          onNavigateToUserManagement={onNavigateToUserManagement || undefined}
         />
       );
     case "Teacher":
@@ -249,6 +249,9 @@ export default function HomeView({
     );
   }
 
+  // Only Admin can access User Management
+  const canAccessUserManagement = user.role === 'Admin';
+
   return (
     <View style={styles.wrapper}>
       <TopNavbar onLogout={onLogout} role={user.role} />
@@ -261,7 +264,7 @@ export default function HomeView({
         <DashboardContent
           role={user.role}
           user={user}
-          onNavigateToUserManagement={onNavigateToUserManagement}
+          onNavigateToUserManagement={canAccessUserManagement ? onNavigateToUserManagement : null}
           onNavigateToCourseManagement={handleNavigateToCourseManagement}
           onNavigateToCourseCatalog={handleNavigateToCourseCatalog}
         />
@@ -269,7 +272,7 @@ export default function HomeView({
       </ScrollView>
       <BottomNavbar
         role={user.role}
-        onNavigateToUserManagement={onNavigateToUserManagement}
+        onNavigateToUserManagement={canAccessUserManagement ? onNavigateToUserManagement : null}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
