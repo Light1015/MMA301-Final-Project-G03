@@ -53,7 +53,7 @@ const BottomNavbar = ({ role, onNavigateToUserManagement, activeTab, setActiveTa
     ],
     Admin: [
       { id: 'home', name: 'Home', icon: 'home-outline', iconActive: 'home' },
-      { id: 'users', name: 'Users', icon: 'people-outline', iconActive: 'people', action: onNavigateToUserManagement },
+      { id: 'users', name: 'Users', icon: 'people-outline', iconActive: 'people', action: onNavigateToUserManagement || undefined },
       { id: 'reports', name: 'Reports', icon: 'stats-chart-outline', iconActive: 'stats-chart' },
       { id: 'settings', name: 'Settings', icon: 'settings-outline', iconActive: 'settings' },
     ],
@@ -95,7 +95,7 @@ const BottomNavbar = ({ role, onNavigateToUserManagement, activeTab, setActiveTa
 const DashboardContent = ({ role, onNavigateToUserManagement }) => {
   switch (role) {
     case 'Admin':
-      return <AdminDashboard onNavigateToUserManagement={onNavigateToUserManagement} />;
+      return <AdminDashboard onNavigateToUserManagement={onNavigateToUserManagement || undefined} />;
     case 'Teacher':
       return <TeacherDashboard />;
     case 'Learner':
@@ -116,6 +116,9 @@ const Footer = () => (
 export default function HomeView({ user, onLogout, onNavigateToUserManagement }) {
   const [activeTab, setActiveTab] = useState('home');
 
+  // Only Admin can access User Management
+  const canAccessUserManagement = user.role === 'Admin';
+
   return (
     <View style={styles.wrapper}>
       <TopNavbar onLogout={onLogout} role={user.role} />
@@ -127,13 +130,13 @@ export default function HomeView({ user, onLogout, onNavigateToUserManagement })
         <Header user={user} />
         <DashboardContent
           role={user.role}
-          onNavigateToUserManagement={onNavigateToUserManagement}
+          onNavigateToUserManagement={canAccessUserManagement ? onNavigateToUserManagement : null}
         />
         <Footer />
       </ScrollView>
       <BottomNavbar
         role={user.role}
-        onNavigateToUserManagement={onNavigateToUserManagement}
+        onNavigateToUserManagement={canAccessUserManagement ? onNavigateToUserManagement : null}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
