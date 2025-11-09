@@ -16,11 +16,19 @@ export default function AdminDashboard({ onNavigateToUserManagement }) {
     <View style={styles.dashboard}>
       <Text style={styles.sectionTitle}>Admin Dashboard</Text>
       <View style={styles.cardRow}>
-        <TouchableOpacity style={styles.card} onPress={onNavigateToUserManagement}>
-          <Ionicons name="people" size={40} color="#4F46E5" />
-          <Text style={styles.cardTitle}>User Management</Text>
-          <Text style={styles.cardText}>Manage users and roles.</Text>
-        </TouchableOpacity>
+        {onNavigateToUserManagement ? (
+          <TouchableOpacity style={styles.card} onPress={onNavigateToUserManagement}>
+            <Ionicons name="people" size={40} color="#4F46E5" />
+            <Text style={styles.cardTitle}>User Management</Text>
+            <Text style={styles.cardText}>Manage users and roles.</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.card}>
+            <Ionicons name="people" size={40} color="#4F46E5" />
+            <Text style={styles.cardTitle}>User Management</Text>
+            <Text style={styles.cardText}>Manage users and roles.</Text>
+          </View>
+        )}
         <View style={styles.card}>
           <Ionicons name="stats-chart" size={40} color="#10B981" />
           <Text style={styles.cardTitle}>Reports</Text>

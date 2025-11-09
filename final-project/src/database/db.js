@@ -1,4 +1,20 @@
 // Database mock data for Eduling Go app
+//
+// ============================================
+// ACCOUNT LOGIN INFORMATION:
+// ============================================
+// Learner Account:
+//   Email: learner@example.com
+//   Password: learner123
+//
+// Teacher Account:
+//   Email: teacher@example.com
+//   Password: teacher123
+//
+// Admin Account:
+//   Email: admin@example.com
+//   Password: admin123
+// ============================================
 
 export const mockUsers = {
   'learner@example.com': {
@@ -103,3 +119,11 @@ export const mockAssignments = [
     status: 'completed',
   },
 ];
+
+// Helper function to get next available ID
+export const getNextUserId = () => {
+  const users = Object.values(mockUsers);
+  if (users.length === 0) return 1;
+  const maxId = Math.max(...users.map((u) => u.id));
+  return maxId + 1;
+};
