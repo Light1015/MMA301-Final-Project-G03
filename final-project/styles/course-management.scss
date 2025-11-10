@@ -1,0 +1,373 @@
+/* SCSS styling for Course Management View (web only) */
+
+$primary: #4F46E5;
+$secondary: #10B981;
+$accent: #F59E0B;
+$danger: #EF4444;
+$bg: #F8FAFC;
+$card-bg: #FFFFFF;
+$text: #1F2937;
+$subtext: #6B7280;
+$border: #E5E7EB;
+
+.course-management {
+  flex: 1;
+  background-color: $bg;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: $card-bg;
+    border-bottom: 1px solid $border;
+
+    .back-button {
+      padding: 8px;
+      cursor: pointer;
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    .header-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: $text;
+    }
+
+    .add-button {
+      padding: 4px;
+      cursor: pointer;
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .search-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: $card-bg;
+    margin: 16px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid $border;
+
+    .search-icon {
+      margin-right: 8px;
+    }
+
+    .search-input {
+      flex: 1;
+      height: 40px;
+      font-size: 16px;
+      border: none;
+      outline: none;
+    }
+  }
+
+  .course-list {
+    flex: 1;
+    overflow-y: auto;
+
+    .course-list-content {
+      padding: 16px;
+      padding-top: 0;
+    }
+  }
+
+  .course-card {
+    background-color: $card-bg;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid $border;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .course-header {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 12px;
+
+      .course-icon {
+        width: 50px;
+        height: 50px;
+        background-color: #EEF2FF;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+      }
+
+      .course-info {
+        flex: 1;
+
+        .course-title {
+          font-size: 18px;
+          font-weight: 700;
+          color: $text;
+          margin-bottom: 4px;
+        }
+
+        .course-description {
+          font-size: 14px;
+          color: $subtext;
+          line-height: 20px;
+        }
+      }
+    }
+
+    .course-details {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      padding: 12px 0;
+      border-top: 1px solid $border;
+      border-bottom: 1px solid $border;
+      margin-bottom: 12px;
+
+      .detail-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .detail-text {
+          margin-left: 4px;
+          font-size: 14px;
+          color: $subtext;
+        }
+      }
+    }
+
+    .course-actions {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .action-button {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        border-radius: 8px;
+        margin: 0 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &.edit-button {
+          background-color: $primary;
+
+          &:hover {
+            background-color: darken($primary, 10%);
+          }
+        }
+
+        &.delete-button {
+          background-color: $danger;
+
+          &:hover {
+            background-color: darken($danger, 10%);
+          }
+        }
+
+        .action-button-text {
+          color: white;
+          font-weight: 600;
+          margin-left: 4px;
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 0;
+
+    .empty-state-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: $subtext;
+      margin-top: 16px;
+    }
+
+    .empty-state-subtext {
+      font-size: 14px;
+      color: #9CA3AF;
+      margin-top: 4px;
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+    .modal-content {
+      background-color: $card-bg;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow: hidden;
+
+      .modal-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        border-bottom: 1px solid $border;
+
+        .modal-title {
+          font-size: 20px;
+          font-weight: 700;
+          color: $text;
+        }
+      }
+
+      .form-container {
+        padding: 16px;
+        overflow-y: auto;
+        max-height: calc(90vh - 80px);
+
+        .form-group {
+          margin-bottom: 16px;
+
+          .label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+          }
+
+          .input {
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            background-color: $card-bg;
+            width: 100%;
+
+            &:focus {
+              outline: none;
+              border-color: $primary;
+            }
+
+            &.text-area {
+              height: 100px;
+              resize: vertical;
+            }
+          }
+
+          .level-buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            .level-button {
+              flex: 1;
+              padding: 12px;
+              border-radius: 8px;
+              border: 1px solid #D1D5DB;
+              margin: 0 4px;
+              text-align: center;
+              cursor: pointer;
+              transition: all 0.2s;
+
+              &:hover {
+                border-color: $primary;
+              }
+
+              &.level-button-active {
+                background-color: $primary;
+                border-color: $primary;
+
+                .level-button-text {
+                  color: white;
+                }
+              }
+
+              .level-button-text {
+                font-size: 14px;
+                font-weight: 600;
+                color: $subtext;
+              }
+            }
+          }
+        }
+
+        .modal-actions {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          margin-top: 8px;
+          margin-bottom: 16px;
+
+          .modal-button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 0 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &.cancel-button {
+              background-color: #F3F4F6;
+
+              &:hover {
+                background-color: darken(#F3F4F6, 5%);
+              }
+
+              .cancel-button-text {
+                font-size: 16px;
+                font-weight: 600;
+                color: $subtext;
+              }
+            }
+
+            &.submit-button {
+              background-color: $secondary;
+
+              &:hover {
+                background-color: darken($secondary, 10%);
+              }
+
+              .submit-button-text {
+                font-size: 16px;
+                font-weight: 600;
+                color: white;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
