@@ -8,13 +8,17 @@ import HomeView from "./src/views/HomeView";
 import UserManagementView from "./src/views/UserManagementView";
 import CourseManagementView from "./src/views/courses/CourseManagementView";
 import CourseCatalogView from "./src/views/courses/CourseCatalogView";
+import MyCoursesView from "./src/views/courses/MyCoursesView";
 import QuizzesListView from "./src/views/quizzes/QuizzesListView";
+import ProfileView from "./src/views/profiles/ProfileView";
+import MyFeedbacksView from "./src/views/feedbacks/MyFeedbacksView";
 import AuthModel from "./src/models/AuthModel";
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [loadingInit, setLoadingInit] = useState(true);
-  const [currentView, setCurrentView] = useState("publicHome"); // 'publicHome', 'login', 'home', 'userManagement', 'courseManagement', 'courseCatalog'
+  const [currentView, setCurrentView] = useState("publicHome"); // 'publicHome', 'login', 'home', 'userManagement', 'courseManagement', 'courseCatalog', 'myCourses', 'profile', 'myFeedbacks'
+  const [selectedCourseId, setSelectedCourseId] = useState(null); // For navigating to specific course feedback
 
   useEffect(() => {
     let mounted = true;
@@ -33,6 +37,10 @@ export default function App() {
     await AuthModel.logout();
     setUser(null);
     setCurrentView("publicHome");
+  };
+
+  const handleProfileUpdate = (updatedUser) => {
+    setUser(updatedUser);
   };
 
   if (loadingInit) {
@@ -72,7 +80,12 @@ export default function App() {
                 setCurrentView("courseManagement")
               }
               onNavigateToCourseCatalog={() => setCurrentView("courseCatalog")}
-              onNavigateToQuizManagement={() => setCurrentView("quizManagement")}
+              onNavigateToQuizManagement={() =>
+                setCurrentView("quizManagement")
+              }
+              onNavigateToMyCourses={() => setCurrentView("myCourses")}
+              onNavigateToProfile={() => setCurrentView("profile")}
+              onNavigateToMyFeedbacks={() => setCurrentView("myFeedbacks")}
             />
           )}
           {currentView === "userManagement" && (
@@ -88,12 +101,41 @@ export default function App() {
             />
           )}
           {currentView === "quizManagement" && (
-            <QuizzesListView user={user} onBack={() => setCurrentView("home")} />
+            <QuizzesListView
+              user={user}
+              onBack={() => setCurrentView("home")}
+            />
           )}
           {currentView === "courseCatalog" && (
             <CourseCatalogView
               user={user}
               onBack={() => setCurrentView("home")}
+            />
+          )}
+          {currentView === "myCourses" && (
+            <MyCoursesView
+              user={user}
+              onBack={() => setCurrentView("home")}
+              selectedCourseId={selectedCourseId}
+              onClearSelectedCourse={() => setSelectedCourseId(null)}
+            />
+          )}
+          {currentView === "profile" && (
+            <ProfileView
+              user={user}
+              onBack={() => setCurrentView("home")}
+              onProfileUpdate={handleProfileUpdate}
+            />
+          )}
+          {currentView === "myFeedbacks" && (
+            <MyFeedbacksView
+              user={user}
+              onBack={() => setCurrentView("home")}
+              onNavigateToCourse={(courseId) => {
+                // Navigate to my courses and open feedback for that course
+                setSelectedCourseId(courseId);
+                setCurrentView("myCourses");
+              }}
             />
           )}
         </View>

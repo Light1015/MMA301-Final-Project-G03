@@ -55,6 +55,7 @@ const TopNavbar = ({ onLogout, role }) => {
 const BottomNavbar = ({
   role,
   onNavigateToUserManagement,
+  onNavigateToMyCourses,
   activeTab,
   setActiveTab,
 }) => {
@@ -66,18 +67,7 @@ const BottomNavbar = ({
         name: "Courses",
         icon: "school-outline",
         iconActive: "school",
-      },
-      {
-        id: "progress",
-        name: "Progress",
-        icon: "bar-chart-outline",
-        iconActive: "bar-chart",
-      },
-      {
-        id: "assignments",
-        name: "Assignments",
-        icon: "clipboard-outline",
-        iconActive: "clipboard",
+        action: onNavigateToMyCourses,
       },
     ],
     Teacher: [
@@ -173,6 +163,9 @@ const DashboardContent = ({
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
   onNavigateToQuizManagement,
+  onNavigateToMyCourses,
+  onNavigateToProfile,
+  onNavigateToMyFeedbacks,
 }) => {
   switch (role) {
     case "Admin":
@@ -191,9 +184,16 @@ const DashboardContent = ({
         />
       );
     case "Learner":
-      return <LearnerDashboard />;
+      return (
+        <LearnerDashboard
+          user={user}
+          onNavigateToMyCourses={onNavigateToMyCourses}
+          onNavigateToProfile={onNavigateToProfile}
+          onNavigateToMyFeedbacks={onNavigateToMyFeedbacks}
+        />
+      );
     default:
-      return <LearnerDashboard />;
+      return <LearnerDashboard user={user} />;
   }
 };
 
@@ -214,6 +214,9 @@ export default function HomeView({
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
   onNavigateToQuizManagement,
+  onNavigateToMyCourses,
+  onNavigateToProfile,
+  onNavigateToMyFeedbacks,
 }) {
   const [activeTab, setActiveTab] = useState("home");
 
@@ -229,12 +232,16 @@ export default function HomeView({
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
           onNavigateToQuizManagement={onNavigateToQuizManagement}
+          onNavigateToMyCourses={onNavigateToMyCourses}
+          onNavigateToProfile={onNavigateToProfile}
+          onNavigateToMyFeedbacks={onNavigateToMyFeedbacks}
         />
         <Footer />
       </View>
       <BottomNavbar
         role={user.role}
         onNavigateToUserManagement={onNavigateToUserManagement}
+        onNavigateToMyCourses={onNavigateToMyCourses}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
