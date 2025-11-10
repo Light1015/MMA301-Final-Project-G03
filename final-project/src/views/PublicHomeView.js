@@ -11,7 +11,7 @@ if (Platform.OS === 'web') {
   }
 }
 
-export default function PublicHomeView({ onNavigateToLogin }) {
+export default function PublicHomeView({ onNavigateToLogin, onNavigateToRegister }) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -37,9 +37,17 @@ export default function PublicHomeView({ onNavigateToLogin }) {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.loginButton} onPress={onNavigateToLogin}>
-          <Text style={styles.loginButtonText}>Login</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.registerButton} onPress={onNavigateToRegister}>
+            <Ionicons name="person-add-outline" size={20} color="#FFF" style={styles.buttonIcon} />
+            <Text style={styles.registerButtonText}>Register Account</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.loginButton} onPress={onNavigateToLogin}>
+            <Ionicons name="log-in-outline" size={20} color="#4F46E5" style={styles.buttonIcon} />
+            <Text style={styles.loginButtonText}>Login</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.footer}>
@@ -124,20 +132,49 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     textAlign: 'center',
   },
-  loginButton: {
+  buttonContainer: {
     width: '100%',
     maxWidth: 400,
-    padding: 16,
-    backgroundColor: '#4F46E5',
-    borderRadius: 12,
-    alignItems: 'center',
+    gap: 12,
     marginTop: 20,
     marginBottom: 20,
   },
-  loginButtonText: {
+  registerButton: {
+    width: '100%',
+    padding: 16,
+    backgroundColor: '#10B981',
+    borderRadius: 12,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    shadowColor: '#10B981',
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  registerButtonText: {
     color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700',
+  },
+  loginButton: {
+    width: '100%',
+    padding: 16,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#4F46E5',
+  },
+  loginButtonText: {
+    color: '#4F46E5',
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  buttonIcon: {
+    marginRight: 8,
   },
   footer: {
     marginTop: 32,

@@ -55,6 +55,8 @@ const TopNavbar = ({ onLogout, role }) => {
 const BottomNavbar = ({
   role,
   onNavigateToUserManagement,
+  onNavigateToMyCourses,
+  onNavigateToAssignmentManagement,
   activeTab,
   setActiveTab,
 }) => {
@@ -66,18 +68,7 @@ const BottomNavbar = ({
         name: "Courses",
         icon: "school-outline",
         iconActive: "school",
-      },
-      {
-        id: "progress",
-        name: "Progress",
-        icon: "bar-chart-outline",
-        iconActive: "bar-chart",
-      },
-      {
-        id: "assignments",
-        name: "Assignments",
-        icon: "clipboard-outline",
-        iconActive: "clipboard",
+        action: onNavigateToMyCourses,
       },
     ],
     Teacher: [
@@ -93,6 +84,7 @@ const BottomNavbar = ({
         name: "Assignments",
         icon: "document-outline",
         iconActive: "document",
+        action: onNavigateToAssignmentManagement,
       },
       {
         id: "students",
@@ -168,10 +160,16 @@ const BottomNavbar = ({
 
 const DashboardContent = ({
   role,
+  user,
   onNavigateToUserManagement,
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
   onNavigateToCertificateList,
+  onNavigateToQuizManagement,
+  onNavigateToMyCourses,
+  onNavigateToProfile,
+  onNavigateToMyFeedbacks,
+  onNavigateToAssignmentManagement,
 }) => {
   switch (role) {
     case "Admin":
@@ -184,14 +182,24 @@ const DashboardContent = ({
     case "Teacher":
       return (
         <TeacherDashboard
+          user={user}
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
+          onNavigateToQuizManagement={onNavigateToQuizManagement}
+          onNavigateToAssignmentManagement={onNavigateToAssignmentManagement}
         />
       );
     case "Learner":
-      return <LearnerDashboard />;
+      return (
+        <LearnerDashboard
+          user={user}
+          onNavigateToMyCourses={onNavigateToMyCourses}
+          onNavigateToProfile={onNavigateToProfile}
+          onNavigateToMyFeedbacks={onNavigateToMyFeedbacks}
+        />
+      );
     default:
-      return <LearnerDashboard />;
+      return <LearnerDashboard user={user} />;
   }
 };
 
@@ -212,6 +220,11 @@ export default function HomeView({
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
   onNavigateToCertificateList,
+  onNavigateToQuizManagement,
+  onNavigateToMyCourses,
+  onNavigateToProfile,
+  onNavigateToMyFeedbacks,
+  onNavigateToAssignmentManagement,
 }) {
   const [activeTab, setActiveTab] = useState("home");
 
@@ -222,16 +235,24 @@ export default function HomeView({
         <Header user={user} />
         <DashboardContent
           role={user.role}
+          user={user}
           onNavigateToUserManagement={onNavigateToUserManagement}
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
           onNavigateToCertificateList={onNavigateToCertificateList}
+          onNavigateToQuizManagement={onNavigateToQuizManagement}
+          onNavigateToMyCourses={onNavigateToMyCourses}
+          onNavigateToProfile={onNavigateToProfile}
+          onNavigateToMyFeedbacks={onNavigateToMyFeedbacks}
+          onNavigateToAssignmentManagement={onNavigateToAssignmentManagement}
         />
         <Footer />
       </View>
       <BottomNavbar
         role={user.role}
         onNavigateToUserManagement={onNavigateToUserManagement}
+        onNavigateToMyCourses={onNavigateToMyCourses}
+        onNavigateToAssignmentManagement={onNavigateToAssignmentManagement}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />

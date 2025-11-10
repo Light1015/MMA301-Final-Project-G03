@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import CourseController from "../../controllers/CourseController";
+import AssignmentController from "../../controllers/AssignmentController";
 
 // Import web SCSS only on web builds
 if (Platform.OS === "web") {
@@ -18,26 +20,71 @@ if (Platform.OS === "web") {
 }
 
 export default function TeacherDashboard({
-  onNavigateToCourseManagement,
+  user,
   onNavigateToCourseCatalog,
+  onNavigateToCourseManagement,
+  onNavigateToQuizManagement,
+  onNavigateToAssignmentManagement,
 }) {
+  const [stats, setStats] = useState({
+    totalCourses: 0,
+    totalStudents: 0,
+    totalAssignments: 0,
+  });
+
+  useEffect(() => {
+    if (user && user.name) {
+      loadStats();
+    }
+  }, [user]);
+
+  const loadStats = () => {
+    // Get teacher's courses
+    const coursesResult = CourseController.getTeacherCourses(user.name);
+    let totalCourses = 0;
+    let totalStudents = 0;
+
+    if (coursesResult.success) {
+      const courses = coursesResult.data;
+      totalCourses = courses.length;
+      totalStudents = courses.reduce(
+        (sum, course) => sum + (course.students || 0),
+        0
+      );
+    }
+
+    // Get teacher's assignments
+    const assignmentsResult = AssignmentController.getTeacherAssignments(user.name);
+    let totalAssignments = 0;
+
+    if (assignmentsResult.success) {
+      totalAssignments = assignmentsResult.data.length;
+    }
+
+    setStats({
+      totalCourses,
+      totalStudents,
+      totalAssignments,
+    });
+  };
+
   return (
     <View style={styles.dashboard}>
       <Text style={styles.sectionTitle}>Teacher Dashboard</Text>
       <View style={styles.statsRow}>
         <View style={styles.statCard}>
           <Ionicons name="book" size={30} color="#4F46E5" />
-          <Text style={styles.statNumber}>3</Text>
+          <Text style={styles.statNumber}>{stats.totalCourses}</Text>
           <Text style={styles.statLabel}>Courses</Text>
         </View>
         <View style={styles.statCard}>
           <Ionicons name="people" size={30} color="#10B981" />
-          <Text style={styles.statNumber}>150</Text>
+          <Text style={styles.statNumber}>{stats.totalStudents}</Text>
           <Text style={styles.statLabel}>Students</Text>
         </View>
         <View style={styles.statCard}>
-          <Ionicons name="document" size={30} color="#F59E0B" />
-          <Text style={styles.statNumber}>12</Text>
+          <Ionicons name="document-text" size={30} color="#F59E0B" />
+          <Text style={styles.statNumber}>{stats.totalAssignments}</Text>
           <Text style={styles.statLabel}>Assignments</Text>
         </View>
       </View>
@@ -62,16 +109,24 @@ export default function TeacherDashboard({
         </TouchableOpacity>
       </View>
       <View style={styles.cardRow}>
-        <View style={styles.card}>
-          <Ionicons name="analytics" size={40} color="#F59E0B" />
-          <Text style={styles.cardTitle}>Student Progress</Text>
-          <Text style={styles.cardText}>Monitor performance.</Text>
-        </View>
-        <View style={styles.card}>
-          <Ionicons name="megaphone" size={40} color="#EF4444" />
-          <Text style={styles.cardTitle}>Announcements</Text>
-          <Text style={styles.cardText}>Post updates.</Text>
-        </View>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={onNavigateToAssignmentManagement}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="document-text" size={40} color="#F59E0B" />
+          <Text style={styles.cardTitle}>Assignment Management</Text>
+          <Text style={styles.cardText}>Create and manage assignments.</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={onNavigateToQuizManagement}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="help-circle" size={40} color="#EF4444" />
+          <Text style={styles.cardTitle}>Quiz Management</Text>
+          <Text style={styles.cardText}>Create and manage quizzes.</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

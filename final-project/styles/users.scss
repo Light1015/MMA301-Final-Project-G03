@@ -1,0 +1,390 @@
+/* SCSS styles for User Management (web only) */
+
+$primary: #4F46E5;
+$secondary: #10B981;
+$danger: #EF4444;
+$bg: #F8FAFC;
+$card-bg: #FFFFFF;
+$text: #1F2937;
+$subtext: #6B7280;
+$border: #E5E7EB;
+
+.user-management-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: $bg;
+}
+
+.user-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: $card-bg;
+  border-bottom: 1px solid $border;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.user-header-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: $text;
+}
+
+.user-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.users-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.users-count {
+  font-size: 14px;
+  color: $subtext;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.user-card {
+  background: $card-bg;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid $border;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background: $primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: $text;
+  margin-bottom: 4px;
+}
+
+.user-email {
+  font-size: 14px;
+  color: $subtext;
+  margin-bottom: 8px;
+}
+
+.user-meta {
+  display: flex;
+  gap: 8px;
+}
+
+.status-badge,
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  gap: 4px;
+}
+
+.status-badge {
+  &.available {
+    background: rgba(16, 185, 129, 0.1);
+    color: $secondary;
+  }
+  &.unavailable {
+    background: rgba(239, 68, 68, 0.1);
+    color: $danger;
+  }
+}
+
+.role-badge {
+  background: $border;
+  color: $primary;
+}
+
+.user-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-button {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #F3F4F6;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &.edit-button {
+    background: #EEF2FF;
+    color: $primary;
+    &:hover {
+      background: darken(#EEF2FF, 5%);
+    }
+  }
+
+  &.delete-button {
+    background: #FEE2E2;
+    color: $danger;
+    &:hover {
+      background: darken(#FEE2E2, 5%);
+    }
+  }
+
+  &.enable-button {
+    background: #D1FAE5;
+    color: $secondary;
+    &:hover {
+      background: darken(#D1FAE5, 5%);
+    }
+  }
+
+  &.add-button {
+    background: $primary;
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &:hover {
+      background: darken($primary, 10%);
+    }
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: $card-bg;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid $border;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: $text;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: $subtext;
+  margin-bottom: 8px;
+  margin-top: 16px;
+  display: block;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.modal-value {
+  font-size: 16px;
+  color: $text;
+  margin-bottom: 8px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid $border;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  }
+}
+
+.role-picker,
+.status-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.role-option,
+.status-option {
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #F3F4F6;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: $subtext;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #E5E7EB;
+  }
+
+  &.active {
+    background: #EEF2FF;
+    border-color: $primary;
+    color: $primary;
+  }
+}
+
+.status-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &.active {
+    &.available {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: $secondary;
+      color: $secondary;
+    }
+    &.unavailable {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: $danger;
+      color: $danger;
+    }
+  }
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px;
+  border-top: 1px solid $border;
+}
+
+.modal-button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.cancel-button {
+    background: #F3F4F6;
+    color: $subtext;
+
+    &:hover {
+      background: darken(#F3F4F6, 5%);
+    }
+  }
+
+  &.save-button,
+  &.submit-button {
+    background: $primary;
+    color: white;
+
+    &:hover {
+      background: darken($primary, 10%);
+    }
+  }
+}
+
+.submit-button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 16px;
+}
+
+.empty-container {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-text {
+  font-size: 16px;
+  color: #9CA3AF;
+  margin-top: 12px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.loading-text {
+  margin-top: 12px;
+  color: $subtext;
+  font-size: 16px;
+}

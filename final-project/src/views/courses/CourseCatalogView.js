@@ -9,7 +9,7 @@ import {
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import CourseController from "../controllers/CourseController";
+import CourseController from "../../controllers/CourseController";
 import CourseDetailView from "./CourseDetailView";
 
 export default function CourseCatalogView({ user, onBack }) {
