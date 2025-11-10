@@ -67,9 +67,12 @@ export default function CourseCatalogView({ user, onBack }) {
       }
     }
 
-    // Level filter
+    // Level filter - đảm bảo normalize level trước khi so sánh
     if (selectedLevel !== "All") {
-      filtered = filtered.filter((course) => course.level === selectedLevel);
+      filtered = filtered.filter((course) => {
+        const courseLevel = course.level || "Beginner";
+        return courseLevel === selectedLevel;
+      });
     }
 
     setFilteredCourses(filtered);

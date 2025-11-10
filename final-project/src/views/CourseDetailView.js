@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 export default function CourseDetailView({ course, onBack }) {
+  const [imageError, setImageError] = useState(false);
+
   if (!course) {
     return (
       <View style={styles.container}>
@@ -25,6 +27,24 @@ export default function CourseDetailView({ course, onBack }) {
   const finalCategory = validCategories.includes(displayCategory)
     ? displayCategory
     : "General";
+
+  // Get fallback image based on category
+  const getFallbackImage = () => {
+    switch (finalCategory) {
+      case "Programming":
+        return "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=500&fit=crop";
+      case "Design":
+        return "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=500&fit=crop";
+      case "Business":
+        return "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=500&fit=crop";
+      default:
+        return "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&h=500&fit=crop";
+    }
+  };
+
+  const imageUri = imageError
+    ? getFallbackImage()
+    : course.image || getFallbackImage();
 
   return (
     <View style={styles.container}>
@@ -45,13 +65,10 @@ export default function CourseDetailView({ course, onBack }) {
         {/* Course Image */}
         <View style={styles.imageContainer}>
           <Image
-            source={{
-              uri:
-                course.image ||
-                "https://via.placeholder.com/400x250.png?text=Course",
-            }}
+            source={{ uri: imageUri }}
             style={styles.courseImage}
             resizeMode="cover"
+            onError={() => setImageError(true)}
           />
           <View style={styles.imageOverlay}>
             <View style={[styles.badge, getCategoryColor(finalCategory)]}>
