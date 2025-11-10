@@ -100,9 +100,9 @@ export class QuizModel {
         if (!quiz) return null;
         const newQuestion = {
             id: quiz.questions && quiz.questions.length > 0 ? Math.max(...quiz.questions.map((qq) => qq.id)) + 1 : 1,
-            text: question.text || "",
-            options: question.options || [],
-            answerIndex: typeof question.answerIndex === 'number' ? question.answerIndex : 0,
+            questionText: question.questionText || "",
+            options: question.options || { A: "", B: "", C: "", D: "" },
+            correctAnswer: question.correctAnswer || "A",
         };
         quiz.questions = quiz.questions || [];
         quiz.questions.push(newQuestion);

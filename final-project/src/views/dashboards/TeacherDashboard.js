@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CourseController from "../../controllers/CourseController";
+import AssignmentController from "../../controllers/AssignmentController";
 
 // Import web SCSS only on web builds
 if (Platform.OS === "web") {
@@ -20,13 +21,15 @@ if (Platform.OS === "web") {
 
 export default function TeacherDashboard({
   user,
+  onNavigateToCourseCatalog,
   onNavigateToCourseManagement,
   onNavigateToQuizManagement,
-  onNavigateToCourseCatalog,
+  onNavigateToAssignmentManagement,
 }) {
   const [stats, setStats] = useState({
     totalCourses: 0,
     totalStudents: 0,
+    totalAssignments: 0,
   });
 
   useEffect(() => {
@@ -37,20 +40,32 @@ export default function TeacherDashboard({
 
   const loadStats = () => {
     // Get teacher's courses
-    const result = CourseController.getTeacherCourses(user.name);
-    if (result.success) {
-      const courses = result.data;
-      const totalCourses = courses.length;
-      const totalStudents = courses.reduce(
+    const coursesResult = CourseController.getTeacherCourses(user.name);
+    let totalCourses = 0;
+    let totalStudents = 0;
+
+    if (coursesResult.success) {
+      const courses = coursesResult.data;
+      totalCourses = courses.length;
+      totalStudents = courses.reduce(
         (sum, course) => sum + (course.students || 0),
         0
       );
-
-      setStats({
-        totalCourses,
-        totalStudents,
-      });
     }
+
+    // Get teacher's assignments
+    const assignmentsResult = AssignmentController.getTeacherAssignments(user.name);
+    let totalAssignments = 0;
+
+    if (assignmentsResult.success) {
+      totalAssignments = assignmentsResult.data.length;
+    }
+
+    setStats({
+      totalCourses,
+      totalStudents,
+      totalAssignments,
+    });
   };
 
   return (
@@ -68,8 +83,8 @@ export default function TeacherDashboard({
           <Text style={styles.statLabel}>Students</Text>
         </View>
         <View style={styles.statCard}>
-          <Ionicons name="document" size={30} color="#F59E0B" />
-          <Text style={styles.statNumber}>12</Text>
+          <Ionicons name="document-text" size={30} color="#F59E0B" />
+          <Text style={styles.statNumber}>{stats.totalAssignments}</Text>
           <Text style={styles.statLabel}>Assignments</Text>
         </View>
       </View>
@@ -94,11 +109,15 @@ export default function TeacherDashboard({
         </TouchableOpacity>
       </View>
       <View style={styles.cardRow}>
-        <View style={styles.card}>
-          <Ionicons name="analytics" size={40} color="#F59E0B" />
-          <Text style={styles.cardTitle}>Student Progress</Text>
-          <Text style={styles.cardText}>Monitor performance.</Text>
-        </View>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={onNavigateToAssignmentManagement}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="document-text" size={40} color="#F59E0B" />
+          <Text style={styles.cardTitle}>Assignment Management</Text>
+          <Text style={styles.cardText}>Create and manage assignments.</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.card}
           onPress={onNavigateToQuizManagement}

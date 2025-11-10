@@ -345,52 +345,247 @@ export const mockAnnouncements = [
   },
 ];
 
-export const mockAssignments = [
-  {
-    id: 1,
-    title: "Build a Simple App",
-    course: "React Native Basics",
-    dueDate: "2025-11-10",
-    status: "pending",
-  },
-  {
-    id: 2,
-    title: "JavaScript Quiz",
-    course: "Advanced JavaScript",
-    dueDate: "2025-11-05",
-    status: "completed",
-  },
-];
 // Mock quizzes data
 export const mockQuizzes = [
   {
     id: 1,
-    title: "JavaScript Basics Quiz",
+    title: "JavaScript Fundamentals",
     courseId: 2,
     courseName: "Advanced JavaScript",
     instructor: "Teacher User",
     questions: [
-      {
-        id: 1,
-        text: "What is a closure in JavaScript?",
-        options: [
-          "A function inside another function",
-          "A loop",
-          "A variable type",
-        ],
-        answerIndex: 0,
-      },
+      { id: 1, questionText: "What is a closure in JavaScript?", options: { A: "A function that has access to variables in its outer scope", B: "A loop structure", C: "A data type", D: "A CSS property" }, correctAnswer: "A" },
+      { id: 2, questionText: "What does 'this' keyword refer to?", options: { A: "The current object", B: "The parent object", C: "Global window", D: "Depends on context" }, correctAnswer: "D" },
+      { id: 3, questionText: "What is hoisting?", options: { A: "Moving declarations to top", B: "A function call", C: "A variable type", D: "An error" }, correctAnswer: "A" },
+      { id: 4, questionText: "What is event bubbling?", options: { A: "Event propagation from child to parent", B: "Event cancellation", C: "Event creation", D: "None" }, correctAnswer: "A" },
+      { id: 5, questionText: "What is a Promise?", options: { A: "An object representing async operation", B: "A function", C: "A loop", D: "A variable" }, correctAnswer: "A" },
+      { id: 6, questionText: "What does async/await do?", options: { A: "Handles asynchronous operations", B: "Creates animations", C: "Manages state", D: "Styles components" }, correctAnswer: "A" },
+      { id: 7, questionText: "What is destructuring?", options: { A: "Extracting values from objects/arrays", B: "Deleting objects", C: "Creating objects", D: "None" }, correctAnswer: "A" },
+      { id: 8, questionText: "What is the spread operator?", options: { A: "... to expand iterables", B: "A multiplication operator", C: "A division operator", D: "None" }, correctAnswer: "A" },
+      { id: 9, questionText: "What is arrow function?", options: { A: "A shorter function syntax", B: "A loop", C: "A variable", D: "An object" }, correctAnswer: "A" },
+      { id: 10, questionText: "What is let vs const?", options: { A: "let allows reassignment, const doesn't", B: "They're the same", C: "const is faster", D: "None" }, correctAnswer: "A" },
+      { id: 11, questionText: "What is map() method?", options: { A: "Creates new array from existing", B: "Deletes array", C: "Sorts array", D: "None" }, correctAnswer: "A" },
+      { id: 12, questionText: "What is filter() method?", options: { A: "Creates array with elements passing test", B: "Deletes elements", C: "Sorts elements", D: "None" }, correctAnswer: "A" },
+      { id: 13, questionText: "What is reduce() method?", options: { A: "Reduces array to single value", B: "Increases array size", C: "Sorts array", D: "None" }, correctAnswer: "A" },
     ],
     createdAt: "2025-11-01",
+    updatedAt: "2025-11-01",
   },
   {
     id: 2,
-    title: "React Native Quiz",
+    title: "React Native Essentials",
     courseId: 1,
     courseName: "React Native Basics",
     instructor: "Teacher User",
-    questions: [],
+    questions: [
+      { id: 1, questionText: "What is React Native?", options: { A: "A JavaScript framework for mobile apps", B: "A CSS framework", C: "A database", D: "A language" }, correctAnswer: "A" },
+      { id: 2, questionText: "What is JSX?", options: { A: "JavaScript XML syntax extension", B: "A programming language", C: "A database query", D: "A CSS preprocessor" }, correctAnswer: "A" },
+      { id: 3, questionText: "What is a Component?", options: { A: "Reusable piece of UI", B: "A function", C: "A variable", D: "A loop" }, correctAnswer: "A" },
+      { id: 4, questionText: "What is state?", options: { A: "Data that changes over time", B: "Static data", C: "A function", D: "None" }, correctAnswer: "A" },
+      { id: 5, questionText: "What is props?", options: { A: "Data passed from parent to child", B: "Local data", C: "A function", D: "None" }, correctAnswer: "A" },
+      { id: 6, questionText: "What is useState?", options: { A: "Hook to manage state", B: "A component", C: "A style", D: "None" }, correctAnswer: "A" },
+      { id: 7, questionText: "What is useEffect?", options: { A: "Hook for side effects", B: "A component", C: "A state", D: "None" }, correctAnswer: "A" },
+      { id: 8, questionText: "What is StyleSheet?", options: { A: "Object for styling components", B: "A component", C: "A function", D: "None" }, correctAnswer: "A" },
+      { id: 9, questionText: "What is FlatList?", options: { A: "Component for rendering lists", B: "A state", C: "A style", D: "None" }, correctAnswer: "A" },
+      { id: 10, questionText: "What is TouchableOpacity?", options: { A: "Touchable component with opacity feedback", B: "A list", C: "A state", D: "None" }, correctAnswer: "A" },
+      { id: 11, questionText: "What is Navigator?", options: { A: "Component for screen navigation", B: "A list", C: "A state", D: "None" }, correctAnswer: "A" },
+      { id: 12, questionText: "What is AsyncStorage?", options: { A: "Storage API for persisting data", B: "A component", C: "A state", D: "None" }, correctAnswer: "A" },
+      { id: 13, questionText: "What is Expo?", options: { A: "Toolchain for React Native", B: "A component", C: "A state", D: "None" }, correctAnswer: "A" },
+    ],
     createdAt: "2025-11-02",
+    updatedAt: "2025-11-02",
+  },
+  {
+    id: 3,
+    title: "Python Programming Basics",
+    courseId: 3,
+    courseName: "Python for Data Science",
+    instructor: "Teacher User",
+    questions: [
+      { id: 1, questionText: "What is Python?", options: { A: "A high-level programming language", B: "A database", C: "An OS", D: "A framework" }, correctAnswer: "A" },
+      { id: 2, questionText: "What is a list in Python?", options: { A: "Ordered mutable collection", B: "Unordered collection", C: "Immutable collection", D: "None" }, correctAnswer: "A" },
+      { id: 3, questionText: "What is a tuple?", options: { A: "Ordered immutable collection", B: "Mutable collection", C: "Unordered collection", D: "None" }, correctAnswer: "A" },
+      { id: 4, questionText: "What is a dictionary?", options: { A: "Key-value pair collection", B: "Ordered list", C: "Immutable set", D: "None" }, correctAnswer: "A" },
+      { id: 5, questionText: "What is a function?", options: { A: "Reusable block of code", B: "A variable", C: "A loop", D: "None" }, correctAnswer: "A" },
+      { id: 6, questionText: "What is lambda?", options: { A: "Anonymous function", B: "A variable", C: "A loop", D: "None" }, correctAnswer: "A" },
+      { id: 7, questionText: "What is list comprehension?", options: { A: "Concise way to create lists", B: "A loop", C: "A function", D: "None" }, correctAnswer: "A" },
+      { id: 8, questionText: "What is inheritance?", options: { A: "Class deriving from another class", B: "A function", C: "A variable", D: "None" }, correctAnswer: "A" },
+      { id: 9, questionText: "What is polymorphism?", options: { A: "Same interface, different implementations", B: "A function", C: "A variable", D: "None" }, correctAnswer: "A" },
+      { id: 10, questionText: "What is encapsulation?", options: { A: "Bundling data and methods", B: "A loop", C: "A function", D: "None" }, correctAnswer: "A" },
+      { id: 11, questionText: "What is pip?", options: { A: "Package installer for Python", B: "A function", C: "A variable", D: "None" }, correctAnswer: "A" },
+      { id: 12, questionText: "What is numpy?", options: { A: "Library for numerical computing", B: "A database", C: "An OS", D: "None" }, correctAnswer: "A" },
+      { id: 13, questionText: "What is pandas?", options: { A: "Data manipulation library", B: "A database", C: "An OS", D: "None" }, correctAnswer: "A" },
+    ],
+    createdAt: "2025-11-03",
+    updatedAt: "2025-11-03",
+  },
+  {
+    id: 4,
+    title: "HTML & CSS Fundamentals",
+    courseId: 4,
+    courseName: "Web Development Bootcamp",
+    instructor: "Teacher User",
+    questions: [
+      { id: 1, questionText: "What is HTML?", options: { A: "HyperText Markup Language", B: "A programming language", C: "A database", D: "An OS" }, correctAnswer: "A" },
+      { id: 2, questionText: "What is CSS?", options: { A: "Cascading Style Sheets", B: "A programming language", C: "A database", D: "None" }, correctAnswer: "A" },
+      { id: 3, questionText: "What is a div tag?", options: { A: "Division container element", B: "A paragraph", C: "A link", D: "None" }, correctAnswer: "A" },
+      { id: 4, questionText: "What is flexbox?", options: { A: "Layout model for flexible boxes", B: "A grid system", C: "A table", D: "None" }, correctAnswer: "A" },
+      { id: 5, questionText: "What is grid?", options: { A: "Two-dimensional layout system", B: "A table", C: "A flex", D: "None" }, correctAnswer: "A" },
+      { id: 6, questionText: "What is responsive design?", options: { A: "Design that adapts to screen size", B: "Fixed design", C: "Mobile only", D: "None" }, correctAnswer: "A" },
+      { id: 7, questionText: "What is media query?", options: { A: "CSS technique for responsive design", B: "A HTML tag", C: "A JavaScript function", D: "None" }, correctAnswer: "A" },
+      { id: 8, questionText: "What is semantic HTML?", options: { A: "HTML with meaningful tags", B: "Regular HTML", C: "Old HTML", D: "None" }, correctAnswer: "A" },
+      { id: 9, questionText: "What is box model?", options: { A: "Model describing element space", B: "A layout", C: "A grid", D: "None" }, correctAnswer: "A" },
+      { id: 10, questionText: "What is CSS selector?", options: { A: "Pattern to select elements", B: "A property", C: "A value", D: "None" }, correctAnswer: "A" },
+      { id: 11, questionText: "What is pseudo-class?", options: { A: "Keyword added to selector for state", B: "A class", C: "An ID", D: "None" }, correctAnswer: "A" },
+      { id: 12, questionText: "What is z-index?", options: { A: "Property controlling stack order", B: "A size", C: "A color", D: "None" }, correctAnswer: "A" },
+      { id: 13, questionText: "What is position property?", options: { A: "Specifies positioning method", B: "A size", C: "A color", D: "None" }, correctAnswer: "A" },
+    ],
+    createdAt: "2025-11-04",
+    updatedAt: "2025-11-04",
+  },
+  {
+    id: 5,
+    title: "Database Design Principles",
+    courseId: 6,
+    courseName: "Database Management",
+    instructor: "Teacher User",
+    questions: [
+      { id: 1, questionText: "What is a database?", options: { A: "Organized collection of data", B: "A file", C: "A program", D: "None" }, correctAnswer: "A" },
+      { id: 2, questionText: "What is SQL?", options: { A: "Structured Query Language", B: "A database", C: "A programming language", D: "None" }, correctAnswer: "A" },
+      { id: 3, questionText: "What is primary key?", options: { A: "Unique identifier for records", B: "A foreign key", C: "An index", D: "None" }, correctAnswer: "A" },
+      { id: 4, questionText: "What is foreign key?", options: { A: "Link between two tables", B: "A primary key", C: "An index", D: "None" }, correctAnswer: "A" },
+      { id: 5, questionText: "What is normalization?", options: { A: "Organizing data to reduce redundancy", B: "Creating backups", C: "Deleting data", D: "None" }, correctAnswer: "A" },
+      { id: 6, questionText: "What is JOIN?", options: { A: "Combining rows from tables", B: "Creating table", C: "Deleting table", D: "None" }, correctAnswer: "A" },
+      { id: 7, questionText: "What is index?", options: { A: "Structure to speed up queries", B: "A table", C: "A column", D: "None" }, correctAnswer: "A" },
+      { id: 8, questionText: "What is transaction?", options: { A: "Unit of work in database", B: "A query", C: "A table", D: "None" }, correctAnswer: "A" },
+      { id: 9, questionText: "What is ACID?", options: { A: "Atomicity Consistency Isolation Durability", B: "A database type", C: "A query", D: "None" }, correctAnswer: "A" },
+      { id: 10, questionText: "What is NoSQL?", options: { A: "Non-relational database", B: "Old SQL", C: "A query language", D: "None" }, correctAnswer: "A" },
+      { id: 11, questionText: "What is MongoDB?", options: { A: "Document-oriented NoSQL database", B: "SQL database", C: "A query language", D: "None" }, correctAnswer: "A" },
+      { id: 12, questionText: "What is schema?", options: { A: "Structure of database", B: "A query", C: "A table", D: "None" }, correctAnswer: "A" },
+      { id: 13, questionText: "What is view?", options: { A: "Virtual table from query", B: "A real table", C: "An index", D: "None" }, correctAnswer: "A" },
+    ],
+    createdAt: "2025-11-05",
+    updatedAt: "2025-11-05",
+  },
+  {
+    id: 6,
+    title: "Git & Version Control",
+    courseId: 4,
+    courseName: "Web Development Bootcamp",
+    instructor: "Teacher User",
+    questions: [
+      { id: 1, questionText: "What is Git?", options: { A: "Distributed version control system", B: "A programming language", C: "A database", D: "None" }, correctAnswer: "A" },
+      { id: 2, questionText: "What is a repository?", options: { A: "Storage location for project", B: "A file", C: "A folder", D: "None" }, correctAnswer: "A" },
+      { id: 3, questionText: "What is a commit?", options: { A: "Snapshot of changes", B: "A branch", C: "A file", D: "None" }, correctAnswer: "A" },
+      { id: 4, questionText: "What is a branch?", options: { A: "Independent line of development", B: "A commit", C: "A file", D: "None" }, correctAnswer: "A" },
+      { id: 5, questionText: "What is merge?", options: { A: "Combining branches", B: "Deleting branch", C: "Creating branch", D: "None" }, correctAnswer: "A" },
+      { id: 6, questionText: "What is pull request?", options: { A: "Request to merge changes", B: "Pulling code", C: "Pushing code", D: "None" }, correctAnswer: "A" },
+      { id: 7, questionText: "What is clone?", options: { A: "Copy of repository", B: "A branch", C: "A commit", D: "None" }, correctAnswer: "A" },
+      { id: 8, questionText: "What is fork?", options: { A: "Personal copy of repository", B: "A branch", C: "A clone", D: "None" }, correctAnswer: "A" },
+      { id: 9, questionText: "What is push?", options: { A: "Upload commits to remote", B: "Download commits", C: "Delete commits", D: "None" }, correctAnswer: "A" },
+      { id: 10, questionText: "What is pull?", options: { A: "Download commits from remote", B: "Upload commits", C: "Delete commits", D: "None" }, correctAnswer: "A" },
+      { id: 11, questionText: "What is conflict?", options: { A: "Merge issue with changes", B: "An error", C: "A bug", D: "None" }, correctAnswer: "A" },
+      { id: 12, questionText: "What is .gitignore?", options: { A: "File specifying ignored files", B: "A branch", C: "A commit", D: "None" }, correctAnswer: "A" },
+      { id: 13, questionText: "What is GitHub?", options: { A: "Platform for hosting Git repositories", B: "A programming language", C: "A database", D: "None" }, correctAnswer: "A" },
+    ],
+    createdAt: "2025-11-06",
+    updatedAt: "2025-11-06",
+  },
+  {
+    id: 7,
+    title: "Node.js Backend Development",
+    courseId: 4,
+    courseName: "Web Development Bootcamp",
+    instructor: "Teacher User",
+    questions: [
+      { id: 1, questionText: "What is Node.js?", options: { A: "JavaScript runtime environment", B: "A framework", C: "A database", D: "None" }, correctAnswer: "A" },
+      { id: 2, questionText: "What is npm?", options: { A: "Node Package Manager", B: "A database", C: "A framework", D: "None" }, correctAnswer: "A" },
+      { id: 3, questionText: "What is Express?", options: { A: "Web framework for Node.js", B: "A database", C: "A language", D: "None" }, correctAnswer: "A" },
+      { id: 4, questionText: "What is middleware?", options: { A: "Function executed during request-response", B: "A database", C: "A framework", D: "None" }, correctAnswer: "A" },
+      { id: 5, questionText: "What is REST API?", options: { A: "Representational State Transfer API", B: "A database", C: "A framework", D: "None" }, correctAnswer: "A" },
+      { id: 6, questionText: "What is JSON?", options: { A: "JavaScript Object Notation", B: "A database", C: "A framework", D: "None" }, correctAnswer: "A" },
+      { id: 7, questionText: "What is HTTP?", options: { A: "HyperText Transfer Protocol", B: "A database", C: "A framework", D: "None" }, correctAnswer: "A" },
+      { id: 8, questionText: "What is CORS?", options: { A: "Cross-Origin Resource Sharing", B: "A database", C: "A framework", D: "None" }, correctAnswer: "A" },
+      { id: 9, questionText: "What is JWT?", options: { A: "JSON Web Token", B: "A database", C: "A framework", D: "None" }, correctAnswer: "A" },
+      { id: 10, questionText: "What is authentication?", options: { A: "Verifying user identity", B: "Creating users", C: "Deleting users", D: "None" }, correctAnswer: "A" },
+      { id: 11, questionText: "What is authorization?", options: { A: "Checking user permissions", B: "Verifying identity", C: "Creating users", D: "None" }, correctAnswer: "A" },
+      { id: 12, questionText: "What is bcrypt?", options: { A: "Library for hashing passwords", B: "A database", C: "A framework", D: "None" }, correctAnswer: "A" },
+      { id: 13, questionText: "What is MongoDB with Node?", options: { A: "NoSQL database for Node apps", B: "SQL database", C: "A framework", D: "None" }, correctAnswer: "A" },
+    ],
+    createdAt: "2025-11-07",
+    updatedAt: "2025-11-07",
+  },
+  {
+    id: 8,
+    title: "UI/UX Design Principles",
+    courseId: 7,
+    courseName: "UI/UX Design Course",
+    instructor: "Teacher User",
+    questions: [
+      { id: 1, questionText: "What is UI?", options: { A: "User Interface", B: "User Information", C: "Universal Interface", D: "None" }, correctAnswer: "A" },
+      { id: 2, questionText: "What is UX?", options: { A: "User Experience", B: "User Excellence", C: "Universal Experience", D: "None" }, correctAnswer: "A" },
+      { id: 3, questionText: "What is wireframe?", options: { A: "Low-fidelity layout sketch", B: "High-fidelity design", C: "A prototype", D: "None" }, correctAnswer: "A" },
+      { id: 4, questionText: "What is prototype?", options: { A: "Interactive model of design", B: "A wireframe", C: "Final design", D: "None" }, correctAnswer: "A" },
+      { id: 5, questionText: "What is user persona?", options: { A: "Fictional representation of user", B: "Real user", C: "Designer", D: "None" }, correctAnswer: "A" },
+      { id: 6, questionText: "What is user journey?", options: { A: "Path user takes through product", B: "Designer path", C: "Development path", D: "None" }, correctAnswer: "A" },
+      { id: 7, questionText: "What is accessibility?", options: { A: "Making product usable for all", B: "Speed of product", C: "Design beauty", D: "None" }, correctAnswer: "A" },
+      { id: 8, questionText: "What is color theory?", options: { A: "Science of color combinations", B: "Random colors", C: "Black and white", D: "None" }, correctAnswer: "A" },
+      { id: 9, questionText: "What is typography?", options: { A: "Art of arranging text", B: "Writing code", C: "Drawing", D: "None" }, correctAnswer: "A" },
+      { id: 10, questionText: "What is white space?", options: { A: "Empty space in design", B: "White color", C: "Background", D: "None" }, correctAnswer: "A" },
+      { id: 11, questionText: "What is grid system?", options: { A: "Structure for aligning elements", B: "Random placement", C: "Table layout", D: "None" }, correctAnswer: "A" },
+      { id: 12, questionText: "What is Figma?", options: { A: "Design and prototyping tool", B: "A programming language", C: "A database", D: "None" }, correctAnswer: "A" },
+      { id: 13, questionText: "What is usability testing?", options: { A: "Testing product with users", B: "Testing code", C: "Testing design", D: "None" }, correctAnswer: "A" },
+    ],
+    createdAt: "2025-11-08",
+    updatedAt: "2025-11-08",
+  },
+  {
+    id: 9,
+    title: "Machine Learning Basics",
+    courseId: 3,
+    courseName: "Python for Data Science",
+    instructor: "Teacher User",
+    questions: [
+      { id: 1, questionText: "What is Machine Learning?", options: { A: "Systems that learn from data", B: "A programming language", C: "A database", D: "None" }, correctAnswer: "A" },
+      { id: 2, questionText: "What is supervised learning?", options: { A: "Learning with labeled data", B: "Learning without data", C: "Random learning", D: "None" }, correctAnswer: "A" },
+      { id: 3, questionText: "What is unsupervised learning?", options: { A: "Learning with unlabeled data", B: "Learning with labels", C: "No learning", D: "None" }, correctAnswer: "A" },
+      { id: 4, questionText: "What is neural network?", options: { A: "Network inspired by brain", B: "Computer network", C: "Social network", D: "None" }, correctAnswer: "A" },
+      { id: 5, questionText: "What is training data?", options: { A: "Data used to train model", B: "Test data", C: "Random data", D: "None" }, correctAnswer: "A" },
+      { id: 6, questionText: "What is test data?", options: { A: "Data used to evaluate model", B: "Training data", C: "Random data", D: "None" }, correctAnswer: "A" },
+      { id: 7, questionText: "What is overfitting?", options: { A: "Model too complex for data", B: "Model too simple", C: "Perfect model", D: "None" }, correctAnswer: "A" },
+      { id: 8, questionText: "What is underfitting?", options: { A: "Model too simple for data", B: "Model too complex", C: "Perfect model", D: "None" }, correctAnswer: "A" },
+      { id: 9, questionText: "What is accuracy?", options: { A: "Measure of correct predictions", B: "Speed of model", C: "Size of model", D: "None" }, correctAnswer: "A" },
+      { id: 10, questionText: "What is feature?", options: { A: "Input variable for model", B: "Output variable", C: "A function", D: "None" }, correctAnswer: "A" },
+      { id: 11, questionText: "What is label?", options: { A: "Output or target variable", B: "Input variable", C: "A function", D: "None" }, correctAnswer: "A" },
+      { id: 12, questionText: "What is regression?", options: { A: "Predicting continuous values", B: "Predicting categories", C: "Clustering", D: "None" }, correctAnswer: "A" },
+      { id: 13, questionText: "What is classification?", options: { A: "Predicting categories", B: "Predicting numbers", C: "Clustering", D: "None" }, correctAnswer: "A" },
+    ],
+    createdAt: "2025-11-09",
+    updatedAt: "2025-11-09",
+  },
+  {
+    id: 10,
+    title: "Cybersecurity Fundamentals",
+    courseId: 8,
+    courseName: "Information Security",
+    instructor: "Teacher User",
+    questions: [
+      { id: 1, questionText: "What is cybersecurity?", options: { A: "Protection of computer systems", B: "A programming language", C: "A database", D: "None" }, correctAnswer: "A" },
+      { id: 2, questionText: "What is encryption?", options: { A: "Converting data to secure format", B: "Deleting data", C: "Copying data", D: "None" }, correctAnswer: "A" },
+      { id: 3, questionText: "What is firewall?", options: { A: "Network security system", B: "A virus", C: "A program", D: "None" }, correctAnswer: "A" },
+      { id: 4, questionText: "What is malware?", options: { A: "Malicious software", B: "Good software", C: "Operating system", D: "None" }, correctAnswer: "A" },
+      { id: 5, questionText: "What is phishing?", options: { A: "Fraudulent attempt to obtain info", B: "Fishing activity", C: "Programming", D: "None" }, correctAnswer: "A" },
+      { id: 6, questionText: "What is VPN?", options: { A: "Virtual Private Network", B: "Very Private Network", C: "Video Private Network", D: "None" }, correctAnswer: "A" },
+      { id: 7, questionText: "What is two-factor authentication?", options: { A: "Two-step verification process", B: "One-step verification", C: "No verification", D: "None" }, correctAnswer: "A" },
+      { id: 8, questionText: "What is SSL/TLS?", options: { A: "Protocols for secure communication", B: "Programming languages", C: "Databases", D: "None" }, correctAnswer: "A" },
+      { id: 9, questionText: "What is penetration testing?", options: { A: "Simulated cyber attack", B: "Real attack", C: "Software testing", D: "None" }, correctAnswer: "A" },
+      { id: 10, questionText: "What is social engineering?", options: { A: "Manipulating people for info", B: "Building software", C: "Network design", D: "None" }, correctAnswer: "A" },
+      { id: 11, questionText: "What is ransomware?", options: { A: "Malware demanding payment", B: "Free software", C: "Antivirus", D: "None" }, correctAnswer: "A" },
+      { id: 12, questionText: "What is DDoS attack?", options: { A: "Distributed Denial of Service", B: "Direct Data Service", C: "Database service", D: "None" }, correctAnswer: "A" },
+      { id: 13, questionText: "What is zero-day vulnerability?", options: { A: "Unknown security flaw", B: "Known security flaw", C: "Fixed flaw", D: "None" }, correctAnswer: "A" },
+    ],
+    createdAt: "2025-11-10",
+    updatedAt: "2025-11-10",
   },
 ];
 export const mockCertificates = [
@@ -611,6 +806,112 @@ export const mockFeedbacks = [
     rating: 5,
     comment:
       "Perfect for beginners! The hands-on projects really helped solidify my understanding of React Native.",
+    date: "2025-10-15",
+  },
+];
+
+// Question Bank - Reusable questions
+export const mockQuestionBank = [
+  // JavaScript Questions
+  { id: 1, questionText: "What is a closure in JavaScript?", options: { A: "A function that has access to variables in its outer scope", B: "A loop structure", C: "A data type", D: "A CSS property" }, correctAnswer: "A", category: "JavaScript" },
+  { id: 2, questionText: "What does async/await do?", options: { A: "Handles asynchronous operations", B: "Creates animations", C: "Manages state", D: "Styles components" }, correctAnswer: "A", category: "JavaScript" },
+  { id: 3, questionText: "What is hoisting?", options: { A: "Moving declarations to top", B: "A function call", C: "A variable type", D: "An error" }, correctAnswer: "A", category: "JavaScript" },
+  { id: 4, questionText: "What is a Promise?", options: { A: "An object representing async operation", B: "A function", C: "A loop", D: "A variable" }, correctAnswer: "A", category: "JavaScript" },
+  { id: 5, questionText: "What is destructuring?", options: { A: "Extracting values from objects/arrays", B: "Deleting objects", C: "Creating objects", D: "None" }, correctAnswer: "A", category: "JavaScript" },
+  { id: 6, questionText: "What is the spread operator?", options: { A: "... to expand iterables", B: "A multiplication operator", C: "A division operator", D: "None" }, correctAnswer: "A", category: "JavaScript" },
+  { id: 7, questionText: "What is arrow function?", options: { A: "A shorter function syntax", B: "A loop", C: "A variable", D: "An object" }, correctAnswer: "A", category: "JavaScript" },
+  { id: 8, questionText: "What is event bubbling?", options: { A: "Event propagation from child to parent", B: "Event cancellation", C: "Event creation", D: "None" }, correctAnswer: "A", category: "JavaScript" },
+
+  // React Native Questions
+  { id: 9, questionText: "What is React Native?", options: { A: "A JavaScript framework for mobile apps", B: "A CSS framework", C: "A database", D: "A language" }, correctAnswer: "A", category: "React Native" },
+  { id: 10, questionText: "What is JSX?", options: { A: "JavaScript XML syntax extension", B: "A programming language", C: "A database query", D: "A CSS preprocessor" }, correctAnswer: "A", category: "React Native" },
+  { id: 11, questionText: "What is the Virtual DOM?", options: { A: "A lightweight copy of the real DOM", B: "A database", C: "A programming language", D: "A CSS framework" }, correctAnswer: "A", category: "React Native" },
+  { id: 12, questionText: "What is a Component?", options: { A: "Reusable piece of UI", B: "A function", C: "A variable", D: "A loop" }, correctAnswer: "A", category: "React Native" },
+  { id: 13, questionText: "What is state?", options: { A: "Data that changes over time", B: "Static data", C: "A function", D: "None" }, correctAnswer: "A", category: "React Native" },
+  { id: 14, questionText: "What is props?", options: { A: "Data passed from parent to child", B: "Local data", C: "A function", D: "None" }, correctAnswer: "A", category: "React Native" },
+  { id: 15, questionText: "What is useState?", options: { A: "Hook to manage state", B: "A component", C: "A style", D: "None" }, correctAnswer: "A", category: "React Native" },
+  { id: 16, questionText: "What is useEffect?", options: { A: "Hook for side effects", B: "A component", C: "A state", D: "None" }, correctAnswer: "A", category: "React Native" },
+
+  // Python Questions
+  { id: 17, questionText: "What is Python?", options: { A: "A high-level programming language", B: "A database", C: "An OS", D: "A framework" }, correctAnswer: "A", category: "Python" },
+  { id: 18, questionText: "What is a list in Python?", options: { A: "Ordered mutable collection", B: "Unordered collection", C: "Immutable collection", D: "None" }, correctAnswer: "A", category: "Python" },
+  { id: 19, questionText: "What is a tuple?", options: { A: "Ordered immutable collection", B: "Mutable collection", C: "Unordered collection", D: "None" }, correctAnswer: "A", category: "Python" },
+  { id: 20, questionText: "What is a dictionary?", options: { A: "Key-value pair collection", B: "Ordered list", C: "Immutable set", D: "None" }, correctAnswer: "A", category: "Python" },
+  { id: 21, questionText: "What is lambda?", options: { A: "Anonymous function", B: "A variable", C: "A loop", D: "None" }, correctAnswer: "A", category: "Python" },
+  { id: 22, questionText: "What is list comprehension?", options: { A: "Concise way to create lists", B: "A loop", C: "A function", D: "None" }, correctAnswer: "A", category: "Python" },
+
+  // HTML & CSS Questions
+  { id: 23, questionText: "What is HTML?", options: { A: "HyperText Markup Language", B: "A programming language", C: "A database", D: "An OS" }, correctAnswer: "A", category: "HTML/CSS" },
+  { id: 24, questionText: "What is CSS?", options: { A: "Cascading Style Sheets", B: "A programming language", C: "A database", D: "None" }, correctAnswer: "A", category: "HTML/CSS" },
+  { id: 25, questionText: "What is flexbox?", options: { A: "Layout model for flexible boxes", B: "A grid system", C: "A table", D: "None" }, correctAnswer: "A", category: "HTML/CSS" },
+  { id: 26, questionText: "What is grid?", options: { A: "Two-dimensional layout system", B: "A table", C: "A flex", D: "None" }, correctAnswer: "A", category: "HTML/CSS" },
+  { id: 27, questionText: "What is responsive design?", options: { A: "Design that adapts to screen size", B: "Fixed design", C: "Mobile only", D: "None" }, correctAnswer: "A", category: "HTML/CSS" },
+  { id: 28, questionText: "What is semantic HTML?", options: { A: "HTML with meaningful tags", B: "Regular HTML", C: "Old HTML", D: "None" }, correctAnswer: "A", category: "HTML/CSS" },
+
+  // Database Questions
+  { id: 29, questionText: "What is a database?", options: { A: "Organized collection of data", B: "A file", C: "A program", D: "None" }, correctAnswer: "A", category: "Database" },
+  { id: 30, questionText: "What is SQL?", options: { A: "Structured Query Language", B: "A database", C: "A programming language", D: "None" }, correctAnswer: "A", category: "Database" },
+  { id: 31, questionText: "What is primary key?", options: { A: "Unique identifier for records", B: "A foreign key", C: "An index", D: "None" }, correctAnswer: "A", category: "Database" },
+  { id: 32, questionText: "What is foreign key?", options: { A: "Link between two tables", B: "A primary key", C: "An index", D: "None" }, correctAnswer: "A", category: "Database" },
+  { id: 33, questionText: "What is normalization?", options: { A: "Organizing data to reduce redundancy", B: "Creating backups", C: "Deleting data", D: "None" }, correctAnswer: "A", category: "Database" },
+  { id: 34, questionText: "What is NoSQL?", options: { A: "Non-relational database", B: "Old SQL", C: "A query language", D: "None" }, correctAnswer: "A", category: "Database" },
+
+  // Git Questions
+  { id: 35, questionText: "What is Git?", options: { A: "Distributed version control system", B: "A programming language", C: "A database", D: "None" }, correctAnswer: "A", category: "Git" },
+  { id: 36, questionText: "What is a commit?", options: { A: "Snapshot of changes", B: "A branch", C: "A file", D: "None" }, correctAnswer: "A", category: "Git" },
+  { id: 37, questionText: "What is a branch?", options: { A: "Independent line of development", B: "A commit", C: "A file", D: "None" }, correctAnswer: "A", category: "Git" },
+  { id: 38, questionText: "What is merge?", options: { A: "Combining branches", B: "Deleting branch", C: "Creating branch", D: "None" }, correctAnswer: "A", category: "Git" },
+  { id: 39, questionText: "What is pull request?", options: { A: "Request to merge changes", B: "Pulling code", C: "Pushing code", D: "None" }, correctAnswer: "A", category: "Git" },
+
+  // Node.js Questions
+  { id: 40, questionText: "What is Node.js?", options: { A: "JavaScript runtime environment", B: "A framework", C: "A database", D: "None" }, correctAnswer: "A", category: "Node.js" },
+  { id: 41, questionText: "What is npm?", options: { A: "Node Package Manager", B: "A database", C: "A framework", D: "None" }, correctAnswer: "A", category: "Node.js" },
+  { id: 42, questionText: "What is Express?", options: { A: "Web framework for Node.js", B: "A database", C: "A language", D: "None" }, correctAnswer: "A", category: "Node.js" },
+  { id: 43, questionText: "What is REST API?", options: { A: "Representational State Transfer API", B: "A database", C: "A framework", D: "None" }, correctAnswer: "A", category: "Node.js" },
+  { id: 44, questionText: "What is JWT?", options: { A: "JSON Web Token", B: "A database", C: "A framework", D: "None" }, correctAnswer: "A", category: "Node.js" },
+
+  // UI/UX Questions
+  { id: 45, questionText: "What is UI?", options: { A: "User Interface", B: "User Information", C: "Universal Interface", D: "None" }, correctAnswer: "A", category: "UI/UX" },
+  { id: 46, questionText: "What is UX?", options: { A: "User Experience", B: "User Excellence", C: "Universal Experience", D: "None" }, correctAnswer: "A", category: "UI/UX" },
+  { id: 47, questionText: "What is wireframe?", options: { A: "Low-fidelity layout sketch", B: "High-fidelity design", C: "A prototype", D: "None" }, correctAnswer: "A", category: "UI/UX" },
+  { id: 48, questionText: "What is prototype?", options: { A: "Interactive model of design", B: "A wireframe", C: "Final design", D: "None" }, correctAnswer: "A", category: "UI/UX" },
+  { id: 49, questionText: "What is accessibility?", options: { A: "Making product usable for all", B: "Speed of product", C: "Design beauty", D: "None" }, correctAnswer: "A", category: "UI/UX" },
+
+  // Machine Learning Questions
+  { id: 50, questionText: "What is Machine Learning?", options: { A: "Systems that learn from data", B: "A programming language", C: "A database", D: "None" }, correctAnswer: "A", category: "Machine Learning" },
+  { id: 51, questionText: "What is supervised learning?", options: { A: "Learning with labeled data", B: "Learning without data", C: "Random learning", D: "None" }, correctAnswer: "A", category: "Machine Learning" },
+  { id: 52, questionText: "What is neural network?", options: { A: "Network inspired by brain", B: "Computer network", C: "Social network", D: "None" }, correctAnswer: "A", category: "Machine Learning" },
+  { id: 53, questionText: "What is overfitting?", options: { A: "Model too complex for data", B: "Model too simple", C: "Perfect model", D: "None" }, correctAnswer: "A", category: "Machine Learning" },
+
+  // Cybersecurity Questions
+  { id: 54, questionText: "What is cybersecurity?", options: { A: "Protection of computer systems", B: "A programming language", C: "A database", D: "None" }, correctAnswer: "A", category: "Cybersecurity" },
+  { id: 55, questionText: "What is encryption?", options: { A: "Converting data to secure format", B: "Deleting data", C: "Copying data", D: "None" }, correctAnswer: "A", category: "Cybersecurity" },
+  { id: 56, questionText: "What is firewall?", options: { A: "Network security system", B: "A virus", C: "A program", D: "None" }, correctAnswer: "A", category: "Cybersecurity" },
+  { id: 57, questionText: "What is phishing?", options: { A: "Fraudulent attempt to obtain info", B: "Fishing activity", C: "Programming", D: "None" }, correctAnswer: "A", category: "Cybersecurity" },
+  { id: 58, questionText: "What is VPN?", options: { A: "Virtual Private Network", B: "Very Private Network", C: "Video Private Network", D: "None" }, correctAnswer: "A", category: "Cybersecurity" },
+  { id: 59, questionText: "What is two-factor authentication?", options: { A: "Two-step verification process", B: "One-step verification", C: "No verification", D: "None" }, correctAnswer: "A", category: "Cybersecurity" },
+  { id: 60, questionText: "What is ransomware?", options: { A: "Malware demanding payment", B: "Free software", C: "Antivirus", D: "None" }, correctAnswer: "A", category: "Cybersecurity" },
+];
+
+// Assignments - Tests for courses
+export const mockAssignments = [
+  {
+    id: 1,
+    title: "JavaScript Midterm Exam",
+    instructor: "Teacher User",
+    courseId: 2,
+    courseName: "Advanced JavaScript",
+    description: "Comprehensive test covering JavaScript fundamentals and advanced concepts",
+    dueDate: "2025-11-20",
+    totalPoints: 100,
+    status: "published",
+    questions: [
+      { id: 1, questionText: "What is a closure in JavaScript?", options: { A: "A function that has access to variables in its outer scope", B: "A loop structure", C: "A data type", D: "A CSS property" }, correctAnswer: "A", points: 10, sourceQuizId: 1, sourceQuestionId: 1 },
+      { id: 2, questionText: "What does async/await do?", options: { A: "Handles asynchronous operations", B: "Creates animations", C: "Manages state", D: "Styles components" }, correctAnswer: "A", points: 10, sourceQuizId: 1, sourceQuestionId: 6 },
+      { id: 3, questionText: "What is hoisting?", options: { A: "Moving declarations to top", B: "A function call", C: "A variable type", D: "An error" }, correctAnswer: "A", points: 10, sourceQuizId: 1, sourceQuestionId: 3 },
+      { id: 4, questionText: "What is a Promise?", options: { A: "An object representing async operation", B: "A function", C: "A loop", D: "A variable" }, correctAnswer: "A", points: 10, sourceQuizId: 1, sourceQuestionId: 5 },
+      { id: 5, questionText: "What is destructuring?", options: { A: "Extracting values from objects/arrays", B: "Deleting objects", C: "Creating objects", D: "None" }, correctAnswer: "A", points: 10, sourceQuizId: 1, sourceQuestionId: 7 },
+    ],
     createdAt: "2025-11-05",
     updatedAt: "2025-11-05",
   },
@@ -774,3 +1075,49 @@ export const mockFeedbacks = [
     updatedAt: "2025-08-30",
   },
 ];
+
+// In-memory data store
+let dataStore = {
+  users: mockUsers,
+  courses: mockCourses,
+  quizzes: mockQuizzes,
+  certificates: mockCertificates,
+  assignments: mockAssignments,
+  questionBank: mockQuestionBank,
+  enrollments: mockEnrollments || [],
+  announcements: mockAnnouncements || [],
+};
+
+// Load data from store
+export function loadData() {
+  return dataStore;
+}
+
+// Save data to store
+export function saveData(data) {
+  dataStore = { ...dataStore, ...data };
+}
+
+// Reset data to initial state
+export function resetData() {
+  dataStore = {
+    users: mockUsers,
+    courses: mockCourses,
+    quizzes: mockQuizzes,
+    certificates: mockCertificates,
+    assignments: mockAssignments,
+    questionBank: mockQuestionBank,
+    enrollments: mockEnrollments || [],
+    announcements: mockAnnouncements || [],
+  };
+}
+
+// Get specific collection
+export function getCollection(collectionName) {
+  return dataStore[collectionName] || [];
+}
+
+// Update specific collection
+export function updateCollection(collectionName, data) {
+  dataStore[collectionName] = data;
+}
