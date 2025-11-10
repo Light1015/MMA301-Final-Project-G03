@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import CourseController from "../../controllers/CourseController";
 
 // Import web SCSS only on web builds
 if (Platform.OS === "web") {
@@ -18,21 +19,51 @@ if (Platform.OS === "web") {
 }
 
 export default function TeacherDashboard({
+  user,
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
 }) {
+  const [stats, setStats] = useState({
+    totalCourses: 0,
+    totalStudents: 0,
+  });
+
+  useEffect(() => {
+    if (user && user.name) {
+      loadStats();
+    }
+  }, [user]);
+
+  const loadStats = () => {
+    // Get teacher's courses
+    const result = CourseController.getTeacherCourses(user.name);
+    if (result.success) {
+      const courses = result.data;
+      const totalCourses = courses.length;
+      const totalStudents = courses.reduce(
+        (sum, course) => sum + (course.students || 0),
+        0
+      );
+
+      setStats({
+        totalCourses,
+        totalStudents,
+      });
+    }
+  };
+
   return (
     <View style={styles.dashboard}>
       <Text style={styles.sectionTitle}>Teacher Dashboard</Text>
       <View style={styles.statsRow}>
         <View style={styles.statCard}>
           <Ionicons name="book" size={30} color="#4F46E5" />
-          <Text style={styles.statNumber}>3</Text>
+          <Text style={styles.statNumber}>{stats.totalCourses}</Text>
           <Text style={styles.statLabel}>Courses</Text>
         </View>
         <View style={styles.statCard}>
           <Ionicons name="people" size={30} color="#10B981" />
-          <Text style={styles.statNumber}>150</Text>
+          <Text style={styles.statNumber}>{stats.totalStudents}</Text>
           <Text style={styles.statLabel}>Students</Text>
         </View>
         <View style={styles.statCard}>

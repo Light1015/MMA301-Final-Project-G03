@@ -6,8 +6,8 @@ import LoginView from "./src/views/LoginView";
 import PublicHomeView from "./src/views/PublicHomeView";
 import HomeView from "./src/views/HomeView";
 import UserManagementView from "./src/views/UserManagementView";
-import CourseManagementView from "./src/views/CourseManagementView";
-import CourseCatalogView from "./src/views/CourseCatalogView";
+import CourseManagementView from "./src/views/courses/CourseManagementView";
+import CourseCatalogView from "./src/views/courses/CourseCatalogView";
 import AuthModel from "./src/models/AuthModel";
 
 export default function App() {
