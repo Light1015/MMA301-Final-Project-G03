@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, SafeAreaView, ActivityIndicator } from 'react-native';
-import LoginView from './src/views/LoginView';
-import PublicHomeView from './src/views/PublicHomeView';
-import HomeView from './src/views/HomeView';
-import UserManagementView from './src/views/UserManagementView';
-import AuthModel from './src/models/AuthModel';
+import React, { useState, useEffect } from "react";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import LoginView from "./src/views/LoginView";
+import PublicHomeView from "./src/views/PublicHomeView";
+import HomeView from "./src/views/HomeView";
+import UserManagementView from "./src/views/UserManagementView";
+import CourseManagementView from "./src/views/CourseManagementView";
+import CourseCatalogView from "./src/views/CourseCatalogView";
+import AuthModel from "./src/models/AuthModel";
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [loadingInit, setLoadingInit] = useState(true);
-  const [currentView, setCurrentView] = useState('publicHome'); // 'publicHome', 'login', 'home', 'userManagement'
+  const [currentView, setCurrentView] = useState("publicHome"); // 'publicHome', 'login', 'home', 'userManagement', 'courseManagement', 'courseCatalog'
 
   useEffect(() => {
     let mounted = true;
@@ -18,7 +21,7 @@ export default function App() {
       const u = await AuthModel.getCurrentUser();
       if (mounted) {
         setUser(u);
-        setCurrentView(u ? 'home' : 'publicHome');
+        setCurrentView(u ? "home" : "publicHome");
       }
       setLoadingInit(false);
     })();
@@ -28,7 +31,7 @@ export default function App() {
   const handleLogout = async () => {
     await AuthModel.logout();
     setUser(null);
-    setCurrentView('publicHome');
+    setCurrentView("publicHome");
   };
 
   if (loadingInit) {
@@ -44,30 +47,48 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       {!user ? (
-        currentView === 'publicHome' ? (
-          <PublicHomeView onNavigateToLogin={() => setCurrentView('login')} />
+        currentView === "publicHome" ? (
+          <PublicHomeView onNavigateToLogin={() => setCurrentView("login")} />
         ) : (
           <LoginView
             onLogin={(u) => {
               setUser(u);
-              setCurrentView('home');
+              setCurrentView("home");
             }}
-            onBack={() => setCurrentView('publicHome')}
+            onBack={() => setCurrentView("publicHome")}
           />
         )
       ) : (
         <View style={{ flex: 1 }}>
-          {currentView === 'home' && (
+          {currentView === "home" && (
             <HomeView
               user={user}
               onLogout={handleLogout}
-              onNavigateToUserManagement={() => setCurrentView('userManagement')}
+              onNavigateToUserManagement={() =>
+                setCurrentView("userManagement")
+              }
+              onNavigateToCourseManagement={() =>
+                setCurrentView("courseManagement")
+              }
+              onNavigateToCourseCatalog={() => setCurrentView("courseCatalog")}
             />
           )}
-          {currentView === 'userManagement' && (
+          {currentView === "userManagement" && (
             <UserManagementView
               user={user}
-              onBack={() => setCurrentView('home')}
+              onBack={() => setCurrentView("home")}
+            />
+          )}
+          {currentView === "courseManagement" && (
+            <CourseManagementView
+              user={user}
+              onBack={() => setCurrentView("home")}
+            />
+          )}
+          {currentView === "courseCatalog" && (
+            <CourseCatalogView
+              user={user}
+              onBack={() => setCurrentView("home")}
             />
           )}
         </View>
@@ -80,23 +101,23 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: "#F8FAFC",
   },
   center: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: "#F8FAFC",
   },
   welcome: {
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 8,
-    color: '#4F46E5',
+    color: "#4F46E5",
   },
   sub: {
     marginBottom: 16,
-    color: '#6B7280',
+    color: "#6B7280",
   },
 });
