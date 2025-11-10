@@ -72,6 +72,12 @@ export default function LoginView({ onLogin, onBack }) {
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         )}
+        <Text style={styles.hint}>
+          Test accounts:{'\n'}
+          learner@example.com (password: learner123){'\n'}
+          teacher@example.com (password: teacher123){'\n'}
+          admin@example.com (password: admin123)
+        </Text>
       </View>
     </View>
   );
