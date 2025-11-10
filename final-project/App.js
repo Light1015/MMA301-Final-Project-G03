@@ -18,7 +18,9 @@ import AuthModel from "./src/models/AuthModel";
 import CertificateListView from "./src/views/certificates/CertificateListView";
 import CertificateFormView from "./src/views/certificates/CertificateFormView";
 import CertificateDetailView from "./src/views/certificates/CertificateDetailView";
-
+import CouponListView from './src/views/coupons/CouponListView.js';
+import CouponFormView from './src/views/coupons/CouponFormView.js';
+import CouponDetailView from './src/views/coupons/CouponDetailView.js';
 export default function App() {
 
   const [user, setUser] = useState(null);
@@ -27,6 +29,8 @@ export default function App() {
   const [refreshToken, setRefreshToken] = useState(0);
   const [selectedCourseId, setSelectedCourseId] = useState(null); // For navigating to specific course feedback
   const [currentView, setCurrentView] = useState("publicHome"); // 'publicHome', 'login', 'home', 'userManagement', 'courseManagement', 'courseCatalog', 'quizManagement', 'assignmentManagement'
+  const [couponRefreshToken, setCouponRefreshToken] = useState(0);
+  const [selectedCouponId, setSelectedCouponId] = useState(null);
 
   useEffect(() => {
     let mounted = true;
@@ -69,6 +73,20 @@ export default function App() {
     setUser(updatedUser);
   };
 
+  // Handle navigation to Coupon List
+  const handleNavigateToCoupon = () => setCurrentView('couponList');
+
+  // Handle navigation to Coupon Form (Create/Edit)
+  const handleNavigateToCouponForm = (couponId = null) => {
+    setSelectedCouponId(couponId);
+    setCurrentView('couponForm');
+  };
+
+  const handleNavigateToCouponDetail = (couponId) => {
+    setSelectedCouponId(couponId);
+    setCurrentView('couponDetail');
+  };
+  const handleBackToDashboard = () => setCurrentView('home');
   if (loadingInit) {
     return (
       <SafeAreaView style={styles.container}>
@@ -124,7 +142,7 @@ export default function App() {
               onNavigateToProfile={() => setCurrentView("profile")}
               onNavigateToMyFeedbacks={() => setCurrentView("myFeedbacks")}
               onNavigateToAssignmentManagement={() => setCurrentView("assignmentManagement")}
-
+              onNavigateToCoupon={() => setCurrentView("couponList")}
             />
           )}
           {currentView === "userManagement" && (
@@ -175,6 +193,36 @@ export default function App() {
               onBack={() => setCurrentView("certificateList")}
               onEdit={handleNavigateToCertificateForm}
               onSaved={handleCertificateSaved}
+            />
+          )}
+          {currentView === "couponList" && (
+            <CouponListView
+              onNavigateToForm={handleNavigateToCouponForm}
+              onViewDetail={handleNavigateToCouponDetail}
+              onBack={handleBackToDashboard}
+              key={couponRefreshToken}
+            />
+          )}
+          {currentView === "couponForm" && (
+            <CouponFormView
+              couponId={selectedCouponId}
+              onBack={handleNavigateToCoupon}
+              onSaved={() => {
+                setCouponRefreshToken(t => t + 1);
+                handleNavigateToCoupon();
+              }}
+            />
+          )}
+
+          {currentView === "couponDetail" && (
+            <CouponDetailView
+              couponId={selectedCouponId}
+              onBack={handleNavigateToCoupon}
+              onEdit={handleNavigateToCouponForm}
+              onSaved={() => {
+                setCouponRefreshToken(t => t + 1);
+                handleNavigateToCoupon();
+              }}
             />
           )}
           {currentView === "myCourses" && (

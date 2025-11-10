@@ -16,6 +16,7 @@ if (Platform.OS === 'web') {
 export default function AdminDashboard({ 
   onNavigateToUserManagement,
     onNavigateToCertificateList, // Add new prop
+    onNavigateToCoupon,
   }) {
 
   // Render Dashboard (Default View)
@@ -58,11 +59,11 @@ export default function AdminDashboard({
           <Text style={styles.cardText}>Monitor security.</Text>
         </TouchableOpacity>
 
-        <View style={styles.card}>
-          <Ionicons name="megaphone" size={40} color="#8B5CF6" />
-          <Text style={styles.cardTitle}>Announcements</Text>
-          <Text style={styles.cardText}>Manage announcements.</Text>
-        </View>
+        <TouchableOpacity style={styles.card} onPress={onNavigateToCoupon}>
+          <Ionicons name="ticket" size={40} color="#8B5CF6" />
+          <Text style={styles.cardTitle}>Coupon</Text>
+          <Text style={styles.cardText}>Manage coupons</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
