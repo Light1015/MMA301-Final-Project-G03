@@ -332,6 +332,34 @@ export const mockAssignments = [
     status: "completed",
   },
 ];
+// Mock quizzes data
+export const mockQuizzes = [
+  {
+    id: 1,
+    title: "JavaScript Basics Quiz",
+    courseId: 2,
+    courseName: "Advanced JavaScript",
+    instructor: "Teacher User",
+    questions: [
+      {
+        id: 1,
+        text: "What is a closure in JavaScript?",
+        options: ["A function inside another function", "A loop", "A variable type"],
+        answerIndex: 0,
+      },
+    ],
+    createdAt: "2025-11-01",
+  },
+  {
+    id: 2,
+    title: "React Native Quiz",
+    courseId: 1,
+    courseName: "React Native Basics",
+    instructor: "Teacher User",
+    questions: [],
+    createdAt: "2025-11-02",
+  },
+];
 export const mockCertificates = [
   {
     id: 1,

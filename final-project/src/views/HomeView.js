@@ -172,6 +172,7 @@ const DashboardContent = ({
   onNavigateToUserManagement,
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
+  onNavigateToQuizManagement,
 }) => {
   switch (role) {
     case "Admin":
@@ -186,6 +187,7 @@ const DashboardContent = ({
           user={user}
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
+          onNavigateToQuizManagement={onNavigateToQuizManagement}
         />
       );
     case "Learner":

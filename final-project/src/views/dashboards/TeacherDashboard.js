@@ -21,6 +21,7 @@ if (Platform.OS === "web") {
 export default function TeacherDashboard({
   user,
   onNavigateToCourseManagement,
+  onNavigateToQuizManagement,
   onNavigateToCourseCatalog,
 }) {
   const [stats, setStats] = useState({
@@ -98,11 +99,15 @@ export default function TeacherDashboard({
           <Text style={styles.cardTitle}>Student Progress</Text>
           <Text style={styles.cardText}>Monitor performance.</Text>
         </View>
-        <View style={styles.card}>
-          <Ionicons name="megaphone" size={40} color="#EF4444" />
-          <Text style={styles.cardTitle}>Announcements</Text>
-          <Text style={styles.cardText}>Post updates.</Text>
-        </View>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={onNavigateToQuizManagement}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="help-circle" size={40} color="#EF4444" />
+          <Text style={styles.cardTitle}>Quiz Management</Text>
+          <Text style={styles.cardText}>Create and manage quizzes.</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
