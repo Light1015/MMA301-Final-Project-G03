@@ -15,9 +15,16 @@ import ProfileView from "./src/views/profiles/ProfileView";
 import MyFeedbacksView from "./src/views/feedbacks/MyFeedbacksView";
 import AssignmentListView from "./src/views/assignments/AssignmentListView";
 import AuthModel from "./src/models/AuthModel";
+import CertificateListView from "./src/views/certificates/CertificateListView";
+import CertificateFormView from "./src/views/certificates/CertificateFormView";
+import CertificateDetailView from "./src/views/certificates/CertificateDetailView";
+
 export default function App() {
+  
   const [user, setUser] = useState(null);
   const [loadingInit, setLoadingInit] = useState(true);
+  const [selectedCertificateId, setSelectedCertificateId] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(0);
   const [selectedCourseId, setSelectedCourseId] = useState(null); // For navigating to specific course feedback
   const [currentView, setCurrentView] = useState("publicHome"); // 'publicHome', 'login', 'home', 'userManagement', 'courseManagement', 'courseCatalog', 'quizManagement', 'assignmentManagement'
 
@@ -39,7 +46,25 @@ export default function App() {
     setUser(null);
     setCurrentView("publicHome");
   };
+  const handleNavigateToCertificateList = () => {
+    setCurrentView("certificateList");
+    setSelectedCertificateId(null);
+  };
 
+  const handleNavigateToCertificateForm = (certId = null) => {
+    setSelectedCertificateId(certId);
+    setCurrentView("certificateForm");
+  };
+
+  const handleNavigateToCertificateDetail = (certId) => {
+    setSelectedCertificateId(certId);
+    setCurrentView("certificateDetail");
+  };
+
+  const handleCertificateSaved = () => {
+    setRefreshToken((prev) => prev + 1);
+    setCurrentView("certificateList");
+  };
   const handleProfileUpdate = (updatedUser) => {
     setUser(updatedUser);
   };
@@ -89,6 +114,8 @@ export default function App() {
               onNavigateToCourseManagement={() =>
                 setCurrentView("courseManagement")
               }
+              onNavigateToCertificateList={handleNavigateToCertificateList}
+
               onNavigateToCourseCatalog={() => setCurrentView("courseCatalog")}
               onNavigateToQuizManagement={() =>
                 setCurrentView("quizManagement")
@@ -97,6 +124,7 @@ export default function App() {
               onNavigateToProfile={() => setCurrentView("profile")}
               onNavigateToMyFeedbacks={() => setCurrentView("myFeedbacks")}
               onNavigateToAssignmentManagement={() => setCurrentView("assignmentManagement")}
+
             />
           )}
           {currentView === "userManagement" && (
@@ -125,6 +153,30 @@ export default function App() {
               user={user}
               onBack={() => setCurrentView("home")}
             />
+            )}
+            {currentView === "certificateList" && (
+              <CertificateListView
+                onNavigateToForm={handleNavigateToCertificateForm}
+                onNavigateToDetail={handleNavigateToCertificateDetail}
+                onBack={() => setCurrentView("home")}
+                refreshToken={refreshToken}
+              />
+            )}
+            {currentView === "certificateForm" && (
+              <CertificateFormView
+                certificateId={selectedCertificateId}
+                onBack={() => setCurrentView("certificateList")}
+                onSaved={handleCertificateSaved}
+              />
+            )}
+            {currentView === "certificateDetail" && (
+              <CertificateDetailView
+                certificateId={selectedCertificateId}
+                onBack={() => setCurrentView("certificateList")}
+                onEdit={handleNavigateToCertificateForm}
+                onSaved={handleCertificateSaved}
+              />
+            )}
           )}
           {currentView === "myCourses" && (
             <MyCoursesView

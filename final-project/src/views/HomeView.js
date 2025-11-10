@@ -164,6 +164,7 @@ const DashboardContent = ({
   onNavigateToUserManagement,
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
+  onNavigateToCertificateList,
   onNavigateToQuizManagement,
   onNavigateToMyCourses,
   onNavigateToProfile,
@@ -173,10 +174,11 @@ const DashboardContent = ({
   switch (role) {
     case "Admin":
       return (
-        <AdminDashboard
+      <AdminDashboard
           onNavigateToUserManagement={onNavigateToUserManagement}
+         onNavigateToCertificateList= { onNavigateToCertificateList }
         />
-      );
+           );
     case "Teacher":
       return (
         <TeacherDashboard
@@ -217,6 +219,7 @@ export default function HomeView({
   onNavigateToUserManagement,
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
+  onNavigateToCertificateList,
   onNavigateToQuizManagement,
   onNavigateToMyCourses,
   onNavigateToProfile,
@@ -236,6 +239,7 @@ export default function HomeView({
           onNavigateToUserManagement={onNavigateToUserManagement}
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
+          onNavigateToCertificateList={onNavigateToCertificateList}
           onNavigateToQuizManagement={onNavigateToQuizManagement}
           onNavigateToMyCourses={onNavigateToMyCourses}
           onNavigateToProfile={onNavigateToProfile}
