@@ -417,12 +417,13 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
 
+
     formRow: { 
-        width: '100%',      // ✅ THÊM
+        width: '100%',      
         marginBottom: 16 
     },
     formRowRow: {
-        width: '100%',      // ✅ THÊM
+        width: '100%',      
         flexDirection: 'row',
         alignItems: 'flex-end',
         justifyContent: 'space-between',
@@ -436,7 +437,7 @@ const styles = StyleSheet.create({
         marginBottom: 8 
     },
     input: {
-        width: '100%',              // ✅ THÊM
+        width: '100%',              
         backgroundColor: '#FAFAFB',
         borderRadius: 10,
         padding: 12,
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
         color: '#111827',
     },
     inputError: { 
-        borderColor: '#EF4444', 
+        borderColor: '#f17676ff', 
         backgroundColor: '#FEF2F2' 
     },
     inputDisabled: { 
