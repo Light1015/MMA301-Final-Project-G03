@@ -2,16 +2,12 @@ import { mockCertificates } from '../database/db';
 
 class CertificateModel {
     constructor() {
-        // clone initial data to avoid accidental external mutation
         this.certificates = (mockCertificates || []).map(c => ({ ...c }));
-        // set nextId to max existing id + 1
         const maxId = this.certificates.reduce((m, c) => Math.max(m, Number(c.id || 0)), 0);
         this.nextId = maxId + 1;
     }
 
-    // Get all certificates (return a copy)
     getAllCertificates() {
-        // default sort by id desc so newest first
         return [...this.certificates].sort((a, b) => b.id - a.id);
     }
 
