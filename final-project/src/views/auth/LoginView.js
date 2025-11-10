@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import AuthController from '../controllers/AuthController';
+import AuthController from '../../controllers/AuthController';
 
 // Import web SCSS only on web builds
 if (Platform.OS === 'web') {
@@ -12,12 +12,13 @@ if (Platform.OS === 'web') {
   }
 }
 
-export default function LoginView({ onLogin, onBack }) {
+export default function LoginView({ onLogin, onBack, onNavigateToRegister }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [serverMessage, setServerMessage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async () => {
     setErrors({});
@@ -72,12 +73,26 @@ export default function LoginView({ onLogin, onBack }) {
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         )}
-        <Text style={styles.hint}>
-          Test accounts:{'\n'}
-          learner@example.com (password: learner123){'\n'}
-          teacher@example.com (password: teacher123){'\n'}
-          admin@example.com (password: admin123)
-        </Text>
+
+        {onNavigateToRegister && (
+          <>
+            <View style={styles.dividerContainer}>
+              <View style={styles.divider} />
+              <Text style={styles.dividerText}>OR</Text>
+              <View style={styles.divider} />
+            </View>
+
+            <TouchableOpacity 
+              onPress={onNavigateToRegister} 
+              style={styles.registerButton}
+            >
+              <Ionicons name="person-add-outline" size={18} color="#10B981" style={styles.registerIcon} />
+              <Text style={styles.registerButtonText}>Create New Account</Text>
+            </TouchableOpacity>
+          </>
+        )}
+
+     
       </View>
     </View>
   );
@@ -152,6 +167,56 @@ const styles = StyleSheet.create({
   },
   loading: {
     marginTop: 12,
+  },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 20,
+    marginBottom: 16,
+  },
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#E5E7EB',
+  },
+  dividerText: {
+    marginHorizontal: 12,
+    fontSize: 12,
+    color: '#9CA3AF',
+    fontWeight: '600',
+  },
+  registerButton: {
+    width: '100%',
+    padding: 14,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#10B981',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  registerIcon: {
+    marginRight: 8,
+  },
+  registerButtonText: {
+    color: '#10B981',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  registerLink: {
+    marginTop: 16,
+    paddingVertical: 8,
+  },
+  registerLinkText: {
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+  },
+  registerLinkBold: {
+    fontWeight: '700',
+    color: '#10B981',
   },
   hint: {
     marginTop: 16,
