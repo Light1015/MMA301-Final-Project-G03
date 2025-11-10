@@ -171,14 +171,16 @@ const DashboardContent = ({
   onNavigateToUserManagement,
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
+  onNavigateToCertificateList,
 }) => {
   switch (role) {
     case "Admin":
       return (
-        <AdminDashboard
+      <AdminDashboard
           onNavigateToUserManagement={onNavigateToUserManagement}
+         onNavigateToCertificateList= { onNavigateToCertificateList }
         />
-      );
+           );
     case "Teacher":
       return (
         <TeacherDashboard
@@ -209,6 +211,7 @@ export default function HomeView({
   onNavigateToUserManagement,
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
+  onNavigateToCertificateList,
 }) {
   const [activeTab, setActiveTab] = useState("home");
 
@@ -222,6 +225,7 @@ export default function HomeView({
           onNavigateToUserManagement={onNavigateToUserManagement}
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
+          onNavigateToCertificateList={onNavigateToCertificateList}
         />
         <Footer />
       </View>

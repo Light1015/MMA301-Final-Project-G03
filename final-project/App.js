@@ -9,12 +9,16 @@ import UserManagementView from "./src/views/UserManagementView";
 import CourseManagementView from "./src/views/CourseManagementView";
 import CourseCatalogView from "./src/views/CourseCatalogView";
 import AuthModel from "./src/models/AuthModel";
+import CertificateListView from "./src/views/certificates/CertificateListView";
+import CertificateFormView from "./src/views/certificates/CertificateFormView";
+import CertificateDetailView from "./src/views/certificates/CertificateDetailView";
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [loadingInit, setLoadingInit] = useState(true);
   const [currentView, setCurrentView] = useState("publicHome"); // 'publicHome', 'login', 'home', 'userManagement', 'courseManagement', 'courseCatalog'
-
+  const [selectedCertificateId, setSelectedCertificateId] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(0);
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -33,7 +37,25 @@ export default function App() {
     setUser(null);
     setCurrentView("publicHome");
   };
+  const handleNavigateToCertificateList = () => {
+    setCurrentView("certificateList");
+    setSelectedCertificateId(null);
+  };
 
+  const handleNavigateToCertificateForm = (certId = null) => {
+    setSelectedCertificateId(certId);
+    setCurrentView("certificateForm");
+  };
+
+  const handleNavigateToCertificateDetail = (certId) => {
+    setSelectedCertificateId(certId);
+    setCurrentView("certificateDetail");
+  };
+
+  const handleCertificateSaved = () => {
+    setRefreshToken((prev) => prev + 1);
+    setCurrentView("certificateList");
+  };
   if (loadingInit) {
     return (
       <SafeAreaView style={styles.container}>
@@ -70,7 +92,8 @@ export default function App() {
               onNavigateToCourseManagement={() =>
                 setCurrentView("courseManagement")
               }
-              onNavigateToCourseCatalog={() => setCurrentView("courseCatalog")}
+                onNavigateToCourseCatalog={() => setCurrentView("courseCatalog")}
+              onNavigateToCertificateList={handleNavigateToCertificateList}
             />
           )}
           {currentView === "userManagement" && (
@@ -90,7 +113,30 @@ export default function App() {
               user={user}
               onBack={() => setCurrentView("home")}
             />
-          )}
+            )}
+            {currentView === "certificateList" && (
+              <CertificateListView
+                onNavigateToForm={handleNavigateToCertificateForm}
+                onNavigateToDetail={handleNavigateToCertificateDetail}
+                onBack={() => setCurrentView("home")}
+                refreshToken={refreshToken}
+              />
+            )}
+            {currentView === "certificateForm" && (
+              <CertificateFormView
+                certificateId={selectedCertificateId}
+                onBack={() => setCurrentView("certificateList")}
+                onSaved={handleCertificateSaved}
+              />
+            )}
+            {currentView === "certificateDetail" && (
+              <CertificateDetailView
+                certificateId={selectedCertificateId}
+                onBack={() => setCurrentView("certificateList")}
+                onEdit={handleNavigateToCertificateForm}
+                onSaved={handleCertificateSaved}
+              />
+            )}
         </View>
       )}
       <StatusBar style="auto" />

@@ -13,88 +13,10 @@ if (Platform.OS === 'web') {
     // ignore if sass not installed
   }
 }
-
-export default function AdminDashboard({ onNavigateToUserManagement }) {
-  const [currentView, setCurrentView] = useState('dashboard'); // dashboard, list, form, detail
-  const [selectedCertificateId, setSelectedCertificateId] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(0);
-
-  // Handle navigation to Certificate List
-  const handleNavigateToCertificates = () => {
-    setSelectedCertificateId(null);
-    setCurrentView('list');
-  };
-
-  // Handle navigation to Certificate Form (Create/Edit)
-  const handleNavigateToForm = (certificateId = null) => {
-    setSelectedCertificateId(certificateId);
-    setCurrentView('form');
-  };
-
-  // Handle navigation to Certificate Detail
-  const handleNavigateToDetail = (certificateId) => {
-    setSelectedCertificateId(certificateId);
-    setCurrentView('detail');
-  };
-
-  // Handle back to dashboard
-  const handleBackToDashboard = () => {
-    setCurrentView('dashboard');
-    setSelectedCertificateId(null);
-  };
-
-  // Handle back to list from form/detail
-  const handleBackToList = () => {
-    setCurrentView('list');
-    setSelectedCertificateId(null);
-  };
-
-  // Called when a certificate is created/updated/deleted to refresh list
-  const handleSaved = () => {
-    setRefreshToken((t) => t + 1);
-    setCurrentView('list');
-    setSelectedCertificateId(null);
-  };
-
-  // Render Certificate List View
-  if (currentView === 'list') {
-    return (
-      <View style={{ flex: 1 }}>
-        <CertificateListView
-          onNavigateToForm={handleNavigateToForm}
-          onNavigateToDetail={handleNavigateToDetail}
-          refreshToken={refreshToken}
-        />
-      </View>
-    );
-  }
-
-  // Render Certificate Form View (Create/Edit)
-  if (currentView === 'form') {
-    return (
-      <View style={{ flex: 1 }}>
-        <CertificateFormView
-          certificateId={selectedCertificateId}
-          onBack={handleBackToList}
-          onSaved={handleSaved}
-        />
-      </View>
-    );
-  }
-
-  // Render Certificate Detail View
-  if (currentView === 'detail') {
-    return (
-      <View style={{ flex: 1 }}>
-        <CertificateDetailView
-          certificateId={selectedCertificateId}
-          onBack={handleBackToList}
-          onEdit={handleNavigateToForm}
-          onSaved={handleSaved}
-        />
-      </View>
-    );
-  }
+export default function AdminDashboard({ 
+  onNavigateToUserManagement,
+    onNavigateToCertificateList, // Add new prop
+  }) {
 
   // Render Dashboard (Default View)
   return (
@@ -108,7 +30,7 @@ export default function AdminDashboard({ onNavigateToUserManagement }) {
           <Text style={styles.cardText}>Manage users and roles.</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card} onPress={handleNavigateToCertificates}>
+        <TouchableOpacity style={styles.card} onPress={onNavigateToCertificateList}>
           <Ionicons name="ribbon" size={40} color="#FFD700" />
           <Text style={styles.cardTitle}>Certificate Management</Text>
           <Text style={styles.cardText}>Create and manage certificates.</Text>
