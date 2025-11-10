@@ -11,56 +11,69 @@ import {
     TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import QuizController from "../../controllers/QuizController";
-import DetailQuizView from "./DetailQuizView";
+import AssignmentController from "../../controllers/AssignmentController";
+import CourseController from "../../controllers/CourseController";
+import DetailAssignmentView from "./DetailAssignmentView";
 
-export default function QuizzesListView({ user, onBack }) {
-    const [quizzes, setQuizzes] = useState([]);
-    const [filteredQuizzes, setFilteredQuizzes] = useState([]);
+export default function AssignmentListView({ user, onBack }) {
+    const [assignments, setAssignments] = useState([]);
+    const [filteredAssignments, setFilteredAssignments] = useState([]);
     const [showDetail, setShowDetail] = useState(false);
-    const [selectedQuiz, setSelectedQuiz] = useState(null);
+    const [selectedAssignment, setSelectedAssignment] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    const [currentQuiz, setCurrentQuiz] = useState(null);
+    const [currentAssignment, setCurrentAssignment] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [sortBy, setSortBy] = useState("newest");
     const [currentPage, setCurrentPage] = useState(1);
+    const [courses, setCourses] = useState([]);
     const itemsPerPage = 8;
+
     const [formData, setFormData] = useState({
         title: "",
+        courseId: "",
         courseName: "",
         description: "",
+        dueDate: "",
+        totalPoints: "100",
+        status: "draft",
     });
 
     useEffect(() => {
-        loadQuizzes();
+        loadAssignments();
+        loadCourses();
     }, []);
 
     useEffect(() => {
-        filterAndSortQuizzes();
-    }, [quizzes, searchQuery, sortBy]);
+        filterAndSortAssignments();
+    }, [assignments, searchQuery, sortBy]);
 
-    const loadQuizzes = () => {
-        const res = QuizController.getTeacherQuizzes(user.name);
+    const loadAssignments = () => {
+        const res = AssignmentController.getTeacherAssignments(user.name);
         if (res.success) {
-            setQuizzes(res.data);
-            setFilteredQuizzes(res.data);
+            setAssignments(res.data);
+            setFilteredAssignments(res.data);
         }
     };
 
-    const filterAndSortQuizzes = () => {
-        let result = [...quizzes];
+    const loadCourses = () => {
+        const res = CourseController.getTeacherCourses(user.name);
+        if (res.success) {
+            setCourses(res.data);
+        }
+    };
 
-        // Search filter
+    const filterAndSortAssignments = () => {
+        let result = [...assignments];
+
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase();
-            result = result.filter(q =>
-                (q.title || "").toLowerCase().includes(query) ||
-                (q.courseName || "").toLowerCase().includes(query)
+            result = result.filter(a =>
+                (a.title || "").toLowerCase().includes(query) ||
+                (a.courseName || "").toLowerCase().includes(query)
             );
         }
 
-        // Sort
         result.sort((a, b) => {
             if (sortBy === "newest") {
                 return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
@@ -70,31 +83,35 @@ export default function QuizzesListView({ user, onBack }) {
             return 0;
         });
 
-        setFilteredQuizzes(result);
+        setFilteredAssignments(result);
         setCurrentPage(1);
     };
 
-    const getStatusBadge = (quiz) => {
-        const qCount = quiz.questions ? quiz.questions.length : 0;
-        if (qCount === 0) return { label: "Inactive", color: "#EF4444" };
-        if (qCount < 5) return { label: "Active", color: "#10B981" };
-        return { label: "Done", color: "#6366F1" };
+    const getStatusBadge = (assignment) => {
+        if (assignment.status === "published") return { label: "Published", color: "#10B981" };
+        if (assignment.status === "draft") return { label: "Draft", color: "#6B7280" };
+        if (assignment.status === "closed") return { label: "Closed", color: "#EF4444" };
+        return { label: "Unknown", color: "#9CA3AF" };
     };
 
-    const handleCreateQuiz = () => {
+    const handleCreateAssignment = () => {
         setEditMode(false);
-        setCurrentQuiz(null);
-        setFormData({ title: "", courseName: "", description: "" });
+        setCurrentAssignment(null);
+        setFormData({ title: "", courseId: "", courseName: "", description: "", dueDate: "", totalPoints: "100", status: "draft" });
         setModalVisible(true);
     };
 
-    const handleEditQuiz = (quiz) => {
+    const handleEditAssignment = (assignment) => {
         setEditMode(true);
-        setCurrentQuiz(quiz);
+        setCurrentAssignment(assignment);
         setFormData({
-            title: quiz.title || "",
-            courseName: quiz.courseName || "",
-            description: quiz.description || "",
+            title: assignment.title || "",
+            courseId: assignment.courseId || "",
+            courseName: assignment.courseName || "",
+            description: assignment.description || "",
+            dueDate: assignment.dueDate || "",
+            totalPoints: String(assignment.totalPoints || 100),
+            status: assignment.status || "draft",
         });
         setModalVisible(true);
     };
@@ -104,38 +121,47 @@ export default function QuizzesListView({ user, onBack }) {
             showAlert("Error", "Title is required");
             return;
         }
+
+        const selectedCourse = courses.find(c => c.id === parseInt(formData.courseId));
+        const payload = {
+            ...formData,
+            courseName: selectedCourse ? selectedCourse.title : formData.courseName,
+            totalPoints: parseInt(formData.totalPoints) || 100,
+        };
+
         let result;
-        if (editMode && currentQuiz) {
-            result = QuizController.updateQuiz(currentQuiz.id, formData, user.name);
+        if (editMode && currentAssignment) {
+            result = AssignmentController.updateAssignment(currentAssignment.id, payload, user.name);
         } else {
-            result = QuizController.createQuiz(formData, user.name);
+            result = AssignmentController.createAssignment(payload, user.name);
         }
+
         if (result.success) {
             setModalVisible(false);
-            loadQuizzes();
+            loadAssignments();
             showAlert("Success", result.message);
         } else {
             showAlert("Error", result.error);
         }
     };
 
-    const handleDelete = (quiz) => {
+    const handleDelete = (assignment) => {
         if (Platform.OS === "web") {
-            if (!window.confirm(`Delete quiz "${quiz.title}"?`)) return;
+            if (!window.confirm(`Delete assignment "${assignment.title}"?`)) return;
         } else {
-            Alert.alert("Delete Quiz", `Delete quiz "${quiz.title}"?`, [
+            Alert.alert("Delete Assignment", `Delete assignment "${assignment.title}"?`, [
                 { text: "Cancel", style: "cancel" },
-                { text: "Delete", style: "destructive", onPress: () => doDelete(quiz.id) },
+                { text: "Delete", style: "destructive", onPress: () => doDelete(assignment.id) },
             ]);
             return;
         }
-        doDelete(quiz.id);
+        doDelete(assignment.id);
     };
 
     const doDelete = (id) => {
-        const res = QuizController.deleteQuiz(id, user.name);
+        const res = AssignmentController.deleteAssignment(id, user.name);
         if (res.success) {
-            loadQuizzes();
+            loadAssignments();
             showAlert("Success", res.message);
         } else {
             showAlert("Error", res.error);
@@ -150,42 +176,39 @@ export default function QuizzesListView({ user, onBack }) {
         }
     };
 
-    if (showDetail && selectedQuiz) {
+    if (showDetail && selectedAssignment) {
         return (
-            <DetailQuizView
+            <DetailAssignmentView
                 user={user}
-                quiz={selectedQuiz}
+                assignment={selectedAssignment}
                 onBack={() => {
                     setShowDetail(false);
-                    setSelectedQuiz(null);
-                    loadQuizzes();
+                    setSelectedAssignment(null);
+                    loadAssignments();
                 }}
             />
         );
     }
 
-    // Pagination
-    const totalPages = Math.ceil(filteredQuizzes.length / itemsPerPage);
+    const totalPages = Math.ceil(filteredAssignments.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentQuizzes = filteredQuizzes.slice(startIndex, endIndex);
+    const currentAssignments = filteredAssignments.slice(startIndex, endIndex);
 
     return (
         <View style={styles.container}>
-            {/* Header with Back Button */}
-            <View style={styles.topHeader}>
+            {/* Header */}
+            <View style={styles.header}>
                 <TouchableOpacity onPress={onBack} style={styles.backButton}>
                     <Ionicons name="arrow-back" size={24} color="#4F46E5" />
-                    <Text style={styles.backText}>Back</Text>
                 </TouchableOpacity>
-            </View>
-
-            {/* Main Header */}
-            <View style={styles.mainHeader}>
-                <View style={styles.headerLeft}>
-                    <Ionicons name="folder-open" size={28} color="#4F46E5" />
-                    <Text style={styles.headerTitle}>My Quizzes</Text>
+                <View style={styles.headerCenter}>
+                    <Ionicons name="document-text" size={24} color="#4F46E5" />
+                    <Text style={styles.headerTitle}>Assignment Management</Text>
                 </View>
+                <TouchableOpacity style={styles.addButton} onPress={handleCreateAssignment}>
+                    <Ionicons name="add" size={28} color="#FFFFFF" />
+                </TouchableOpacity>
             </View>
 
             {/* Search and Sort Bar */}
@@ -213,61 +236,66 @@ export default function QuizzesListView({ user, onBack }) {
 
             {/* Table */}
             <ScrollView style={styles.tableContainer}>
-                {/* Table Header */}
                 <View style={styles.tableHeader}>
                     <View style={[styles.tableCell, styles.nameCell]}>
-                        <Text style={styles.headerText}>Quiz Name</Text>
+                        <Text style={styles.headerText}>Assignment Name</Text>
                     </View>
                     <View style={[styles.tableCell, styles.courseCell]}>
                         <Text style={styles.headerText}>Course</Text>
                     </View>
                     <View style={[styles.tableCell, styles.dateCell]}>
-                        <Text style={styles.headerText}>Date Added</Text>
+                        <Text style={styles.headerText}>Due Date</Text>
                     </View>
                     <View style={[styles.tableCell, styles.questionsCell]}>
                         <Text style={styles.headerText}>Questions</Text>
+                    </View>
+                    <View style={[styles.tableCell, styles.statusCell]}>
+                        <Text style={styles.headerText}>Status</Text>
                     </View>
                     <View style={[styles.tableCell, styles.actionsCell]}>
                         <Text style={styles.headerText}>Actions</Text>
                     </View>
                 </View>
 
-                {/* Table Rows */}
-                {currentQuizzes.length === 0 ? (
+                {currentAssignments.length === 0 ? (
                     <View style={styles.empty}>
-                        <Text style={styles.emptyText}>No quizzes found</Text>
+                        <Text style={styles.emptyText}>No assignments found</Text>
                     </View>
                 ) : (
-                    currentQuizzes.map((q, index) => {
-                        const status = getStatusBadge(q);
-                        const qCount = q.questions ? q.questions.length : 0;
+                    currentAssignments.map((a, index) => {
+                        const status = getStatusBadge(a);
+                        const qCount = a.questions ? a.questions.length : 0;
                         return (
                             <TouchableOpacity
-                                key={q.id}
+                                key={a.id}
                                 style={[styles.tableRow, index % 2 === 0 && styles.tableRowEven]}
-                                onPress={() => { setSelectedQuiz(q); setShowDetail(true); }}
+                                onPress={() => { setSelectedAssignment(a); setShowDetail(true); }}
                                 activeOpacity={0.7}
                             >
                                 <View style={[styles.tableCell, styles.nameCell]}>
-                                    <Text style={styles.fileName}>{q.title}</Text>
+                                    <Text style={styles.fileName}>{a.title}</Text>
                                 </View>
                                 <View style={[styles.tableCell, styles.courseCell]}>
-                                    <Text style={styles.cellText}>{q.courseName || "-"}</Text>
+                                    <Text style={styles.cellText}>{a.courseName || "-"}</Text>
                                 </View>
                                 <View style={[styles.tableCell, styles.dateCell]}>
                                     <Text style={styles.cellText}>
-                                        {q.createdAt ? new Date(q.createdAt).toLocaleDateString() : "-"}
+                                        {a.dueDate || "-"}
                                     </Text>
                                 </View>
                                 <View style={[styles.tableCell, styles.questionsCell]}>
                                     <Text style={styles.cellText}>{qCount}</Text>
                                 </View>
-
+                                <View style={[styles.tableCell, styles.statusCell]}>
+                                    <View style={[styles.statusBadge, { backgroundColor: status.color }]}>
+                                        <Text style={styles.statusText}>{status.label}</Text>
+                                    </View>
+                                </View>
                                 <View style={[styles.tableCell, styles.actionsCell]}>
                                     <TouchableOpacity
                                         onPress={(e) => {
                                             e.stopPropagation();
-                                            handleEditQuiz(q);
+                                            handleEditAssignment(a);
                                         }}
                                         style={styles.iconButton}
                                     >
@@ -276,7 +304,7 @@ export default function QuizzesListView({ user, onBack }) {
                                     <TouchableOpacity
                                         onPress={(e) => {
                                             e.stopPropagation();
-                                            handleDelete(q);
+                                            handleDelete(a);
                                         }}
                                         style={styles.iconButton}
                                     >
@@ -290,50 +318,59 @@ export default function QuizzesListView({ user, onBack }) {
             </ScrollView>
 
             {/* Pagination */}
-            <View style={styles.pagination}>
-                <Text style={styles.paginationText}>
-                    Showing data {startIndex + 1} to {Math.min(endIndex, filteredQuizzes.length)} of {filteredQuizzes.length} entries
-                </Text>
-                <View style={styles.paginationButtons}>
-                    <TouchableOpacity
-                        style={[styles.pageButton, currentPage === 1 && styles.pageButtonDisabled]}
-                        onPress={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                        disabled={currentPage === 1}
-                    >
-                        <Ionicons name="chevron-back" size={16} color={currentPage === 1 ? "#D1D5DB" : "#4F46E5"} />
-                    </TouchableOpacity>
-                    {[...Array(totalPages)].map((_, i) => (
+            {totalPages > 1 && (
+                <View style={styles.pagination}>
+                    <Text style={styles.paginationText}>
+                        {startIndex + 1}-{Math.min(endIndex, filteredAssignments.length)} of {filteredAssignments.length}
+                    </Text>
+                    <View style={styles.paginationButtons}>
                         <TouchableOpacity
-                            key={i}
-                            style={[styles.pageButton, currentPage === i + 1 && styles.pageButtonActive]}
-                            onPress={() => setCurrentPage(i + 1)}
+                            style={[styles.pageButton, currentPage === 1 && styles.pageButtonDisabled]}
+                            onPress={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                            disabled={currentPage === 1}
                         >
-                            <Text style={[styles.pageButtonText, currentPage === i + 1 && styles.pageButtonTextActive]}>
-                                {i + 1}
-                            </Text>
+                            <Ionicons name="chevron-back" size={16} color={currentPage === 1 ? "#D1D5DB" : "#4F46E5"} />
                         </TouchableOpacity>
-                    ))}
-                    <TouchableOpacity
-                        style={[styles.pageButton, currentPage === totalPages && styles.pageButtonDisabled]}
-                        onPress={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                        disabled={currentPage === totalPages}
-                    >
-                        <Ionicons name="chevron-forward" size={16} color={currentPage === totalPages ? "#D1D5DB" : "#4F46E5"} />
-                    </TouchableOpacity>
+                        {[...Array(Math.min(5, totalPages))].map((_, i) => {
+                            let pageNum;
+                            if (totalPages <= 5) {
+                                pageNum = i + 1;
+                            } else if (currentPage <= 3) {
+                                pageNum = i + 1;
+                            } else if (currentPage >= totalPages - 2) {
+                                pageNum = totalPages - 4 + i;
+                            } else {
+                                pageNum = currentPage - 2 + i;
+                            }
+                            return (
+                                <TouchableOpacity
+                                    key={i}
+                                    style={[styles.pageButton, currentPage === pageNum && styles.pageButtonActive]}
+                                    onPress={() => setCurrentPage(pageNum)}
+                                >
+                                    <Text style={[styles.pageButtonText, currentPage === pageNum && styles.pageButtonTextActive]}>
+                                        {pageNum}
+                                    </Text>
+                                </TouchableOpacity>
+                            );
+                        })}
+                        <TouchableOpacity
+                            style={[styles.pageButton, currentPage === totalPages && styles.pageButtonDisabled]}
+                            onPress={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                            disabled={currentPage === totalPages}
+                        >
+                            <Ionicons name="chevron-forward" size={16} color={currentPage === totalPages ? "#D1D5DB" : "#4F46E5"} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
+            )}
 
-            {/* Floating Action Button */}
-            <TouchableOpacity style={styles.fab} onPress={handleCreateQuiz}>
-                <Ionicons name="add" size={28} color="#FFFFFF" />
-            </TouchableOpacity>
-
-            {/* Create/Edit Quiz Modal */}
+            {/* Modal */}
             <Modal visible={modalVisible} animationType="slide" transparent={true} onRequestClose={() => setModalVisible(false)}>
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>{editMode ? "Edit Quiz" : "Create Quiz"}</Text>
+                            <Text style={styles.modalTitle}>{editMode ? "Edit Assignment" : "Create Assignment"}</Text>
                             <TouchableOpacity onPress={() => setModalVisible(false)}>
                                 <Ionicons name="close" size={24} color="#6B7280" />
                             </TouchableOpacity>
@@ -343,29 +380,55 @@ export default function QuizzesListView({ user, onBack }) {
                                 <Text style={styles.label}>Title *</Text>
                                 <TextInput
                                     style={styles.input}
-                                    placeholder="e.g., JavaScript Basics Quiz"
+                                    placeholder="e.g., Midterm Exam"
                                     value={formData.title}
                                     onChangeText={(text) => setFormData({ ...formData, title: text })}
                                 />
                             </View>
                             <View style={styles.formGroup}>
-                                <Text style={styles.label}>Course Name</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="e.g., Advanced JavaScript"
-                                    value={formData.courseName}
-                                    onChangeText={(text) => setFormData({ ...formData, courseName: text })}
-                                />
+                                <Text style={styles.label}>Course *</Text>
+                                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.courseSelector}>
+                                    {courses.map((course) => (
+                                        <TouchableOpacity
+                                            key={course.id}
+                                            style={[styles.courseOption, formData.courseId === String(course.id) && styles.courseOptionActive]}
+                                            onPress={() => setFormData({ ...formData, courseId: String(course.id), courseName: course.title })}
+                                        >
+                                            <Text style={[styles.courseOptionText, formData.courseId === String(course.id) && styles.courseOptionTextActive]}>
+                                                {course.title}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </ScrollView>
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Description</Text>
                                 <TextInput
                                     style={[styles.input, styles.textArea]}
-                                    placeholder="Quiz description..."
+                                    placeholder="Assignment description..."
                                     value={formData.description}
                                     onChangeText={(text) => setFormData({ ...formData, description: text })}
                                     multiline
                                     numberOfLines={4}
+                                />
+                            </View>
+                            <View style={styles.formGroup}>
+                                <Text style={styles.label}>Due Date</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="YYYY-MM-DD"
+                                    value={formData.dueDate}
+                                    onChangeText={(text) => setFormData({ ...formData, dueDate: text })}
+                                />
+                            </View>
+                            <View style={styles.formGroup}>
+                                <Text style={styles.label}>Total Points</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="100"
+                                    value={formData.totalPoints}
+                                    onChangeText={(text) => setFormData({ ...formData, totalPoints: text })}
+                                    keyboardType="numeric"
                                 />
                             </View>
                             <View style={styles.modalActions}>
@@ -386,41 +449,35 @@ export default function QuizzesListView({ user, onBack }) {
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#F8FAFC' },
-    topHeader: {
+    header: {
         backgroundColor: '#FFFFFF',
-        padding: 12,
-        borderBottomWidth: 1,
-        borderBottomColor: '#E5E7EB',
-    },
-    backButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 8,
-    },
-    backText: {
-        marginLeft: 8,
-        fontSize: 16,
-        color: '#4F46E5',
-        fontWeight: '600',
-    },
-    mainHeader: {
-        backgroundColor: '#FFFFFF',
-        padding: 20,
-        flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        padding: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#E5E7EB',
     },
-    headerLeft: {
+    backButton: { padding: 8 },
+    headerCenter: {
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
     },
     headerTitle: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: '700',
         color: '#1F2937',
-        marginLeft: 12,
+        marginLeft: 8,
+    },
+    addButton: {
+        backgroundColor: '#4F46E5',
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     controlBar: {
         backgroundColor: '#FFFFFF',
@@ -443,9 +500,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#E5E7EB',
     },
-    searchIcon: {
-        marginRight: 8,
-    },
+    searchIcon: { marginRight: 8 },
     searchInput: {
         flex: 1,
         fontSize: 14,
@@ -503,17 +558,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: 4,
     },
-    nameCell: {
-        width: 150,
-    },
-    courseCell: {
-        width: 150,
-    },
-    dateCell: {
-        width: 100,
-    },
+    nameCell: { width: 120 },
+    courseCell: { width: 100 },
+    dateCell: { width: 80 },
     questionsCell: {
-        width: 60,
+        width: 80,
+        alignItems: 'center',
+    },
+    statusCell: {
+        width: 90,
         alignItems: 'center',
     },
     actionsCell: {
@@ -593,22 +646,6 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontWeight: '600',
     },
-    fab: {
-        position: 'absolute',
-        bottom: 84,
-        right: 24,
-        width: 56,
-        height: 56,
-        borderRadius: 28,
-        backgroundColor: '#4F46E5',
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 8,
-    },
     empty: {
         padding: 60,
         alignItems: 'center',
@@ -627,6 +664,29 @@ const styles = StyleSheet.create({
     label: { fontSize: 14, fontWeight: '600', color: '#374151', marginBottom: 6 },
     input: { borderWidth: 1, borderColor: '#D1D5DB', borderRadius: 8, padding: 10, backgroundColor: '#FFFFFF', fontSize: 16 },
     textArea: { height: 100, textAlignVertical: 'top' },
+    courseSelector: { flexDirection: 'row', marginTop: 8 },
+    courseOption: {
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#D1D5DB',
+        marginRight: 8,
+        backgroundColor: '#FFFFFF',
+    },
+    courseOptionActive: {
+        backgroundColor: '#4F46E5',
+        borderColor: '#4F46E5',
+    },
+    courseOptionText: {
+        fontSize: 14,
+        color: '#6B7280',
+        fontWeight: '500',
+    },
+    courseOptionTextActive: {
+        color: '#FFFFFF',
+        fontWeight: '600',
+    },
     modalActions: { flexDirection: 'row', justifyContent: 'space-between', padding: 12 },
     modalButton: { flex: 1, padding: 12, borderRadius: 8, alignItems: 'center', marginHorizontal: 4 },
     cancelButton: { backgroundColor: '#F3F4F6' },

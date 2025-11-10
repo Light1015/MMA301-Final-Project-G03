@@ -13,12 +13,13 @@ import MyCoursesView from "./src/views/courses/MyCoursesView";
 import QuizzesListView from "./src/views/quizzes/QuizzesListView";
 import ProfileView from "./src/views/profiles/ProfileView";
 import MyFeedbacksView from "./src/views/feedbacks/MyFeedbacksView";
+import AssignmentListView from "./src/views/assignments/AssignmentListView";
 import AuthModel from "./src/models/AuthModel";
 export default function App() {
   const [user, setUser] = useState(null);
   const [loadingInit, setLoadingInit] = useState(true);
-  const [currentView, setCurrentView] = useState("publicHome"); // 'publicHome', 'login', 'register', 'home', 'userManagement', 'courseManagement', 'courseCatalog', 'myCourses', 'profile', 'myFeedbacks'
   const [selectedCourseId, setSelectedCourseId] = useState(null); // For navigating to specific course feedback
+  const [currentView, setCurrentView] = useState("publicHome"); // 'publicHome', 'login', 'home', 'userManagement', 'courseManagement', 'courseCatalog', 'quizManagement', 'assignmentManagement'
 
   useEffect(() => {
     let mounted = true;
@@ -95,6 +96,7 @@ export default function App() {
               onNavigateToMyCourses={() => setCurrentView("myCourses")}
               onNavigateToProfile={() => setCurrentView("profile")}
               onNavigateToMyFeedbacks={() => setCurrentView("myFeedbacks")}
+              onNavigateToAssignmentManagement={() => setCurrentView("assignmentManagement")}
             />
           )}
           {currentView === "userManagement" && (
@@ -114,6 +116,9 @@ export default function App() {
               user={user}
               onBack={() => setCurrentView("home")}
             />
+          )}
+          {currentView === "assignmentManagement" && (
+            <AssignmentListView user={user} onBack={() => setCurrentView("home")} />
           )}
           {currentView === "courseCatalog" && (
             <CourseCatalogView

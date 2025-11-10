@@ -56,6 +56,7 @@ const BottomNavbar = ({
   role,
   onNavigateToUserManagement,
   onNavigateToMyCourses,
+  onNavigateToAssignmentManagement,
   activeTab,
   setActiveTab,
 }) => {
@@ -83,6 +84,7 @@ const BottomNavbar = ({
         name: "Assignments",
         icon: "document-outline",
         iconActive: "document",
+        action: onNavigateToAssignmentManagement,
       },
       {
         id: "students",
@@ -166,6 +168,7 @@ const DashboardContent = ({
   onNavigateToMyCourses,
   onNavigateToProfile,
   onNavigateToMyFeedbacks,
+  onNavigateToAssignmentManagement,
 }) => {
   switch (role) {
     case "Admin":
@@ -181,6 +184,7 @@ const DashboardContent = ({
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
           onNavigateToQuizManagement={onNavigateToQuizManagement}
+          onNavigateToAssignmentManagement={onNavigateToAssignmentManagement}
         />
       );
     case "Learner":
@@ -217,6 +221,7 @@ export default function HomeView({
   onNavigateToMyCourses,
   onNavigateToProfile,
   onNavigateToMyFeedbacks,
+  onNavigateToAssignmentManagement,
 }) {
   const [activeTab, setActiveTab] = useState("home");
 
@@ -235,6 +240,7 @@ export default function HomeView({
           onNavigateToMyCourses={onNavigateToMyCourses}
           onNavigateToProfile={onNavigateToProfile}
           onNavigateToMyFeedbacks={onNavigateToMyFeedbacks}
+          onNavigateToAssignmentManagement={onNavigateToAssignmentManagement}
         />
         <Footer />
       </View>
@@ -242,6 +248,7 @@ export default function HomeView({
         role={user.role}
         onNavigateToUserManagement={onNavigateToUserManagement}
         onNavigateToMyCourses={onNavigateToMyCourses}
+        onNavigateToAssignmentManagement={onNavigateToAssignmentManagement}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
