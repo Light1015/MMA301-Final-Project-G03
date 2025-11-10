@@ -168,6 +168,7 @@ const BottomNavbar = ({
 
 const DashboardContent = ({
   role,
+  user,
   onNavigateToUserManagement,
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
@@ -182,6 +183,7 @@ const DashboardContent = ({
     case "Teacher":
       return (
         <TeacherDashboard
+          user={user}
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
         />
@@ -223,6 +225,7 @@ export default function HomeView({
         <Header user={user} />
         <DashboardContent
           role={user.role}
+          user={user}
           onNavigateToUserManagement={onNavigateToUserManagement}
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
