@@ -61,13 +61,22 @@ export default function App() {
             <HomeView
               user={user}
               onLogout={handleLogout}
-              onNavigateToUserManagement={() => setCurrentView('userManagement')}
+              onNavigateToUserManagement={
+                user.role === 'Admin' ? () => setCurrentView('userManagement') : undefined
+              }
             />
           )}
-          {currentView === 'userManagement' && (
+          {currentView === 'userManagement' && user.role === 'Admin' && (
             <UserManagementView
               user={user}
               onBack={() => setCurrentView('home')}
+            />
+          )}
+          {currentView === 'userManagement' && user.role !== 'Admin' && (
+            <HomeView
+              user={user}
+              onLogout={handleLogout}
+              onNavigateToUserManagement={undefined}
             />
           )}
         </View>
