@@ -20,7 +20,7 @@ import CertificateFormView from "./src/views/certificates/CertificateFormView";
 import CertificateDetailView from "./src/views/certificates/CertificateDetailView";
 
 export default function App() {
-  
+
   const [user, setUser] = useState(null);
   const [loadingInit, setLoadingInit] = useState(true);
   const [selectedCertificateId, setSelectedCertificateId] = useState(null);
@@ -153,30 +153,29 @@ export default function App() {
               user={user}
               onBack={() => setCurrentView("home")}
             />
-            )}
-            {currentView === "certificateList" && (
-              <CertificateListView
-                onNavigateToForm={handleNavigateToCertificateForm}
-                onNavigateToDetail={handleNavigateToCertificateDetail}
-                onBack={() => setCurrentView("home")}
-                refreshToken={refreshToken}
-              />
-            )}
-            {currentView === "certificateForm" && (
-              <CertificateFormView
-                certificateId={selectedCertificateId}
-                onBack={() => setCurrentView("certificateList")}
-                onSaved={handleCertificateSaved}
-              />
-            )}
-            {currentView === "certificateDetail" && (
-              <CertificateDetailView
-                certificateId={selectedCertificateId}
-                onBack={() => setCurrentView("certificateList")}
-                onEdit={handleNavigateToCertificateForm}
-                onSaved={handleCertificateSaved}
-              />
-            )}
+          )}
+          {currentView === "certificateList" && (
+            <CertificateListView
+              onNavigateToForm={handleNavigateToCertificateForm}
+              onNavigateToDetail={handleNavigateToCertificateDetail}
+              onBack={() => setCurrentView("home")}
+              refreshToken={refreshToken}
+            />
+          )}
+          {currentView === "certificateForm" && (
+            <CertificateFormView
+              certificateId={selectedCertificateId}
+              onBack={() => setCurrentView("certificateList")}
+              onSaved={handleCertificateSaved}
+            />
+          )}
+          {currentView === "certificateDetail" && (
+            <CertificateDetailView
+              certificateId={selectedCertificateId}
+              onBack={() => setCurrentView("certificateList")}
+              onEdit={handleNavigateToCertificateForm}
+              onSaved={handleCertificateSaved}
+            />
           )}
           {currentView === "myCourses" && (
             <MyCoursesView
