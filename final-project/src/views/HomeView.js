@@ -213,6 +213,7 @@ export default function HomeView({
   onNavigateToUserManagement,
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
+  onNavigateToQuizManagement,
 }) {
   const [activeTab, setActiveTab] = useState("home");
 
@@ -231,6 +232,7 @@ export default function HomeView({
           onNavigateToUserManagement={onNavigateToUserManagement}
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
+          onNavigateToQuizManagement={onNavigateToQuizManagement}
         />
         <Footer />
       </ScrollView>
