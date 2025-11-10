@@ -179,7 +179,6 @@ const CertificateListView = ({
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderCertificate}
         showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={true} // Android: allow nested scrolling
         keyboardShouldPersistTaps="handled"
         removeClippedSubviews={false} // safer for complex items
         ListEmptyComponent={

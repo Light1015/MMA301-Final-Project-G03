@@ -217,11 +217,7 @@ export default function HomeView({
   return (
     <View style={styles.wrapper}>
       <TopNavbar onLogout={onLogout} role={user.role} />
-      <ScrollView
-        contentContainerStyle={styles.container}
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-      >
+      <View style={[styles.scrollView, styles.container]}>
         <Header user={user} />
         <DashboardContent
           role={user.role}
@@ -231,7 +227,7 @@ export default function HomeView({
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
         />
         <Footer />
-      </ScrollView>
+      </View>
       <BottomNavbar
         role={user.role}
         onNavigateToUserManagement={onNavigateToUserManagement}
