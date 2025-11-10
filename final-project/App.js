@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import LoginView from "./src/views/LoginView";
+import LoginView from "./src/views/auth/LoginView";
 import PublicHomeView from "./src/views/PublicHomeView";
 import HomeView from "./src/views/HomeView";
-import UserManagementView from "./src/views/UserManagementView";
+import RegisterView from "./src/views/auth/RegisterView";
+import UsersShell from "./src/views/users";
 import CourseManagementView from "./src/views/courses/CourseManagementView";
 import CourseCatalogView from "./src/views/courses/CourseCatalogView";
 import MyCoursesView from "./src/views/courses/MyCoursesView";
@@ -13,11 +14,10 @@ import QuizzesListView from "./src/views/quizzes/QuizzesListView";
 import ProfileView from "./src/views/profiles/ProfileView";
 import MyFeedbacksView from "./src/views/feedbacks/MyFeedbacksView";
 import AuthModel from "./src/models/AuthModel";
-
 export default function App() {
   const [user, setUser] = useState(null);
   const [loadingInit, setLoadingInit] = useState(true);
-  const [currentView, setCurrentView] = useState("publicHome"); // 'publicHome', 'login', 'home', 'userManagement', 'courseManagement', 'courseCatalog', 'myCourses', 'profile', 'myFeedbacks'
+  const [currentView, setCurrentView] = useState("publicHome"); // 'publicHome', 'login', 'register', 'home', 'userManagement', 'courseManagement', 'courseCatalog', 'myCourses', 'profile', 'myFeedbacks'
   const [selectedCourseId, setSelectedCourseId] = useState(null); // For navigating to specific course feedback
 
   useEffect(() => {
@@ -57,7 +57,15 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       {!user ? (
         currentView === "publicHome" ? (
-          <PublicHomeView onNavigateToLogin={() => setCurrentView("login")} />
+          <PublicHomeView
+            onNavigateToLogin={() => setCurrentView("login")}
+            onNavigateToRegister={() => setCurrentView("register")}
+          />
+        ) : currentView === "register" ? (
+          <RegisterView
+            onBack={() => setCurrentView("publicHome")}
+            onNavigateToLogin={() => setCurrentView("login")}
+          />
         ) : (
           <LoginView
             onLogin={(u) => {
@@ -65,6 +73,7 @@ export default function App() {
               setCurrentView("home");
             }}
             onBack={() => setCurrentView("publicHome")}
+            onNavigateToRegister={() => setCurrentView("register")}
           />
         )
       ) : (
@@ -89,8 +98,8 @@ export default function App() {
             />
           )}
           {currentView === "userManagement" && (
-            <UserManagementView
-              user={user}
+            <UsersShell
+              currentUser={user}
               onBack={() => setCurrentView("home")}
             />
           )}
