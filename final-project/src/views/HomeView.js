@@ -172,6 +172,7 @@ const DashboardContent = ({
   onNavigateToUserManagement,
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
+  onNavigateToQuizManagement,
 }) => {
   switch (role) {
     case "Admin":
@@ -186,6 +187,7 @@ const DashboardContent = ({
           user={user}
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
+          onNavigateToQuizManagement={onNavigateToQuizManagement}
         />
       );
     case "Learner":
@@ -211,6 +213,7 @@ export default function HomeView({
   onNavigateToUserManagement,
   onNavigateToCourseManagement,
   onNavigateToCourseCatalog,
+  onNavigateToQuizManagement,
 }) {
   const [activeTab, setActiveTab] = useState("home");
 
@@ -225,6 +228,7 @@ export default function HomeView({
           onNavigateToUserManagement={onNavigateToUserManagement}
           onNavigateToCourseManagement={onNavigateToCourseManagement}
           onNavigateToCourseCatalog={onNavigateToCourseCatalog}
+          onNavigateToQuizManagement={onNavigateToQuizManagement}
         />
         <Footer />
       </View>

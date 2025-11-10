@@ -8,6 +8,7 @@ import HomeView from "./src/views/HomeView";
 import UserManagementView from "./src/views/UserManagementView";
 import CourseManagementView from "./src/views/courses/CourseManagementView";
 import CourseCatalogView from "./src/views/courses/CourseCatalogView";
+import QuizzesListView from "./src/views/quizzes/QuizzesListView";
 import AuthModel from "./src/models/AuthModel";
 
 export default function App() {
@@ -71,6 +72,7 @@ export default function App() {
                 setCurrentView("courseManagement")
               }
               onNavigateToCourseCatalog={() => setCurrentView("courseCatalog")}
+              onNavigateToQuizManagement={() => setCurrentView("quizManagement")}
             />
           )}
           {currentView === "userManagement" && (
@@ -84,6 +86,9 @@ export default function App() {
               user={user}
               onBack={() => setCurrentView("home")}
             />
+          )}
+          {currentView === "quizManagement" && (
+            <QuizzesListView user={user} onBack={() => setCurrentView("home")} />
           )}
           {currentView === "courseCatalog" && (
             <CourseCatalogView
