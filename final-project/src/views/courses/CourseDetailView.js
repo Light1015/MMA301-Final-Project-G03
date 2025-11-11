@@ -192,59 +192,79 @@ export default function CourseDetailView({ course, onBack }) {
           {courseAssignments.length > 0 ? (
             courseAssignments.map((assignment) => (
               <View key={assignment.id} style={styles.assignmentCard}>
-                <View style={styles.assignmentHeader}>
-                  <View style={styles.assignmentIcon}>
-                    <Ionicons name="clipboard" size={24} color="#4F46E5" />
-                  </View>
-                  <View style={styles.assignmentInfo}>
-                    <Text style={styles.assignmentTitle}>{assignment.title}</Text>
-                    <View style={styles.assignmentMeta}>
-                      <Ionicons name="person-outline" size={14} color="#6B7280" />
-                      <Text style={styles.assignmentInstructor}>
-                        {assignment.instructor}
-                      </Text>
-                    </View>
-                  </View>
+                {/* Assignment Title & Status */}
+                <View style={styles.assignmentTopRow}>
+                  <Text style={styles.assignmentTitle} numberOfLines={2}>
+                    {assignment.title}
+                  </Text>
                   <View style={[
-                    styles.assignmentStatus,
+                    styles.assignmentStatusBadge,
                     assignment.status === 'published' ? styles.publishedStatus :
                       assignment.status === 'draft' ? styles.draftStatus : styles.closedStatus
                   ]}>
-                    <Text style={styles.statusText}>
-                      {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
+                    <Text style={styles.statusBadgeText}>
+                      {assignment.status === 'published' ? '✓ Published' :
+                        assignment.status === 'draft' ? '⋯ Draft' : '✕ Closed'}
                     </Text>
                   </View>
                 </View>
 
+                {/* Description */}
                 {assignment.description && (
                   <Text style={styles.assignmentDescription} numberOfLines={2}>
                     {assignment.description}
                   </Text>
                 )}
 
-                <View style={styles.assignmentFooter}>
+                {/* Assignment Details Grid */}
+                <View style={styles.assignmentDetailsGrid}>
                   {assignment.dueDate && (
-                    <View style={styles.assignmentDetail}>
-                      <Ionicons name="calendar-outline" size={16} color="#6B7280" />
-                      <Text style={styles.assignmentDetailText}>
-                        Due: {new Date(assignment.dueDate).toLocaleDateString()}
-                      </Text>
+                    <View style={styles.assignmentDetailItem}>
+                      <Ionicons name="calendar-outline" size={18} color="#4F46E5" />
+                      <View style={styles.detailTextContainer}>
+                        <Text style={styles.detailLabel}>Due Date</Text>
+                        <Text style={styles.detailValue}>
+                          {new Date(assignment.dueDate).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}
+                        </Text>
+                      </View>
                     </View>
                   )}
-                  <View style={styles.assignmentDetail}>
-                    <Ionicons name="star-outline" size={16} color="#6B7280" />
-                    <Text style={styles.assignmentDetailText}>
-                      {assignment.totalPoints || 100} points
-                    </Text>
+
+                  <View style={styles.assignmentDetailItem}>
+                    <Ionicons name="trophy-outline" size={18} color="#F59E0B" />
+                    <View style={styles.detailTextContainer}>
+                      <Text style={styles.detailLabel}>Points</Text>
+                      <Text style={styles.detailValue}>
+                        {assignment.totalPoints || 100}
+                      </Text>
+                    </View>
                   </View>
+
                   {assignment.questions && assignment.questions.length > 0 && (
-                    <View style={styles.assignmentDetail}>
-                      <Ionicons name="help-circle-outline" size={16} color="#6B7280" />
-                      <Text style={styles.assignmentDetailText}>
-                        {assignment.questions.length} questions
-                      </Text>
+                    <View style={styles.assignmentDetailItem}>
+                      <Ionicons name="help-circle-outline" size={18} color="#10B981" />
+                      <View style={styles.detailTextContainer}>
+                        <Text style={styles.detailLabel}>Questions</Text>
+                        <Text style={styles.detailValue}>
+                          {assignment.questions.length}
+                        </Text>
+                      </View>
                     </View>
                   )}
+
+                  <View style={styles.assignmentDetailItem}>
+                    <Ionicons name="person-outline" size={18} color="#6B7280" />
+                    <View style={styles.detailTextContainer}>
+                      <Text style={styles.detailLabel}>Instructor</Text>
+                      <Text style={styles.detailValue} numberOfLines={1}>
+                        {assignment.instructor}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
               </View>
             ))
@@ -255,7 +275,7 @@ export default function CourseDetailView({ course, onBack }) {
                 No assignments available yet
               </Text>
               <Text style={styles.noAssignmentsSubtext}>
-                Assignments will appear here once they are created
+                Assignments will appear here once they are published
               </Text>
             </View>
           )}
@@ -680,49 +700,38 @@ const styles = StyleSheet.create({
   },
   // Assignment Styles
   assignmentCard: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#FFFFFF",
     padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
+    borderRadius: 16,
+    marginBottom: 16,
     borderWidth: 1,
     borderColor: "#E5E7EB",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  assignmentHeader: {
+  assignmentTopRow: {
     flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  assignmentIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: "#EEF2FF",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
-  },
-  assignmentInfo: {
-    flex: 1,
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 12,
   },
   assignmentTitle: {
-    fontSize: 16,
+    flex: 1,
+    fontSize: 17,
     fontWeight: "700",
     color: "#1F2937",
-    marginBottom: 4,
+    lineHeight: 24,
+    marginRight: 12,
   },
-  assignmentMeta: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  assignmentInstructor: {
-    fontSize: 13,
-    color: "#6B7280",
-    marginLeft: 4,
-  },
-  assignmentStatus: {
+  assignmentStatusBadge: {
     paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    minWidth: 90,
+    alignItems: "center",
   },
   publishedStatus: {
     backgroundColor: "#D1FAE5",
@@ -733,45 +742,65 @@ const styles = StyleSheet.create({
   closedStatus: {
     backgroundColor: "#FEE2E2",
   },
+  statusBadgeText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: "#065F46",
+  },
   assignmentDescription: {
     fontSize: 14,
     color: "#6B7280",
     lineHeight: 20,
-    marginBottom: 12,
-    marginLeft: 60,
+    marginBottom: 16,
   },
-  assignmentFooter: {
+  assignmentDetailsGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
-    marginLeft: 60,
+    borderTopColor: "#F3F4F6",
+    paddingTop: 16,
+    gap: 12,
   },
-  assignmentDetail: {
+  assignmentDetailItem: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 16,
-    marginBottom: 4,
+    width: "48%",
+    marginBottom: 8,
   },
-  assignmentDetailText: {
-    fontSize: 12,
-    color: "#6B7280",
-    marginLeft: 4,
+  detailTextContainer: {
+    marginLeft: 8,
+    flex: 1,
+  },
+  detailLabel: {
+    fontSize: 11,
+    color: "#9CA3AF",
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginBottom: 2,
+  },
+  detailValue: {
+    fontSize: 14,
+    color: "#1F2937",
+    fontWeight: "600",
   },
   noAssignments: {
     alignItems: "center",
-    paddingVertical: 40,
+    paddingVertical: 48,
+    paddingHorizontal: 24,
   },
   noAssignmentsText: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "700",
     color: "#6B7280",
-    marginTop: 12,
+    marginTop: 16,
+    textAlign: "center",
   },
   noAssignmentsSubtext: {
     fontSize: 14,
     color: "#9CA3AF",
-    marginTop: 4,
+    marginTop: 8,
+    textAlign: "center",
+    lineHeight: 20,
   },
 });

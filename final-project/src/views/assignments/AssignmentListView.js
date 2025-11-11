@@ -88,10 +88,10 @@ export default function AssignmentListView({ user, onBack }) {
     };
 
     const getStatusBadge = (assignment) => {
-        if (assignment.status === "published") return { label: "Published", color: "#10B981" };
-        if (assignment.status === "draft") return { label: "Draft", color: "#6B7280" };
-        if (assignment.status === "closed") return { label: "Closed", color: "#EF4444" };
-        return { label: "Unknown", color: "#9CA3AF" };
+        if (assignment.status === "published") return { color: "#10B981" }; // Green
+        if (assignment.status === "draft") return { color: "#9CA3AF" }; // Gray
+        if (assignment.status === "closed") return { color: "#EF4444" }; // Red
+        return { color: "#D1D5DB" }; // Light Gray
     };
 
     const handleCreateAssignment = () => {
@@ -247,13 +247,13 @@ export default function AssignmentListView({ user, onBack }) {
                         <Text style={styles.headerText}>Due Date</Text>
                     </View>
                     <View style={[styles.tableCell, styles.questionsCell]}>
-                        <Text style={styles.headerText}>Questions</Text>
+                        <Text style={styles.headerText}>Ques</Text>
                     </View>
                     <View style={[styles.tableCell, styles.statusCell]}>
                         <Text style={styles.headerText}>Status</Text>
                     </View>
                     <View style={[styles.tableCell, styles.actionsCell]}>
-                        <Text style={styles.headerText}>Actions</Text>
+                        <Ionicons name="settings-outline" size={16} color="#9CA3AF" />
                     </View>
                 </View>
 
@@ -287,9 +287,7 @@ export default function AssignmentListView({ user, onBack }) {
                                     <Text style={styles.cellText}>{qCount}</Text>
                                 </View>
                                 <View style={[styles.tableCell, styles.statusCell]}>
-                                    <View style={[styles.statusBadge, { backgroundColor: status.color }]}>
-                                        <Text style={styles.statusText}>{status.label}</Text>
-                                    </View>
+                                    <View style={[styles.statusDot, { backgroundColor: status.color }]} />
                                 </View>
                                 <View style={[styles.tableCell, styles.actionsCell]}>
                                     <TouchableOpacity
@@ -297,18 +295,18 @@ export default function AssignmentListView({ user, onBack }) {
                                             e.stopPropagation();
                                             handleEditAssignment(a);
                                         }}
-                                        style={styles.iconButton}
+                                        style={styles.actionButtonEdit}
                                     >
-                                        <Ionicons name="create-outline" size={20} color="#F59E0B" />
+                                        <Ionicons name="create-outline" size={16} color="#FFFFFF" />
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         onPress={(e) => {
                                             e.stopPropagation();
                                             handleDelete(a);
                                         }}
-                                        style={styles.iconButton}
+                                        style={styles.actionButtonDelete}
                                     >
-                                        <Ionicons name="trash-outline" size={20} color="#EF4444" />
+                                        <Ionicons name="trash-outline" size={16} color="#FFFFFF" />
                                     </TouchableOpacity>
                                 </View>
                             </TouchableOpacity>
@@ -562,15 +560,20 @@ const styles = StyleSheet.create({
     courseCell: { width: 100 },
     dateCell: { width: 80 },
     questionsCell: {
-        width: 80,
+        width: 50,
         alignItems: 'center',
     },
     statusCell: {
-        width: 90,
+        width: 60,
         alignItems: 'center',
     },
+    statusDot: {
+        width: 12,
+        height: 12,
+        borderRadius: 6,
+    },
     actionsCell: {
-        width: 120,
+        width: 80,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -578,6 +581,34 @@ const styles = StyleSheet.create({
     iconButton: {
         padding: 6,
         marginHorizontal: 4,
+    },
+    actionButtonEdit: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        backgroundColor: '#F59E0B',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    actionButtonDelete: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        backgroundColor: '#EF4444',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     headerText: {
         fontSize: 12,
@@ -596,13 +627,14 @@ const styles = StyleSheet.create({
     },
     statusBadge: {
         paddingHorizontal: 12,
-        paddingVertical: 4,
+        paddingVertical: 6,
         borderRadius: 12,
+        minWidth: 80,
+        alignItems: 'center',
     },
     statusText: {
-        color: '#FFFFFF',
         fontSize: 12,
-        fontWeight: '600',
+        fontWeight: '700',
     },
     pagination: {
         flexDirection: 'row',

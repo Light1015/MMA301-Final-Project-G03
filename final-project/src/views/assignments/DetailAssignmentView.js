@@ -187,9 +187,6 @@ export default function DetailAssignmentView({ user, assignment, onBack }) {
                     <View style={[styles.tableCell, styles.questionCell]}>
                         <Text style={styles.headerText}>Question</Text>
                     </View>
-                    <View style={[styles.tableCell, styles.optionsCell]}>
-                        <Text style={styles.headerText}>Options (A/B/C/D)</Text>
-                    </View>
                     <View style={[styles.tableCell, styles.answerCell]}>
                         <Text style={styles.headerText}>Answer</Text>
                     </View>
@@ -213,11 +210,6 @@ export default function DetailAssignmentView({ user, assignment, onBack }) {
                                 <View style={[styles.tableCell, styles.questionCell]}>
                                     <Text style={styles.cellText} numberOfLines={2}>
                                         {qq.questionText}
-                                    </Text>
-                                </View>
-                                <View style={[styles.tableCell, styles.optionsCell]}>
-                                    <Text style={styles.optionsText} numberOfLines={2}>
-                                        A: {opts.A || "-"} | B: {opts.B || "-"} | C: {opts.C || "-"} | D: {opts.D || "-"}
                                     </Text>
                                 </View>
                                 <View style={[styles.tableCell, styles.answerCell]}>
@@ -433,8 +425,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: 4,
     },
-    questionCell: { width: 160 },
-    optionsCell: { width: 180 },
+    questionCell: { width: 260 },
     answerCell: {
         width: 80,
         alignItems: 'center',
