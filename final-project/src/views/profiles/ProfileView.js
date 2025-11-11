@@ -14,6 +14,7 @@ import UserModel from "../../models/UserModel";
 
 export default function ProfileView({ user, onBack, onProfileUpdate }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   // Default avatar if not provided
   const defaultAvatar =
@@ -23,6 +24,18 @@ export default function ProfileView({ user, onBack, onProfileUpdate }) {
     name: user.name,
     email: user.email,
     avatar: user.avatar || defaultAvatar,
+  });
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false,
   });
 
   const handleSave = async () => {
@@ -47,6 +60,50 @@ export default function ProfileView({ user, onBack, onProfileUpdate }) {
       avatar: user.avatar || defaultAvatar,
     });
     setIsEditing(false);
+  };
+
+  const handleChangePassword = async () => {
+    // Validation
+    if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
+      Alert.alert("Error", "Please fill in all password fields");
+      return;
+    }
+
+    if (passwordData.newPassword.length < 6) {
+      Alert.alert("Error", "New password must be at least 6 characters");
+      return;
+    }
+
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      Alert.alert("Error", "New password and confirm password do not match");
+      return;
+    }
+
+    try {
+      await UserModel.changePassword(
+        user.email,
+        passwordData.currentPassword,
+        passwordData.newPassword
+      );
+      Alert.alert("Success", "Password changed successfully");
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setIsChangingPassword(false);
+    } catch (error) {
+      Alert.alert("Error", error.message || "Failed to change password");
+    }
+  };
+
+  const handleCancelPasswordChange = () => {
+    setPasswordData({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
+    setIsChangingPassword(false);
   };
 
   return (
@@ -145,6 +202,127 @@ export default function ProfileView({ user, onBack, onProfileUpdate }) {
             <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
               <Text style={styles.saveButtonText}>Save Changes</Text>
             </TouchableOpacity>
+          </View>
+        )}
+
+        {/* Change Password Section */}
+        {!isEditing && (
+          <View style={styles.securitySection}>
+            <View style={styles.sectionHeader}>
+              <Ionicons name="lock-closed-outline" size={24} color="#1F2937" />
+              <Text style={styles.sectionTitle}>Security</Text>
+            </View>
+
+            {!isChangingPassword ? (
+              <TouchableOpacity
+                style={styles.changePasswordButton}
+                onPress={() => setIsChangingPassword(true)}
+              >
+                <Ionicons name="key-outline" size={20} color="#4F46E5" />
+                <Text style={styles.changePasswordButtonText}>Change Password</Text>
+              </TouchableOpacity>
+            ) : (
+              <View style={styles.passwordForm}>
+                <View style={styles.fieldContainer}>
+                  <Text style={styles.label}>
+                    <Ionicons name="lock-closed-outline" size={16} color="#6B7280" /> Current Password
+                  </Text>
+                  <View style={styles.passwordInputContainer}>
+                    <TextInput
+                      style={styles.passwordInput}
+                      value={passwordData.currentPassword}
+                      onChangeText={(text) =>
+                        setPasswordData({ ...passwordData, currentPassword: text })
+                      }
+                      placeholder="Enter current password"
+                      secureTextEntry={!showPasswords.current}
+                      autoCapitalize="none"
+                    />
+                    <TouchableOpacity
+                      onPress={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })}
+                      style={styles.eyeIcon}
+                    >
+                      <Ionicons
+                        name={showPasswords.current ? "eye-off-outline" : "eye-outline"}
+                        size={20}
+                        color="#6B7280"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View style={styles.fieldContainer}>
+                  <Text style={styles.label}>
+                    <Ionicons name="lock-closed-outline" size={16} color="#6B7280" /> New Password
+                  </Text>
+                  <View style={styles.passwordInputContainer}>
+                    <TextInput
+                      style={styles.passwordInput}
+                      value={passwordData.newPassword}
+                      onChangeText={(text) =>
+                        setPasswordData({ ...passwordData, newPassword: text })
+                      }
+                      placeholder="Enter new password (min 6 characters)"
+                      secureTextEntry={!showPasswords.new}
+                      autoCapitalize="none"
+                    />
+                    <TouchableOpacity
+                      onPress={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
+                      style={styles.eyeIcon}
+                    >
+                      <Ionicons
+                        name={showPasswords.new ? "eye-off-outline" : "eye-outline"}
+                        size={20}
+                        color="#6B7280"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View style={styles.fieldContainer}>
+                  <Text style={styles.label}>
+                    <Ionicons name="lock-closed-outline" size={16} color="#6B7280" /> Confirm New Password
+                  </Text>
+                  <View style={styles.passwordInputContainer}>
+                    <TextInput
+                      style={styles.passwordInput}
+                      value={passwordData.confirmPassword}
+                      onChangeText={(text) =>
+                        setPasswordData({ ...passwordData, confirmPassword: text })
+                      }
+                      placeholder="Confirm new password"
+                      secureTextEntry={!showPasswords.confirm}
+                      autoCapitalize="none"
+                    />
+                    <TouchableOpacity
+                      onPress={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })}
+                      style={styles.eyeIcon}
+                    >
+                      <Ionicons
+                        name={showPasswords.confirm ? "eye-off-outline" : "eye-outline"}
+                        size={20}
+                        color="#6B7280"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View style={styles.actionButtons}>
+                  <TouchableOpacity
+                    style={styles.cancelButton}
+                    onPress={handleCancelPasswordChange}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.saveButton}
+                    onPress={handleChangePassword}
+                  >
+                    <Text style={styles.saveButtonText}>Update Password</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
           </View>
         )}
       </ScrollView>
@@ -341,5 +519,59 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#FFFFFF",
+  },
+  securitySection: {
+    padding: 16,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 16,
+    gap: 12,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#1F2937",
+  },
+  changePasswordButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFFFFF",
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#4F46E5",
+    gap: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  changePasswordButtonText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#4F46E5",
+  },
+  passwordForm: {
+    gap: 12,
+  },
+  passwordInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF",
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 12,
+    fontSize: 16,
+    color: "#1F2937",
+  },
+  eyeIcon: {
+    padding: 12,
   },
 });

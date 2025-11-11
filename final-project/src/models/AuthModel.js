@@ -4,14 +4,36 @@ import { mockUsers } from '../database/db';
 // Simple AuthModel - mock implementation but persists user using AsyncStorage
 // Methods: login(email, password), getCurrentUser(), logout()
 const STORAGE_KEY = '@edulinggo_user';
+const PASSWORDS_STORAGE_KEY = '@edulinggo_passwords';
+
+// Helper function to get stored passwords
+const getStoredPasswords = async () => {
+  try {
+    const stored = await AsyncStorage.getItem(PASSWORDS_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch (e) {
+    return {};
+  }
+};
 
 const AuthModel = {
   login: async (email, password) => {
     // Simulate network latency
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+      // Load any stored password changes
+      const storedPasswords = await getStoredPasswords();
+
       setTimeout(async () => {
         const user = mockUsers[email];
-        if (user && user.password === password) {
+        if (!user) {
+          reject({ message: 'Invalid credentials' });
+          return;
+        }
+
+        // Check stored password first, fall back to default
+        const actualPassword = storedPasswords[email] || user.password;
+
+        if (actualPassword === password) {
           // Check if user is available
           if (user.status === 'unavailable') {
             reject({ message: 'Account is unavailable. Please contact administrator.' });
