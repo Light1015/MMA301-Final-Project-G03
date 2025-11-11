@@ -91,6 +91,42 @@ class CertificateModel {
         const nid = Number(courseId);
         return this.certificates.filter(cert => Number(cert.courseId) === nid);
     }
+
+    // Issue certificate to user for course completion
+    issueCertificateToUser(userData, courseData) {
+        // Check if user already has certificate for this course
+        const existingCert = this.certificates.find(
+            cert => cert.userEmail === userData.email && cert.courseId === courseData.id
+        );
+
+        if (existingCert) {
+            return existingCert; // Already has certificate
+        }
+
+        const newCertificate = {
+            id: this.nextId++,
+            certificateName: `${courseData.title} Completion Certificate`,
+            courseId: courseData.id,
+            courseName: courseData.title,
+            description: `Certificate of completion for successfully finishing ${courseData.title}`,
+            issueDate: new Date().toISOString().split('T')[0],
+            validityPeriod: 'Lifetime',
+            templateDesign: 'default',
+            status: 'active',
+            // User-specific fields
+            userEmail: userData.email,
+            userName: userData.name,
+            userId: userData.id,
+        };
+
+        this.certificates.push(newCertificate);
+        return { ...newCertificate };
+    }
+
+    // Get user's certificates
+    getUserCertificates(userEmail) {
+        return this.certificates.filter(cert => cert.userEmail === userEmail);
+    }
 }
 
 export default new CertificateModel();

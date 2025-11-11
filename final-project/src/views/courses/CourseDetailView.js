@@ -13,38 +13,82 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import CertificateModel from "../../models/CertificateModel";
 import AssignmentController from "../../controllers/AssignmentController";
+import EnrollmentModel from "../../models/EnrollmentModel";
 
-export default function CourseDetailView({ course, onBack }) {
+export default function CourseDetailView({ course, onBack, user }) {
   const [imageError, setImageError] = useState(false);
   const [courseCertificates, setCourseCertificates] = useState([]);
   const [courseAssignments, setCourseAssignments] = useState([]);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [enrolling, setEnrolling] = useState(false);
 
   useEffect(() => {
     if (course?.id) {
-      // Get certificates for this course
-      const allCerts = CertificateModel.getAllCertificates();
-      const filtered = allCerts.filter(
-        (cert) => Number(cert.courseId) === Number(course.id)
-      );
-      setCourseCertificates(filtered);
-
-      // Get assignments for this course (only published ones)
-      console.log("Course ID:", course.id, typeof course.id);
-      const assignmentsResult = AssignmentController.getAssignmentsByCourse(
-        course.id
-      );
-      console.log("Assignments Result:", assignmentsResult);
-      if (assignmentsResult.success) {
-        console.log("All assignments for course:", assignmentsResult.data);
-        // Filter only published assignments
-        const publishedAssignments = assignmentsResult.data.filter(
-          (assignment) => assignment.status === "published"
-        );
-        console.log("Published assignments:", publishedAssignments);
-        setCourseAssignments(publishedAssignments);
-      }
+      loadCourseData();
     }
-  }, [course?.id]);
+  }, [course?.id, user]);
+
+  const loadCourseData = async () => {
+    // Get certificates for this course
+    const allCerts = CertificateModel.getAllCertificates();
+    const filtered = allCerts.filter(
+      (cert) => Number(cert.courseId) === Number(course.id)
+    );
+    setCourseCertificates(filtered);
+
+    // Get assignments for this course (only published ones)
+    const assignmentsResult = AssignmentController.getAssignmentsByCourse(
+      course.id
+    );
+    if (assignmentsResult.success) {
+      // Filter only published assignments
+      const publishedAssignments = assignmentsResult.data.filter(
+        (assignment) => assignment.status === "published"
+      );
+      setCourseAssignments(publishedAssignments);
+    }
+
+    // Check if user is already enrolled
+    if (user) {
+      const enrollments = await EnrollmentModel.getUserEnrollments(user.email);
+      const enrolled = enrollments.some((e) => e.courseId === course.id);
+      setIsEnrolled(enrolled);
+    }
+  };
+
+  const handleEnroll = async () => {
+    if (!user) {
+      Alert.alert("Error", "Please login to enroll in courses");
+      return;
+    }
+
+    if (isEnrolled) {
+      Alert.alert("Info", "You are already enrolled in this course");
+      return;
+    }
+
+    setEnrolling(true);
+    try {
+      await EnrollmentModel.createEnrollment({
+        userId: user.id,
+        userEmail: user.email,
+        courseId: course.id,
+        courseName: course.title,
+      });
+
+      setIsEnrolled(true);
+      Alert.alert(
+        "Success",
+        "You have successfully enrolled in this course!",
+        [{ text: "OK" }]
+      );
+    } catch (error) {
+      Alert.alert("Error", "Failed to enroll in course");
+    } finally {
+      setEnrolling(false);
+    }
+  };
+
   // Handle video playback - works on both web and mobile
   const handleVideoPlayback = async (videoUrl) => {
     if (!videoUrl) {
@@ -147,6 +191,28 @@ export default function CourseDetailView({ course, onBack }) {
             <Text style={styles.instructorText}>by {course.instructor}</Text>
           </View>
         </View>
+
+        {/* Enroll Button - Only for learners */}
+        {user && user.role === 'Learner' && (
+          <TouchableOpacity
+            style={[
+              styles.enrollButton,
+              isEnrolled && styles.enrolledButton,
+              enrolling && styles.enrollingButton,
+            ]}
+            onPress={handleEnroll}
+            disabled={isEnrolled || enrolling}
+          >
+            <Ionicons
+              name={isEnrolled ? "checkmark-circle" : "add-circle"}
+              size={24}
+              color="#FFF"
+            />
+            <Text style={styles.enrollButtonText}>
+              {enrolling ? "Enrolling..." : isEnrolled ? "Already Enrolled" : "Enroll Now"}
+            </Text>
+          </TouchableOpacity>
+        )}
 
         {/* Stats Row */}
         <View style={styles.statsContainer}>
@@ -913,6 +979,40 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: "center",
     lineHeight: 20,
+  },
+  enrollButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#10B981",
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    marginHorizontal: 16,
+    marginVertical: 16,
+    gap: 8,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
+  },
+  enrolledButton: {
+    backgroundColor: "#6B7280",
+  },
+  enrollingButton: {
+    opacity: 0.7,
+  },
+  enrollButtonText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#FFFFFF",
   },
   lessonCard: {
     backgroundColor: "#F8FAFC",

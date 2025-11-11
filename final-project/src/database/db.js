@@ -2197,40 +2197,9 @@ export const mockEnrollments = [
     lastAccessed: "2025-10-30",
     completedDate: "2025-10-30",
   },
-  {
-    id: 3,
-    userId: 1,
-    userEmail: "learner@example.com",
-    courseId: 7,
-    courseName: "UI/UX Design Principles",
-    enrollDate: "2025-10-01",
-    progress: 45,
-    status: "in-progress",
-    lastAccessed: "2025-11-08",
-  },
-  {
-    id: 4,
-    userId: 1,
-    userEmail: "learner@example.com",
-    courseId: 11,
-    courseName: "Digital Marketing Strategy",
-    enrollDate: "2025-07-20",
-    progress: 100,
-    status: "completed",
-    lastAccessed: "2025-09-15",
-    completedDate: "2025-09-15",
-  },
-  {
-    id: 5,
-    userId: 1,
-    userEmail: "learner@example.com",
-    courseId: 15,
-    courseName: "Public Speaking & Presentation Skills",
-    enrollDate: "2025-10-15",
-    progress: 30,
-    status: "in-progress",
-    lastAccessed: "2025-11-07",
-  },
+  // Removed old enrollments for courses 5, 7, 9 (no assignments)
+  // Only keep courses with assignments (1, 2)
+
   // Enrollments for learner2@example.com
   {
     id: 6,
@@ -3190,6 +3159,234 @@ export const mockAssignments = [
     updatedAt: "2025-11-05",
   },
   {
+    id: 2,
+    title: "React Native Components Quiz",
+    instructor: "Teacher User",
+    courseId: 1,
+    courseName: "React Native Basics",
+    description:
+      "Test your knowledge of React Native core components and their usage",
+    dueDate: "2025-11-25",
+    totalPoints: 50,
+    status: "published",
+    questions: [
+      {
+        id: 1,
+        questionText: "What is React Native?",
+        options: {
+          A: "A JavaScript framework for mobile apps",
+          B: "A CSS framework",
+          C: "A database",
+          D: "A language",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 2,
+        questionText: "What is JSX?",
+        options: {
+          A: "JavaScript XML syntax extension",
+          B: "A programming language",
+          C: "A database query",
+          D: "A CSS preprocessor",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 3,
+        questionText: "What is a Component?",
+        options: {
+          A: "Reusable piece of UI",
+          B: "A function",
+          C: "A variable",
+          D: "A loop",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 4,
+        questionText: "What is state?",
+        options: {
+          A: "Data that changes over time",
+          B: "Static data",
+          C: "A function",
+          D: "None",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 5,
+        questionText: "What is props?",
+        options: {
+          A: "Data passed from parent to child",
+          B: "Local data",
+          C: "A function",
+          D: "None",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+    ],
+    createdAt: "2025-11-08",
+    updatedAt: "2025-11-08",
+  },
+  {
+    id: 3,
+    title: "React Hooks Assignment",
+    instructor: "Teacher User",
+    courseId: 1,
+    courseName: "React Native Basics",
+    description:
+      "Assignment covering useState, useEffect, and other React hooks",
+    dueDate: "2025-12-01",
+    totalPoints: 50,
+    status: "published",
+    questions: [
+      {
+        id: 1,
+        questionText: "What is useState?",
+        options: {
+          A: "Hook to manage state",
+          B: "A component",
+          C: "A style",
+          D: "None",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 2,
+        questionText: "What is useEffect?",
+        options: {
+          A: "Hook for side effects",
+          B: "A component",
+          C: "A state",
+          D: "None",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 3,
+        questionText: "What is StyleSheet?",
+        options: {
+          A: "Object for styling components",
+          B: "A component",
+          C: "A function",
+          D: "None",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 4,
+        questionText: "What is FlatList?",
+        options: {
+          A: "Component for rendering lists",
+          B: "A state",
+          C: "A style",
+          D: "None",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 5,
+        questionText: "What is TouchableOpacity?",
+        options: {
+          A: "Touchable component with opacity feedback",
+          B: "A list",
+          C: "A state",
+          D: "None",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+    ],
+    createdAt: "2025-11-09",
+    updatedAt: "2025-11-09",
+  },
+  {
+    id: 4,
+    title: "JavaScript ES6 Features Test",
+    instructor: "Teacher User",
+    courseId: 2,
+    courseName: "Advanced JavaScript",
+    description:
+      "Test covering ES6+ features including arrow functions, destructuring, and more",
+    dueDate: "2025-11-22",
+    totalPoints: 50,
+    status: "published",
+    questions: [
+      {
+        id: 1,
+        questionText: "What is the spread operator?",
+        options: {
+          A: "... to expand iterables",
+          B: "A multiplication operator",
+          C: "A division operator",
+          D: "None",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 2,
+        questionText: "What is arrow function?",
+        options: {
+          A: "A shorter function syntax",
+          B: "A loop",
+          C: "A variable",
+          D: "An object",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 3,
+        questionText: "What is let vs const?",
+        options: {
+          A: "let allows reassignment, const doesn't",
+          B: "They're the same",
+          C: "const is faster",
+          D: "None",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 4,
+        questionText: "What is map() method?",
+        options: {
+          A: "Creates new array from existing",
+          B: "Deletes array",
+          C: "Sorts array",
+          D: "None",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+      {
+        id: 5,
+        questionText: "What is filter() method?",
+        options: {
+          A: "Creates array with elements passing test",
+          B: "Deletes elements",
+          C: "Sorts elements",
+          D: "None",
+        },
+        correctAnswer: "A",
+        points: 10,
+      },
+    ],
+    createdAt: "2025-11-07",
+    updatedAt: "2025-11-07",
+  },
+  {
     id: 4,
     userId: 1,
     userEmail: "learner@example.com",
@@ -3350,6 +3547,9 @@ export const mockAssignments = [
   },
 ];
 
+// Mock Assignment Submissions - Learner submissions for assignments
+export const mockAssignmentSubmissions = [];
+
 // In-memory data store
 let dataStore = {
   users: mockUsers,
@@ -3360,6 +3560,7 @@ let dataStore = {
   questionBank: mockQuestionBank,
   enrollments: mockEnrollments || [],
   coupons: mockCoupons || [],
+  assignmentSubmissions: mockAssignmentSubmissions || [],
 };
 
 // Load data from store
@@ -3383,6 +3584,7 @@ export function resetData() {
     questionBank: mockQuestionBank,
     enrollments: mockEnrollments || [],
     coupons: mockCoupons || [],
+    assignmentSubmissions: mockAssignmentSubmissions || [],
   };
 }
 

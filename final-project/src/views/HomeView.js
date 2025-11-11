@@ -200,6 +200,7 @@ const DashboardContent = ({
         <LearnerDashboard
           user={user}
           onNavigateToMyCourses={onNavigateToMyCourses}
+          onNavigateToCatalog={onNavigateToCourseCatalog}
           onNavigateToProfile={onNavigateToProfile}
           onNavigateToMyFeedbacks={onNavigateToMyFeedbacks}
         />

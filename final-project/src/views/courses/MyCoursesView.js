@@ -12,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import EnrollmentModel from "../../models/EnrollmentModel";
 import FeedbackModel from "../../models/FeedbackModel";
+import AssignmentSubmissionModel from "../../models/AssignmentSubmissionModel";
 import { mockCourses } from "../../database/db";
 
 export default function MyCoursesView({
@@ -19,6 +20,8 @@ export default function MyCoursesView({
   onBack,
   selectedCourseId,
   onClearSelectedCourse,
+  onNavigateToCourseAssignments,
+  refreshToken = 0,
 }) {
   const [enrollments, setEnrollments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,27 +32,30 @@ export default function MyCoursesView({
 
   useEffect(() => {
     loadEnrollments();
-  }, []);
+  }, [refreshToken]);
 
-  // Auto-open feedback modal if selectedCourseId is provided
-  useEffect(() => {
-    if (selectedCourseId && enrollments.length > 0) {
-      const enrollment = enrollments.find(
-        (e) => e.courseId === selectedCourseId
-      );
-      if (enrollment) {
-        handleOpenFeedback(enrollment);
-        if (onClearSelectedCourse) {
-          onClearSelectedCourse();
-        }
-      }
-    }
-  }, [selectedCourseId, enrollments]);
+  // Removed auto-open feedback modal - let users manually open feedback
 
   const loadEnrollments = async () => {
     try {
       setLoading(true);
       const data = await EnrollmentModel.getUserEnrollments(user.email);
+
+      // Sync progress with actual assignment completion for ALL courses
+      for (const enrollment of data) {
+        // Get actual completion rate from assignments
+        const rate = await AssignmentSubmissionModel.getCourseCompletionRate(
+          enrollment.courseId,
+          user.email
+        );
+
+        // If progress is different from actual completion rate, update it
+        if (enrollment.progress !== rate.percentage) {
+          await EnrollmentModel.updateEnrollmentProgress(enrollment.id, rate.percentage);
+          enrollment.progress = rate.percentage; // Update local data
+        }
+      }
+
       setEnrollments(data);
     } catch (error) {
       Alert.alert("Error", "Failed to load enrollments");
@@ -60,6 +66,16 @@ export default function MyCoursesView({
 
   const getCourseDetails = (courseId) => {
     return mockCourses.find((c) => c.id === courseId);
+  };
+
+  const courseHasAssignments = (courseId) => {
+    // Dynamic import to get fresh data
+    const { mockAssignments: assignments } = require('../../database/db');
+    const hasAssignments = assignments.some(
+      (a) => a.courseId === courseId && a.status === 'published'
+    );
+    console.log(`Course ${courseId} has assignments:`, hasAssignments);
+    return hasAssignments;
   };
 
   const handleOpenFeedback = async (enrollment) => {
@@ -272,6 +288,20 @@ export default function MyCoursesView({
                   />
                   <Text style={styles.feedbackButtonText}>Manage Feedback</Text>
                 </TouchableOpacity>
+
+                {courseHasAssignments(enrollment.courseId) && (
+                  <TouchableOpacity
+                    style={styles.assignmentsButton}
+                    onPress={() => onNavigateToCourseAssignments?.(enrollment.courseId, enrollment.courseName)}
+                  >
+                    <Ionicons
+                      name="document-text-outline"
+                      size={20}
+                      color="#10B981"
+                    />
+                    <Text style={styles.assignmentsButtonText}>View Assignments</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             );
           })
@@ -494,6 +524,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     color: "#4F46E5",
+  },
+  assignmentsButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#D1FAE5",
+    padding: 12,
+    borderRadius: 8,
+    gap: 8,
+    marginTop: 8,
+  },
+  assignmentsButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#10B981",
   },
   modalOverlay: {
     position: "absolute",
