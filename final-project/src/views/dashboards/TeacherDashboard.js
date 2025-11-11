@@ -39,8 +39,8 @@ export default function TeacherDashboard({
   }, [user]);
 
   const loadStats = () => {
-    // Get teacher's courses
-    const coursesResult = CourseController.getTeacherCourses(user.name);
+    // Get teacher's courses by email (more reliable than name)
+    const coursesResult = CourseController.getTeacherCourses(user.email);
     let totalCourses = 0;
     let totalStudents = 0;
 
@@ -54,7 +54,9 @@ export default function TeacherDashboard({
     }
 
     // Get teacher's assignments
-    const assignmentsResult = AssignmentController.getTeacherAssignments(user.name);
+    const assignmentsResult = AssignmentController.getTeacherAssignments(
+      user.name
+    );
     let totalAssignments = 0;
 
     if (assignmentsResult.success) {

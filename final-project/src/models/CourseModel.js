@@ -15,7 +15,12 @@ export class CourseModel {
     return this.courses;
   }
 
-  // Get courses by instructor
+  // Get courses by instructor email (more reliable than name)
+  getCoursesByInstructorEmail(instructorEmail) {
+    return this.courses.filter((course) => course.email === instructorEmail);
+  }
+
+  // Get courses by instructor (legacy - for backward compatibility)
   getCoursesByInstructor(instructorName) {
     return this.courses.filter(
       (course) => course.instructor === instructorName
@@ -57,6 +62,7 @@ export class CourseModel {
           : 1,
       title: courseData.title,
       instructor: courseData.instructor,
+      email: courseData.email,
       description: courseData.description,
       duration: courseData.duration,
       students: 0,
@@ -64,6 +70,8 @@ export class CourseModel {
       image: courseData.image || getDefaultImage(category),
       category: category,
       level: courseData.level || "Beginner",
+      whatYouLearn: courseData.whatYouLearn || [],
+      content: courseData.content || [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -116,8 +124,8 @@ export class CourseModel {
   }
 
   // Get course statistics
-  getCourseStats(instructorName) {
-    const instructorCourses = this.getCoursesByInstructor(instructorName);
+  getCourseStats(instructorEmail) {
+    const instructorCourses = this.getCoursesByInstructorEmail(instructorEmail);
     const totalStudents = instructorCourses.reduce(
       (sum, course) => sum + course.students,
       0

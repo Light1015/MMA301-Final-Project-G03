@@ -30,6 +30,13 @@ export default function CourseManagementView({ user, onBack }) {
     category: "Programming",
     level: "Beginner",
     image: "",
+    whatYouLearn: [],
+    content: [],
+  });
+  const [currentVideoLesson, setCurrentVideoLesson] = useState({
+    title: "",
+    videoUrl: "",
+    duration: "",
   });
 
   // Load courses on component mount
@@ -54,7 +61,8 @@ export default function CourseManagementView({ user, onBack }) {
   }, [searchQuery, courses]);
 
   const loadCourses = () => {
-    const result = CourseController.getTeacherCourses(user.name);
+    // Use email for reliable course fetching
+    const result = CourseController.getTeacherCourses(user.email);
     if (result.success) {
       setCourses(result.data);
       setFilteredCourses(result.data);
@@ -71,6 +79,8 @@ export default function CourseManagementView({ user, onBack }) {
       category: "Programming",
       level: "Beginner",
       image: "",
+      whatYouLearn: [],
+      content: [],
     });
     setModalVisible(true);
   };
@@ -93,6 +103,8 @@ export default function CourseManagementView({ user, onBack }) {
       category: displayCategory,
       level: course.level || "Beginner",
       image: course.image || "",
+      whatYouLearn: course.whatYouLearn || [],
+      content: course.content || [],
     });
     setModalVisible(true);
   };
@@ -122,7 +134,8 @@ export default function CourseManagementView({ user, onBack }) {
   };
 
   const deleteCourse = (courseId) => {
-    const result = CourseController.deleteCourse(courseId, user.name);
+    // Use email for ownership verification
+    const result = CourseController.deleteCourse(courseId, user.email);
     if (result.success) {
       loadCourses();
       showAlert("Success", result.message);
@@ -142,10 +155,14 @@ export default function CourseManagementView({ user, onBack }) {
       result = CourseController.updateCourse(
         currentCourse.id,
         formData,
-        user.name
+        user.email
       );
     } else {
-      result = CourseController.createCourse(formData, user.name);
+      // For new courses, include email
+      result = CourseController.createCourse(
+        { ...formData, email: user.email },
+        user.email
+      );
     }
 
     if (result.success) {
@@ -163,6 +180,43 @@ export default function CourseManagementView({ user, onBack }) {
     } else {
       Alert.alert(title, message);
     }
+  };
+
+  // Video Content Management Functions
+  const addVideoLesson = () => {
+    if (
+      !currentVideoLesson.title.trim() ||
+      !currentVideoLesson.videoUrl.trim()
+    ) {
+      showAlert("Error", "Lesson title and video URL are required");
+      return;
+    }
+
+    setFormData({
+      ...formData,
+      content: [
+        ...formData.content,
+        {
+          title: currentVideoLesson.title.trim(),
+          videoUrl: currentVideoLesson.videoUrl.trim(),
+          duration: currentVideoLesson.duration.trim() || "N/A",
+        },
+      ],
+    });
+
+    setCurrentVideoLesson({ title: "", videoUrl: "", duration: "" });
+  };
+
+  const removeVideoLesson = (index) => {
+    const updated = formData.content.filter((_, i) => i !== index);
+    setFormData({ ...formData, content: updated });
+  };
+
+  const updateVideoLesson = (index, field, value) => {
+    const updated = formData.content.map((lesson, i) =>
+      i === index ? { ...lesson, [field]: value } : lesson
+    );
+    setFormData({ ...formData, content: updated });
   };
 
   const handleViewDetail = (course) => {
@@ -418,6 +472,149 @@ export default function CourseManagementView({ user, onBack }) {
                     setFormData({ ...formData, image: text })
                   }
                 />
+              </View>
+
+              <View style={styles.formGroup}>
+                <Text style={styles.label}>What You'll Learn</Text>
+                <View style={styles.learnItemsList}>
+                  {formData.whatYouLearn.map((item, index) => (
+                    <View key={index} style={styles.learnItem}>
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={20}
+                        color="#10B981"
+                      />
+                      <Text style={styles.learnItemText}>{item}</Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          const updated = formData.whatYouLearn.filter(
+                            (_, i) => i !== index
+                          );
+                          setFormData({ ...formData, whatYouLearn: updated });
+                        }}
+                      >
+                        <Ionicons
+                          name="close-circle"
+                          size={20}
+                          color="#EF4444"
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+                <View style={styles.addLearnItemContainer}>
+                  <TextInput
+                    style={[styles.input, { flex: 1 }]}
+                    placeholder="Add a learning outcome..."
+                    onSubmitEditing={(e) => {
+                      const text = e.nativeEvent.text.trim();
+                      if (text) {
+                        setFormData({
+                          ...formData,
+                          whatYouLearn: [...formData.whatYouLearn, text],
+                        });
+                        e.target.clear();
+                      }
+                    }}
+                  />
+                  <Text style={styles.helperText}>Press Enter to add item</Text>
+                </View>
+              </View>
+
+              {/* Video Content Section */}
+              <View style={styles.formGroup}>
+                <Text style={styles.label}>Course Content (Video Lessons)</Text>
+                <View style={styles.videoLessonsList}>
+                  {formData.content.map((lesson, index) => (
+                    <View key={index} style={styles.videoLessonCard}>
+                      <View style={styles.videoLessonHeader}>
+                        <Ionicons
+                          name="play-circle"
+                          size={24}
+                          color="#4F46E5"
+                        />
+                        <Text style={styles.videoLessonNumber}>
+                          Lesson {index + 1}
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() => removeVideoLesson(index)}
+                          style={styles.deleteVideoButton}
+                        >
+                          <Ionicons name="trash" size={20} color="#EF4444" />
+                        </TouchableOpacity>
+                      </View>
+                      <TextInput
+                        style={[styles.input, styles.videoInput]}
+                        placeholder="Lesson title"
+                        value={lesson.title}
+                        onChangeText={(text) =>
+                          updateVideoLesson(index, "title", text)
+                        }
+                      />
+                      <TextInput
+                        style={[styles.input, styles.videoInput]}
+                        placeholder="YouTube URL (e.g., https://www.youtube.com/watch?v=...)"
+                        value={lesson.videoUrl}
+                        onChangeText={(text) =>
+                          updateVideoLesson(index, "videoUrl", text)
+                        }
+                      />
+                      <TextInput
+                        style={[styles.input, styles.videoInput]}
+                        placeholder="Duration (e.g., 15:30)"
+                        value={lesson.duration}
+                        onChangeText={(text) =>
+                          updateVideoLesson(index, "duration", text)
+                        }
+                      />
+                    </View>
+                  ))}
+                </View>
+
+                {/* Add New Video Lesson */}
+                <View style={styles.addVideoContainer}>
+                  <Text style={styles.addVideoTitle}>Add New Video Lesson</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Lesson title"
+                    value={currentVideoLesson.title}
+                    onChangeText={(text) =>
+                      setCurrentVideoLesson({
+                        ...currentVideoLesson,
+                        title: text,
+                      })
+                    }
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="YouTube URL"
+                    value={currentVideoLesson.videoUrl}
+                    onChangeText={(text) =>
+                      setCurrentVideoLesson({
+                        ...currentVideoLesson,
+                        videoUrl: text,
+                      })
+                    }
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Duration (optional)"
+                    value={currentVideoLesson.duration}
+                    onChangeText={(text) =>
+                      setCurrentVideoLesson({
+                        ...currentVideoLesson,
+                        duration: text,
+                      })
+                    }
+                  />
+                  <TouchableOpacity
+                    style={styles.addVideoButton}
+                    onPress={addVideoLesson}
+                  >
+                    <Ionicons name="add-circle" size={20} color="#FFFFFF" />
+                    <Text style={styles.addVideoButtonText}>Add Lesson</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
 
               <View style={styles.modalActions}>
@@ -734,6 +931,85 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     fontSize: 16,
+    fontWeight: "600",
+    color: "#FFFFFF",
+  },
+  learnItemsList: {
+    marginBottom: 12,
+  },
+  learnItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F9FAFB",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+    gap: 8,
+  },
+  learnItemText: {
+    flex: 1,
+    fontSize: 14,
+    color: "#1F2937",
+  },
+  addLearnItemContainer: {
+    gap: 4,
+  },
+  // Video Content Styles
+  videoLessonsList: {
+    marginBottom: 16,
+  },
+  videoLessonCard: {
+    backgroundColor: "#F9FAFB",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  videoLessonHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+    gap: 8,
+  },
+  videoLessonNumber: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#1F2937",
+  },
+  deleteVideoButton: {
+    padding: 4,
+  },
+  videoInput: {
+    marginBottom: 8,
+  },
+  addVideoContainer: {
+    backgroundColor: "#EEF2FF",
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderStyle: "dashed",
+    borderColor: "#4F46E5",
+  },
+  addVideoTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#4F46E5",
+    marginBottom: 12,
+  },
+  addVideoButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#4F46E5",
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 8,
+    gap: 8,
+  },
+  addVideoButtonText: {
+    fontSize: 14,
     fontWeight: "600",
     color: "#FFFFFF",
   },

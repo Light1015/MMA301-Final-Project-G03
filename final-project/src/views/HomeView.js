@@ -57,6 +57,8 @@ const BottomNavbar = ({
   onNavigateToUserManagement,
   onNavigateToMyCourses,
   onNavigateToAssignmentManagement,
+  onNavigateToCourseManagement,
+  onNavigateToProfile,
   activeTab,
   setActiveTab,
 }) => {
@@ -74,10 +76,11 @@ const BottomNavbar = ({
     Teacher: [
       { id: "home", name: "Home", icon: "home-outline", iconActive: "home" },
       {
-        id: "classes",
-        name: "Classes",
-        icon: "people-outline",
-        iconActive: "people",
+        id: "courses",
+        name: "Courses",
+        icon: "school-outline",
+        iconActive: "school",
+        action: onNavigateToCourseManagement,
       },
       {
         id: "assignments",
@@ -87,10 +90,11 @@ const BottomNavbar = ({
         action: onNavigateToAssignmentManagement,
       },
       {
-        id: "students",
-        name: "Students",
+        id: "profile",
+        name: "Profile",
         icon: "person-outline",
         iconActive: "person",
+        action: onNavigateToProfile,
       },
     ],
     Admin: [
@@ -257,6 +261,8 @@ export default function HomeView({
         onNavigateToUserManagement={onNavigateToUserManagement}
         onNavigateToMyCourses={onNavigateToMyCourses}
         onNavigateToAssignmentManagement={onNavigateToAssignmentManagement}
+        onNavigateToCourseManagement={onNavigateToCourseManagement}
+        onNavigateToProfile={onNavigateToProfile}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />

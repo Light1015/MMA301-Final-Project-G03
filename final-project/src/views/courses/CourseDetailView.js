@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  Linking,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CertificateModel from "../../models/CertificateModel";
@@ -21,24 +23,55 @@ export default function CourseDetailView({ course, onBack }) {
     if (course?.id) {
       // Get certificates for this course
       const allCerts = CertificateModel.getAllCertificates();
-      const filtered = allCerts.filter(cert => Number(cert.courseId) === Number(course.id));
+      const filtered = allCerts.filter(
+        (cert) => Number(cert.courseId) === Number(course.id)
+      );
       setCourseCertificates(filtered);
 
       // Get assignments for this course (only published ones)
-      console.log('Course ID:', course.id, typeof course.id);
-      const assignmentsResult = AssignmentController.getAssignmentsByCourse(course.id);
-      console.log('Assignments Result:', assignmentsResult);
+      console.log("Course ID:", course.id, typeof course.id);
+      const assignmentsResult = AssignmentController.getAssignmentsByCourse(
+        course.id
+      );
+      console.log("Assignments Result:", assignmentsResult);
       if (assignmentsResult.success) {
-        console.log('All assignments for course:', assignmentsResult.data);
+        console.log("All assignments for course:", assignmentsResult.data);
         // Filter only published assignments
         const publishedAssignments = assignmentsResult.data.filter(
-          assignment => assignment.status === 'published'
+          (assignment) => assignment.status === "published"
         );
-        console.log('Published assignments:', publishedAssignments);
+        console.log("Published assignments:", publishedAssignments);
         setCourseAssignments(publishedAssignments);
       }
     }
   }, [course?.id]);
+  // Handle video playback - works on both web and mobile
+  const handleVideoPlayback = async (videoUrl) => {
+    if (!videoUrl) {
+      Alert.alert("Error", "Video URL not available");
+      return;
+    }
+
+    try {
+      if (Platform.OS === "web") {
+        // For web platform, open in new tab
+        globalThis.open(videoUrl, "_blank");
+      } else {
+        // For mobile (iOS/Android), check if URL can be opened
+        const supported = await Linking.canOpenURL(videoUrl);
+        if (supported) {
+          // Open video in default browser or YouTube app
+          await Linking.openURL(videoUrl);
+        } else {
+          Alert.alert("Error", "Cannot open this video URL");
+        }
+      }
+    } catch (error) {
+      console.error("Error opening video:", error);
+      Alert.alert("Error", "Failed to open video");
+    }
+  };
+
   if (!course) {
     return (
       <View style={styles.container}>
@@ -270,7 +303,11 @@ export default function CourseDetailView({ course, onBack }) {
             ))
           ) : (
             <View style={styles.noAssignments}>
-              <Ionicons name="document-text-outline" size={48} color="#D1D5DB" />
+              <Ionicons
+                name="document-text-outline"
+                size={48}
+                color="#D1D5DB"
+              />
               <Text style={styles.noAssignmentsText}>
                 No assignments available yet
               </Text>
@@ -288,50 +325,106 @@ export default function CourseDetailView({ course, onBack }) {
             <Text style={styles.sectionTitle}>What You'll Learn</Text>
           </View>
 
-          <View style={styles.learningItem}>
-            <Ionicons
-              name="checkmark-circle-outline"
-              size={20}
-              color="#10B981"
-            />
-            <Text style={styles.learningText}>
-              Master the fundamentals and advanced concepts
-            </Text>
-          </View>
+          {course.whatYouLearn && course.whatYouLearn.length > 0 ? (
+            course.whatYouLearn.map((item, index) => (
+              <View key={index} style={styles.learningItem}>
+                <Ionicons
+                  name="checkmark-circle-outline"
+                  size={20}
+                  color="#10B981"
+                />
+                <Text style={styles.learningText}>{item}</Text>
+              </View>
+            ))
+          ) : (
+            <>
+              <View style={styles.learningItem}>
+                <Ionicons
+                  name="checkmark-circle-outline"
+                  size={20}
+                  color="#10B981"
+                />
+                <Text style={styles.learningText}>
+                  Master the fundamentals and advanced concepts
+                </Text>
+              </View>
 
-          <View style={styles.learningItem}>
-            <Ionicons
-              name="checkmark-circle-outline"
-              size={20}
-              color="#10B981"
-            />
-            <Text style={styles.learningText}>
-              Build real-world projects and applications
-            </Text>
-          </View>
+              <View style={styles.learningItem}>
+                <Ionicons
+                  name="checkmark-circle-outline"
+                  size={20}
+                  color="#10B981"
+                />
+                <Text style={styles.learningText}>
+                  Build real-world projects and applications
+                </Text>
+              </View>
 
-          <View style={styles.learningItem}>
-            <Ionicons
-              name="checkmark-circle-outline"
-              size={20}
-              color="#10B981"
-            />
-            <Text style={styles.learningText}>
-              Learn industry best practices and techniques
-            </Text>
-          </View>
+              <View style={styles.learningItem}>
+                <Ionicons
+                  name="checkmark-circle-outline"
+                  size={20}
+                  color="#10B981"
+                />
+                <Text style={styles.learningText}>
+                  Learn industry best practices and techniques
+                </Text>
+              </View>
 
-          <View style={styles.learningItem}>
-            <Ionicons
-              name="checkmark-circle-outline"
-              size={20}
-              color="#10B981"
-            />
-            <Text style={styles.learningText}>
-              Get hands-on experience with practical exercises
-            </Text>
-          </View>
+              <View style={styles.learningItem}>
+                <Ionicons
+                  name="checkmark-circle-outline"
+                  size={20}
+                  color="#10B981"
+                />
+                <Text style={styles.learningText}>
+                  Get hands-on experience with practical exercises
+                </Text>
+              </View>
+            </>
+          )}
         </View>
+
+        {/* Course Content Section */}
+        {course.content && course.content.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Ionicons name="play-circle" size={24} color="#4F46E5" />
+              <Text style={styles.sectionTitle}>Course Content</Text>
+            </View>
+
+            {course.content.map((lesson, index) => (
+              <View key={index} style={styles.lessonCard}>
+                <View style={styles.lessonHeader}>
+                  <View style={styles.lessonNumber}>
+                    <Text style={styles.lessonNumberText}>{index + 1}</Text>
+                  </View>
+                  <View style={styles.lessonInfo}>
+                    <Text style={styles.lessonTitle}>{lesson.title}</Text>
+                    {lesson.duration && (
+                      <View style={styles.lessonMeta}>
+                        <Ionicons
+                          name="time-outline"
+                          size={14}
+                          color="#6B7280"
+                        />
+                        <Text style={styles.lessonDuration}>
+                          {lesson.duration}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                  <TouchableOpacity
+                    style={styles.playButton}
+                    onPress={() => handleVideoPlayback(lesson.videoUrl)}
+                  >
+                    <Ionicons name="play-circle" size={32} color="#4F46E5" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
         {/* Course Certificates Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -344,23 +437,37 @@ export default function CourseDetailView({ course, onBack }) {
               <View key={cert.id} style={styles.certificateCard}>
                 <View style={styles.certificateHeader}>
                   <View style={styles.certificateIcon}>
-                    <Ionicons name="shield-checkmark" size={24} color="#FFD700" />
+                    <Ionicons
+                      name="shield-checkmark"
+                      size={24}
+                      color="#FFD700"
+                    />
                   </View>
                   <View style={styles.certificateInfo}>
-                    <Text style={styles.certificateName}>{cert.certificateName}</Text>
+                    <Text style={styles.certificateName}>
+                      {cert.certificateName}
+                    </Text>
                     <View style={styles.certificateMeta}>
-                      <Ionicons name="calendar-outline" size={14} color="#6B7280" />
+                      <Ionicons
+                        name="calendar-outline"
+                        size={14}
+                        color="#6B7280"
+                      />
                       <Text style={styles.certificateDate}>
-                        Issued: {cert.issueDate || 'N/A'}
+                        Issued: {cert.issueDate || "N/A"}
                       </Text>
                     </View>
                   </View>
-                  <View style={[
-                    styles.certificateStatus,
-                    cert.status === 'active' ? styles.activeStatus : styles.inactiveStatus
-                  ]}>
+                  <View
+                    style={[
+                      styles.certificateStatus,
+                      cert.status === "active"
+                        ? styles.activeStatus
+                        : styles.inactiveStatus,
+                    ]}
+                  >
                     <Text style={styles.statusText}>
-                      {cert.status === 'active' ? 'Active' : 'Inactive'}
+                      {cert.status === "active" ? "Active" : "Inactive"}
                     </Text>
                   </View>
                 </View>
@@ -375,13 +482,17 @@ export default function CourseDetailView({ course, onBack }) {
                   <View style={styles.certificateDetail}>
                     <Ionicons name="time-outline" size={16} color="#6B7280" />
                     <Text style={styles.certificateDetailText}>
-                      Valid for: {cert.validityPeriod || 'Lifetime'}
+                      Valid for: {cert.validityPeriod || "Lifetime"}
                     </Text>
                   </View>
                   <View style={styles.certificateDetail}>
-                    <Ionicons name="document-text-outline" size={16} color="#6B7280" />
+                    <Ionicons
+                      name="document-text-outline"
+                      size={16}
+                      color="#6B7280"
+                    />
                     <Text style={styles.certificateDetailText}>
-                      Template: {cert.templateDesign || 'Default'}
+                      Template: {cert.templateDesign || "Default"}
                     </Text>
                   </View>
                 </View>
@@ -802,5 +913,52 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: "center",
     lineHeight: 20,
+  },
+  lessonCard: {
+    backgroundColor: "#F8FAFC",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  lessonHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  lessonNumber: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#EEF2FF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+  lessonNumberText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#4F46E5",
+  },
+  lessonInfo: {
+    flex: 1,
+  },
+  lessonTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#1F2937",
+    marginBottom: 4,
+  },
+  lessonMeta: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  lessonDuration: {
+    fontSize: 13,
+    color: "#6B7280",
+  },
+  playButton: {
+    padding: 4,
   },
 });
