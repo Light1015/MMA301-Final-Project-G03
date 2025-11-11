@@ -21,6 +21,7 @@ if (Platform.OS === "web") {
 export default function LearnerDashboard({
   user,
   onNavigateToMyCourses,
+  onNavigateToCatalog,
   onNavigateToProfile,
   onNavigateToMyFeedbacks,
 }) {
@@ -67,18 +68,23 @@ export default function LearnerDashboard({
         </View>
       </View>
       <View style={styles.cardRow}>
-        <TouchableOpacity style={styles.card} onPress={onNavigateToMyCourses}>
-          <Ionicons name="school" size={40} color="#4F46E5" />
-          <Text style={styles.cardTitle}>My Courses</Text>
-          <Text style={styles.cardText}>View and manage your courses.</Text>
+        <TouchableOpacity style={styles.card} onPress={onNavigateToCatalog}>
+          <Ionicons name="grid" size={40} color="#4F46E5" />
+          <Text style={styles.cardTitle}>Browse Courses</Text>
+          <Text style={styles.cardText}>Explore and enroll in courses.</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.card} onPress={onNavigateToMyCourses}>
+          <Ionicons name="book" size={40} color="#8B5CF6" />
+          <Text style={styles.cardTitle}>My Courses</Text>
+          <Text style={styles.cardText}>View enrolled courses.</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.cardRow}>
         <TouchableOpacity style={styles.card} onPress={onNavigateToProfile}>
           <Ionicons name="person" size={40} color="#10B981" />
           <Text style={styles.cardTitle}>View Profile</Text>
           <Text style={styles.cardText}>Edit your information.</Text>
         </TouchableOpacity>
-      </View>
-      <View style={styles.cardRow}>
         <TouchableOpacity style={styles.card} onPress={onNavigateToMyFeedbacks}>
           <Ionicons name="chatbubbles" size={40} color="#F59E0B" />
           <Text style={styles.cardTitle}>My Feedbacks</Text>

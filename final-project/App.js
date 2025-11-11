@@ -9,6 +9,7 @@ import RegisterView from "./src/views/auth/RegisterView";
 import UsersShell from "./src/views/users";
 import CourseManagementView from "./src/views/courses/CourseManagementView";
 import CourseCatalogView from "./src/views/courses/CourseCatalogView";
+import BrowseCoursesView from "./src/views/courses/BrowseCoursesView";
 import MyCoursesView from "./src/views/courses/MyCoursesView";
 import QuizzesListView from "./src/views/quizzes/QuizzesListView";
 import ProfileView from "./src/views/profiles/ProfileView";
@@ -21,6 +22,10 @@ import CertificateDetailView from "./src/views/certificates/CertificateDetailVie
 import CouponListView from './src/views/coupons/CouponListView.js';
 import CouponFormView from './src/views/coupons/CouponFormView.js';
 import CouponDetailView from './src/views/coupons/CouponDetailView.js';
+import CourseAssignmentsView from './src/views/courses/CourseAssignmentsView';
+import TakeAssignmentView from './src/views/assignments/TakeAssignmentView';
+import UserCertificateView from './src/views/certificates/UserCertificateView';
+
 export default function App() {
 
   const [user, setUser] = useState(null);
@@ -31,6 +36,9 @@ export default function App() {
   const [currentView, setCurrentView] = useState("publicHome"); // 'publicHome', 'login', 'home', 'userManagement', 'courseManagement', 'courseCatalog', 'quizManagement', 'assignmentManagement'
   const [couponRefreshToken, setCouponRefreshToken] = useState(0);
   const [selectedCouponId, setSelectedCouponId] = useState(null);
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState(null);
+  const [selectedUserCertificate, setSelectedUserCertificate] = useState(null);
+  const [myCoursesRefreshToken, setMyCoursesRefreshToken] = useState(0);
 
   useEffect(() => {
     let mounted = true;
@@ -166,7 +174,13 @@ export default function App() {
           {currentView === "assignmentManagement" && (
             <AssignmentListView user={user} onBack={() => setCurrentView("home")} />
           )}
-          {currentView === "courseCatalog" && (
+          {currentView === "courseCatalog" && user && user.role === "Learner" && (
+            <BrowseCoursesView
+              user={user}
+              onBack={() => setCurrentView("home")}
+            />
+          )}
+          {currentView === "courseCatalog" && user && user.role !== "Learner" && (
             <CourseCatalogView
               user={user}
               onBack={() => setCurrentView("home")}
@@ -231,6 +245,59 @@ export default function App() {
               onBack={() => setCurrentView("home")}
               selectedCourseId={selectedCourseId}
               onClearSelectedCourse={() => setSelectedCourseId(null)}
+              onNavigateToCourseAssignments={(courseId, courseName) => {
+                setSelectedCourseId(courseId);
+                setCurrentView("courseAssignments");
+              }}
+              refreshToken={myCoursesRefreshToken}
+            />
+          )}
+          {currentView === "courseAssignments" && (
+            <CourseAssignmentsView
+              courseId={selectedCourseId}
+              courseName={
+                require('./src/database/db').mockCourses.find(
+                  (c) => c.id === selectedCourseId
+                )?.title
+              }
+              user={user}
+              onBack={() => {
+                // Refresh My Courses when going back
+                setMyCoursesRefreshToken(prev => prev + 1);
+                setCurrentView("myCourses");
+              }}
+              onTakeAssignment={(assignmentId) => {
+                setSelectedAssignmentId(assignmentId);
+                setCurrentView("takeAssignment");
+              }}
+              onViewCertificate={(certificate) => {
+                setSelectedUserCertificate(certificate);
+                setCurrentView("userCertificate");
+              }}
+            />
+          )}
+          {currentView === "takeAssignment" && (
+            <TakeAssignmentView
+              assignmentId={selectedAssignmentId}
+              user={user}
+              onBack={() => setCurrentView("courseAssignments")}
+              onSubmitted={() => {
+                // Refresh the course assignments view
+                setCurrentView("courseAssignments");
+              }}
+            />
+          )}
+          {currentView === "userCertificate" && (
+            <UserCertificateView
+              certificate={selectedUserCertificate}
+              onBack={() => {
+                // Go back to course assignments or my courses
+                if (selectedCourseId) {
+                  setCurrentView("courseAssignments");
+                } else {
+                  setCurrentView("myCourses");
+                }
+              }}
             />
           )}
           {currentView === "profile" && (

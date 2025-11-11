@@ -11,6 +11,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import CourseController from "../../controllers/CourseController";
 import CourseDetailView from "./CourseDetailView";
+import { mockAssignments } from "../../database/db";
 
 export default function CourseCatalogView({ user, onBack }) {
   const [courses, setCourses] = useState([]);
@@ -35,6 +36,8 @@ export default function CourseCatalogView({ user, onBack }) {
   const loadCourses = () => {
     const result = CourseController.getAllCourses();
     if (result.success) {
+      // Show all courses for all users (including Learner)
+      // Learners can enroll in any course
       setCourses(result.data);
       setFilteredCourses(result.data);
     }
@@ -91,7 +94,11 @@ export default function CourseCatalogView({ user, onBack }) {
   // Show Course Detail View
   if (showDetail && selectedCourse) {
     return (
-      <CourseDetailView course={selectedCourse} onBack={handleBackFromDetail} />
+      <CourseDetailView
+        course={selectedCourse}
+        onBack={handleBackFromDetail}
+        user={user}
+      />
     );
   }
 
@@ -194,7 +201,7 @@ export default function CourseCatalogView({ user, onBack }) {
                 style={[
                   styles.filterButtonText,
                   selectedCategory === category &&
-                    styles.filterButtonTextActive,
+                  styles.filterButtonTextActive,
                 ]}
               >
                 {category}
