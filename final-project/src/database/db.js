@@ -328,22 +328,63 @@ export const mockCourses = [
   },
 ];
 
-export const mockAnnouncements = [
+export const mockCoupons = [
   {
-    id: 1,
-    title: "New Course Available",
-    content: "Check out our latest React Native course!",
-    date: "2025-11-01",
-    author: "Admin User",
+    id: '1',
+    code: 'WELCOME10',
+    discount: 10,
+    expiryDate: '2025-12-31',
+    description: 'Get 10% off on your first course purchase!',
+    createdBy: 'Admin User',
+    createdAt: '2025-11-01',
   },
   {
-    id: 2,
-    title: "System Maintenance",
-    content: "Scheduled maintenance on Nov 5th, 2-4 AM.",
-    date: "2025-10-30",
-    author: "Admin User",
+    id: '2',
+    code: 'BLACKFRIDAY25',
+    discount: 25,
+    expiryDate: '2025-11-30',
+    description: 'Exclusive 25% discount for Black Friday!',
+    createdBy: 'Admin User',
+    createdAt: '2025-11-05',
+  },
+  {
+    id: '3',
+    code: 'LEARNMORE15',
+    discount: 15,
+    expiryDate: '2026-01-15',
+    description: '15% discount for enrolling in multiple courses.',
+    createdBy: 'Admin User',
+    createdAt: '2025-11-07',
+  },
+  {
+    id: '4',
+    code: 'WELCOME50',
+    discount: 10,
+    expiryDate: '2025-12-31',
+    description: 'Get 10% off on your first course purchase!',
+    createdBy: 'Admin User',
+    createdAt: '2025-11-01',
+  },
+  {
+    id: '5',
+    code: 'BLACKFRIDAY65',
+    discount: 25,
+    expiryDate: '2025-11-30',
+    description: 'Exclusive 25% discount for Black Friday!',
+    createdBy: 'Admin User',
+    createdAt: '2025-11-05',
+  },
+  {
+    id: '6',
+    code: 'LEARNMORE55',
+    discount: 15,
+    expiryDate: '2026-01-15',
+    description: '15% discount for enrolling in multiple courses.',
+    createdBy: 'Admin User',
+    createdAt: '2025-11-07',
   },
 ];
+
 
 // Mock quizzes data
 export const mockQuizzes = [
@@ -1085,7 +1126,7 @@ let dataStore = {
   assignments: mockAssignments,
   questionBank: mockQuestionBank,
   enrollments: mockEnrollments || [],
-  announcements: mockAnnouncements || [],
+  coupons: mockCoupons || [],
 };
 
 // Load data from store
@@ -1108,7 +1149,7 @@ export function resetData() {
     assignments: mockAssignments,
     questionBank: mockQuestionBank,
     enrollments: mockEnrollments || [],
-    announcements: mockAnnouncements || [],
+    coupons: mockCoupons || [],
   };
 }
 
