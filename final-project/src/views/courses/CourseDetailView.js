@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CertificateModel from "../../models/CertificateModel";
+import AssignmentController from "../../controllers/AssignmentController";
 
 export default function CourseDetailView({ course, onBack }) {
   const [imageError, setImageError] = useState(false);
   const [courseCertificates, setCourseCertificates] = useState([]);
+  const [courseAssignments, setCourseAssignments] = useState([]);
 
   useEffect(() => {
     if (course?.id) {
@@ -21,6 +23,20 @@ export default function CourseDetailView({ course, onBack }) {
       const allCerts = CertificateModel.getAllCertificates();
       const filtered = allCerts.filter(cert => Number(cert.courseId) === Number(course.id));
       setCourseCertificates(filtered);
+
+      // Get assignments for this course (only published ones)
+      console.log('Course ID:', course.id, typeof course.id);
+      const assignmentsResult = AssignmentController.getAssignmentsByCourse(course.id);
+      console.log('Assignments Result:', assignmentsResult);
+      if (assignmentsResult.success) {
+        console.log('All assignments for course:', assignmentsResult.data);
+        // Filter only published assignments
+        const publishedAssignments = assignmentsResult.data.filter(
+          assignment => assignment.status === 'published'
+        );
+        console.log('Published assignments:', publishedAssignments);
+        setCourseAssignments(publishedAssignments);
+      }
     }
   }, [course?.id]);
   if (!course) {
@@ -161,6 +177,85 @@ export default function CourseDetailView({ course, onBack }) {
               <Text style={styles.infoLabel}>Created:</Text>
               <Text style={styles.infoValue}>
                 {new Date(course.createdAt).toLocaleDateString()}
+              </Text>
+            </View>
+          )}
+        </View>
+
+        {/* Course Assignments Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="document-text" size={24} color="#4F46E5" />
+            <Text style={styles.sectionTitle}>Course Assignments</Text>
+          </View>
+
+          {courseAssignments.length > 0 ? (
+            courseAssignments.map((assignment) => (
+              <View key={assignment.id} style={styles.assignmentCard}>
+                <View style={styles.assignmentHeader}>
+                  <View style={styles.assignmentIcon}>
+                    <Ionicons name="clipboard" size={24} color="#4F46E5" />
+                  </View>
+                  <View style={styles.assignmentInfo}>
+                    <Text style={styles.assignmentTitle}>{assignment.title}</Text>
+                    <View style={styles.assignmentMeta}>
+                      <Ionicons name="person-outline" size={14} color="#6B7280" />
+                      <Text style={styles.assignmentInstructor}>
+                        {assignment.instructor}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={[
+                    styles.assignmentStatus,
+                    assignment.status === 'published' ? styles.publishedStatus :
+                      assignment.status === 'draft' ? styles.draftStatus : styles.closedStatus
+                  ]}>
+                    <Text style={styles.statusText}>
+                      {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
+                    </Text>
+                  </View>
+                </View>
+
+                {assignment.description && (
+                  <Text style={styles.assignmentDescription} numberOfLines={2}>
+                    {assignment.description}
+                  </Text>
+                )}
+
+                <View style={styles.assignmentFooter}>
+                  {assignment.dueDate && (
+                    <View style={styles.assignmentDetail}>
+                      <Ionicons name="calendar-outline" size={16} color="#6B7280" />
+                      <Text style={styles.assignmentDetailText}>
+                        Due: {new Date(assignment.dueDate).toLocaleDateString()}
+                      </Text>
+                    </View>
+                  )}
+                  <View style={styles.assignmentDetail}>
+                    <Ionicons name="star-outline" size={16} color="#6B7280" />
+                    <Text style={styles.assignmentDetailText}>
+                      {assignment.totalPoints || 100} points
+                    </Text>
+                  </View>
+                  {assignment.questions && assignment.questions.length > 0 && (
+                    <View style={styles.assignmentDetail}>
+                      <Ionicons name="help-circle-outline" size={16} color="#6B7280" />
+                      <Text style={styles.assignmentDetailText}>
+                        {assignment.questions.length} questions
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+            ))
+          ) : (
+            <View style={styles.noAssignments}>
+              <Ionicons name="document-text-outline" size={48} color="#D1D5DB" />
+              <Text style={styles.noAssignmentsText}>
+                No assignments available yet
+              </Text>
+              <Text style={styles.noAssignmentsSubtext}>
+                Assignments will appear here once they are created
               </Text>
             </View>
           )}
@@ -579,6 +674,102 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   noCertificatesSubtext: {
+    fontSize: 14,
+    color: "#9CA3AF",
+    marginTop: 4,
+  },
+  // Assignment Styles
+  assignmentCard: {
+    backgroundColor: "#F8FAFC",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  assignmentHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  assignmentIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "#EEF2FF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+  assignmentInfo: {
+    flex: 1,
+  },
+  assignmentTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#1F2937",
+    marginBottom: 4,
+  },
+  assignmentMeta: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  assignmentInstructor: {
+    fontSize: 13,
+    color: "#6B7280",
+    marginLeft: 4,
+  },
+  assignmentStatus: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  publishedStatus: {
+    backgroundColor: "#D1FAE5",
+  },
+  draftStatus: {
+    backgroundColor: "#FEF3C7",
+  },
+  closedStatus: {
+    backgroundColor: "#FEE2E2",
+  },
+  assignmentDescription: {
+    fontSize: 14,
+    color: "#6B7280",
+    lineHeight: 20,
+    marginBottom: 12,
+    marginLeft: 60,
+  },
+  assignmentFooter: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#E5E7EB",
+    marginLeft: 60,
+  },
+  assignmentDetail: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 16,
+    marginBottom: 4,
+  },
+  assignmentDetailText: {
+    fontSize: 12,
+    color: "#6B7280",
+    marginLeft: 4,
+  },
+  noAssignments: {
+    alignItems: "center",
+    paddingVertical: 40,
+  },
+  noAssignmentsText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#6B7280",
+    marginTop: 12,
+  },
+  noAssignmentsSubtext: {
     fontSize: 14,
     color: "#9CA3AF",
     marginTop: 4,
