@@ -16,9 +16,21 @@ class CertificateModel {
         const nid = Number(id);
         return this.certificates.find(cert => Number(cert.id) === nid) || null;
     }
-
+    // Check if certificate name already exists (case-insensitive)
+    certificateNameExists(certificateName, excludeId = null) {
+        const normalized = (certificateName || '').trim().toLowerCase();
+        return this.certificates.some(cert => {
+            if (excludeId && Number(cert.id) === Number(excludeId)) return false;
+            return (cert.certificateName || '').trim().toLowerCase() === normalized;
+        });
+    }
     // Create new certificate
     createCertificate(certificateData) {
+        // Validate: check duplicate name
+        if (this.certificateNameExists(certificateData.certificateName)) {
+            throw new Error('Certificate name already exists. Please use a different name.');
+        }
+
         const newCertificate = {
             id: this.nextId++,
             ...certificateData,
@@ -33,14 +45,19 @@ class CertificateModel {
     updateCertificate(id, updatedData) {
         const nid = Number(id);
         const index = this.certificates.findIndex(cert => Number(cert.id) === nid);
-        if (index !== -1) {
-            this.certificates[index] = {
-                ...this.certificates[index],
-                ...updatedData,
-            };
-            return { ...this.certificates[index] };
+        if (index === -1) return null;
+
+        // Validate: check duplicate name (excluding current certificate)
+        if (updatedData.certificateName &&
+            this.certificateNameExists(updatedData.certificateName, nid)) {
+            throw new Error('Certificate name already exists. Please use a different name.');
         }
-        return null;
+
+        this.certificates[index] = {
+            ...this.certificates[index],
+            ...updatedData,
+        };
+        return { ...this.certificates[index] };
     }
 
     // Delete certificate

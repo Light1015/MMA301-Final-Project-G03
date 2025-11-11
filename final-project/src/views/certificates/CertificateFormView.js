@@ -70,7 +70,7 @@ const CustomSelect = ({
                             nestedScrollEnabled={true}
                             keyboardShouldPersistTaps="handled"
                             contentContainerStyle={{ paddingBottom: 10 }}
-                          style={{ maxHeight: 400 }}
+                            style={{ maxHeight: 400 }}
                             showsVerticalScrollIndicator={false}
                         >
                             {options.map((item, idx) => (
@@ -201,22 +201,25 @@ const CertificateFormView = ({ certificateId, onBack, onSaved }) => {
             issueDate: formData.issueDate,
             status: formData.status,
         };
-
-        if (isEditMode) {
-            const updated = CertificateModel.updateCertificate(
-                Number(certificateId),
-                data
-            );
-            if (updated) {
-                if (typeof onSaved === "function") onSaved();
-                Alert.alert("Success", "Certificate updated successfully");
+        try {
+            if (isEditMode) {
+                const updated = CertificateModel.updateCertificate(
+                    Number(certificateId),
+                    data
+                );
+                if (updated) {
+                    if (typeof onSaved === "function") onSaved();
+                    Alert.alert("Success", "Certificate updated successfully");
+                } else {
+                    Alert.alert("Error", "Failed to update");
+                }
             } else {
-                Alert.alert("Error", "Failed to update");
+                CertificateModel.createCertificate(data);
+                if (typeof onSaved === "function") onSaved();
+                Alert.alert("Success", "Certificate created successfully");
             }
-        } else {
-            CertificateModel.createCertificate(data);
-            if (typeof onSaved === "function") onSaved();
-            Alert.alert("Success", "Certificate created successfully");
+        } catch (error) {
+            Alert.alert("Error", error.message || "An error occurred");
         }
     };
 
@@ -252,7 +255,7 @@ const CertificateFormView = ({ certificateId, onBack, onSaved }) => {
                     contentContainerStyle={styles.scrollContent}
                     keyboardShouldPersistTaps="handled"
                     showsVerticalScrollIndicator={false}
-                       nestedScrollEnabled={true} // <-- allow nested scrolling so children lists won't break
+                    nestedScrollEnabled={true} // <-- allow nested scrolling so children lists won't break
 
                 >
                     <View style={styles.card}>
