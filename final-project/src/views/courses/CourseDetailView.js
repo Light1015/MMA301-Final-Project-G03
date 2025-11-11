@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,10 +9,20 @@ import {
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import CertificateModel from "../../models/CertificateModel";
 
 export default function CourseDetailView({ course, onBack }) {
   const [imageError, setImageError] = useState(false);
+  const [courseCertificates, setCourseCertificates] = useState([]);
 
+  useEffect(() => {
+    if (course?.id) {
+      // Get certificates for this course
+      const allCerts = CertificateModel.getAllCertificates();
+      const filtered = allCerts.filter(cert => Number(cert.courseId) === Number(course.id));
+      setCourseCertificates(filtered);
+    }
+  }, [course?.id]);
   if (!course) {
     return (
       <View style={styles.container}>
@@ -207,7 +217,73 @@ export default function CourseDetailView({ course, onBack }) {
             </Text>
           </View>
         </View>
+        {/* Course Certificates Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="ribbon" size={24} color="#FFD700" />
+            <Text style={styles.sectionTitle}>Course Certificates</Text>
+          </View>
 
+          {courseCertificates.length > 0 ? (
+            courseCertificates.map((cert) => (
+              <View key={cert.id} style={styles.certificateCard}>
+                <View style={styles.certificateHeader}>
+                  <View style={styles.certificateIcon}>
+                    <Ionicons name="shield-checkmark" size={24} color="#FFD700" />
+                  </View>
+                  <View style={styles.certificateInfo}>
+                    <Text style={styles.certificateName}>{cert.certificateName}</Text>
+                    <View style={styles.certificateMeta}>
+                      <Ionicons name="calendar-outline" size={14} color="#6B7280" />
+                      <Text style={styles.certificateDate}>
+                        Issued: {cert.issueDate || 'N/A'}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={[
+                    styles.certificateStatus,
+                    cert.status === 'active' ? styles.activeStatus : styles.inactiveStatus
+                  ]}>
+                    <Text style={styles.statusText}>
+                      {cert.status === 'active' ? 'Active' : 'Inactive'}
+                    </Text>
+                  </View>
+                </View>
+
+                {cert.description && (
+                  <Text style={styles.certificateDescription} numberOfLines={2}>
+                    {cert.description}
+                  </Text>
+                )}
+
+                <View style={styles.certificateFooter}>
+                  <View style={styles.certificateDetail}>
+                    <Ionicons name="time-outline" size={16} color="#6B7280" />
+                    <Text style={styles.certificateDetailText}>
+                      Valid for: {cert.validityPeriod || 'Lifetime'}
+                    </Text>
+                  </View>
+                  <View style={styles.certificateDetail}>
+                    <Ionicons name="document-text-outline" size={16} color="#6B7280" />
+                    <Text style={styles.certificateDetailText}>
+                      Template: {cert.templateDesign || 'Default'}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            ))
+          ) : (
+            <View style={styles.noCertificates}>
+              <Ionicons name="ribbon-outline" size={48} color="#D1D5DB" />
+              <Text style={styles.noCertificatesText}>
+                No certificates available for this course yet
+              </Text>
+              <Text style={styles.noCertificatesSubtext}>
+                Complete the course to earn your certificate
+              </Text>
+            </View>
+          )}
+        </View>
         {/* Bottom Spacing */}
         <View style={{ height: 40 }} />
       </ScrollView>
@@ -411,5 +487,100 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 4,
+  },
+
+  certificateCard: {
+    backgroundColor: "#F8FAFC",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  certificateHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  certificateIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "#FEF3C7",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+  certificateInfo: {
+    flex: 1,
+  },
+  certificateName: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#1F2937",
+    marginBottom: 4,
+  },
+  certificateMeta: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  certificateDate: {
+    fontSize: 13,
+    color: "#6B7280",
+    marginLeft: 4,
+  },
+  certificateStatus: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  activeStatus: {
+    backgroundColor: "#D1FAE5",
+  },
+  inactiveStatus: {
+    backgroundColor: "#FED7AA",
+  },
+  statusText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: "#065F46",
+  },
+  certificateDescription: {
+    fontSize: 14,
+    color: "#6B7280",
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  certificateFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#E5E7EB",
+  },
+  certificateDetail: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  certificateDetailText: {
+    fontSize: 12,
+    color: "#6B7280",
+    marginLeft: 4,
+  },
+  noCertificates: {
+    alignItems: "center",
+    paddingVertical: 40,
+  },
+  noCertificatesText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#6B7280",
+    marginTop: 12,
+  },
+  noCertificatesSubtext: {
+    fontSize: 14,
+    color: "#9CA3AF",
+    marginTop: 4,
   },
 });
