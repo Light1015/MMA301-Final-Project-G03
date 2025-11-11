@@ -1,7 +1,7 @@
 // Course Controller - Handles course-related business logic
 
-import CourseModel from '../models/CourseModel';
-import { mockCourses } from '../database/db';
+import CourseModel from "../models/CourseModel";
+import { mockCourses } from "../database/db";
 
 class CourseController {
   constructor() {
@@ -24,10 +24,17 @@ class CourseController {
     }
   }
 
-  // Get courses for a specific teacher
-  getTeacherCourses(instructorName) {
+  // Get courses for a specific teacher (by email for consistency)
+  getTeacherCourses(instructorEmail) {
     try {
-      const courses = CourseModel.getCoursesByInstructor(instructorName);
+      // Try to get by email first (new method)
+      let courses = CourseModel.getCoursesByInstructorEmail(instructorEmail);
+
+      // If no courses found by email, try by name (backward compatibility)
+      if (courses.length === 0) {
+        courses = CourseModel.getCoursesByInstructor(instructorEmail);
+      }
+
       return {
         success: true,
         data: courses,
@@ -52,7 +59,7 @@ class CourseController {
       }
       return {
         success: false,
-        error: 'Course not found',
+        error: "Course not found",
       };
     } catch (error) {
       return {
@@ -63,25 +70,30 @@ class CourseController {
   }
 
   // Create new course
-  createCourse(courseData, instructorName) {
+  createCourse(courseData, instructorIdentifier) {
     try {
       // Validate required fields
       if (!courseData.title || !courseData.description) {
         return {
           success: false,
-          error: 'Title and description are required',
+          error: "Title and description are required",
         };
       }
 
+      // If instructorIdentifier looks like email, use it as email
+      // Otherwise use it as name (backward compatibility)
+      const isEmail = instructorIdentifier.includes("@");
+
       const newCourse = CourseModel.createCourse({
         ...courseData,
-        instructor: instructorName,
+        instructor: instructorIdentifier,
+        email: isEmail ? instructorIdentifier : courseData.email,
       });
 
       return {
         success: true,
         data: newCourse,
-        message: 'Course created successfully',
+        message: "Course created successfully",
       };
     } catch (error) {
       return {
@@ -92,21 +104,27 @@ class CourseController {
   }
 
   // Update course
-  updateCourse(id, courseData, instructorName) {
+  updateCourse(id, courseData, instructorIdentifier) {
     try {
-      // Check if course exists and belongs to instructor
+      // Check if course exists
       const existingCourse = CourseModel.getCourseById(id);
       if (!existingCourse) {
         return {
           success: false,
-          error: 'Course not found',
+          error: "Course not found",
         };
       }
 
-      if (existingCourse.instructor !== instructorName) {
+      // Check ownership by email or name
+      const isEmail = instructorIdentifier.includes("@");
+      const isOwner = isEmail
+        ? existingCourse.email === instructorIdentifier
+        : existingCourse.instructor === instructorIdentifier;
+
+      if (!isOwner) {
         return {
           success: false,
-          error: 'You can only update your own courses',
+          error: "You can only update your own courses",
         };
       }
 
@@ -114,7 +132,7 @@ class CourseController {
       return {
         success: true,
         data: updatedCourse,
-        message: 'Course updated successfully',
+        message: "Course updated successfully",
       };
     } catch (error) {
       return {
@@ -125,21 +143,27 @@ class CourseController {
   }
 
   // Delete course
-  deleteCourse(id, instructorName) {
+  deleteCourse(id, instructorIdentifier) {
     try {
-      // Check if course exists and belongs to instructor
+      // Check if course exists
       const existingCourse = CourseModel.getCourseById(id);
       if (!existingCourse) {
         return {
           success: false,
-          error: 'Course not found',
+          error: "Course not found",
         };
       }
 
-      if (existingCourse.instructor !== instructorName) {
+      // Check ownership by email or name
+      const isEmail = instructorIdentifier.includes("@");
+      const isOwner = isEmail
+        ? existingCourse.email === instructorIdentifier
+        : existingCourse.instructor === instructorIdentifier;
+
+      if (!isOwner) {
         return {
           success: false,
-          error: 'You can only delete your own courses',
+          error: "You can only delete your own courses",
         };
       }
 
@@ -147,7 +171,7 @@ class CourseController {
       return {
         success: true,
         data: deletedCourse,
-        message: 'Course deleted successfully',
+        message: "Course deleted successfully",
       };
     } catch (error) {
       return {
@@ -174,9 +198,14 @@ class CourseController {
   }
 
   // Get course statistics for teacher
-  getTeacherStats(instructorName) {
+  getTeacherStats(instructorIdentifier) {
     try {
-      const stats = CourseModel.getCourseStats(instructorName);
+      // Try email first, then name
+      const isEmail = instructorIdentifier.includes("@");
+      const stats = isEmail
+        ? CourseModel.getCourseStats(instructorIdentifier)
+        : CourseModel.getCourseStats(instructorIdentifier);
+
       return {
         success: true,
         data: stats,
