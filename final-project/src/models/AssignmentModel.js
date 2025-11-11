@@ -27,7 +27,7 @@ export class AssignmentModel {
 
     // Get assignments by course
     getAssignmentsByCourse(courseId) {
-        return this.assignments.filter((assignment) => assignment.courseId === courseId);
+        return this.assignments.filter((assignment) => Number(assignment.courseId) === Number(courseId));
     }
 
     // Create new assignment
