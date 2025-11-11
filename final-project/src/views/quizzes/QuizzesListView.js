@@ -221,14 +221,11 @@ export default function QuizzesListView({ user, onBack }) {
                     <View style={[styles.tableCell, styles.courseCell]}>
                         <Text style={styles.headerText}>Course</Text>
                     </View>
-                    <View style={[styles.tableCell, styles.dateCell]}>
-                        <Text style={styles.headerText}>Date Added</Text>
-                    </View>
                     <View style={[styles.tableCell, styles.questionsCell]}>
                         <Text style={styles.headerText}>Questions</Text>
                     </View>
                     <View style={[styles.tableCell, styles.actionsCell]}>
-                        <Text style={styles.headerText}>Actions</Text>
+                        <Ionicons name="settings-outline" size={16} color="#9CA3AF" />
                     </View>
                 </View>
 
@@ -254,11 +251,7 @@ export default function QuizzesListView({ user, onBack }) {
                                 <View style={[styles.tableCell, styles.courseCell]}>
                                     <Text style={styles.cellText}>{q.courseName || "-"}</Text>
                                 </View>
-                                <View style={[styles.tableCell, styles.dateCell]}>
-                                    <Text style={styles.cellText}>
-                                        {q.createdAt ? new Date(q.createdAt).toLocaleDateString() : "-"}
-                                    </Text>
-                                </View>
+                                
                                 <View style={[styles.tableCell, styles.questionsCell]}>
                                     <Text style={styles.cellText}>{qCount}</Text>
                                 </View>
@@ -269,18 +262,18 @@ export default function QuizzesListView({ user, onBack }) {
                                             e.stopPropagation();
                                             handleEditQuiz(q);
                                         }}
-                                        style={styles.iconButton}
+                                        style={styles.actionButtonEdit}
                                     >
-                                        <Ionicons name="create-outline" size={20} color="#F59E0B" />
+                                        <Ionicons name="create-outline" size={16} color="#FFFFFF" />
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         onPress={(e) => {
                                             e.stopPropagation();
                                             handleDelete(q);
                                         }}
-                                        style={styles.iconButton}
+                                        style={styles.actionButtonDelete}
                                     >
-                                        <Ionicons name="trash-outline" size={20} color="#EF4444" />
+                                        <Ionicons name="trash-outline" size={16} color="#FFFFFF" />
                                     </TouchableOpacity>
                                 </View>
                             </TouchableOpacity>
@@ -504,20 +497,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: 4,
     },
     nameCell: {
-        width: 150,
+        width: 180,
     },
     courseCell: {
         width: 150,
     },
-    dateCell: {
-        width: 100,
-    },
     questionsCell: {
-        width: 60,
+        width: 100,
         alignItems: 'center',
     },
     actionsCell: {
-        width: 120,
+        width: 80,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -525,6 +515,34 @@ const styles = StyleSheet.create({
     iconButton: {
         padding: 6,
         marginHorizontal: 4,
+    },
+    actionButtonEdit: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        backgroundColor: '#F59E0B',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    actionButtonDelete: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        backgroundColor: '#EF4444',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     headerText: {
         fontSize: 12,

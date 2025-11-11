@@ -153,9 +153,6 @@ export default function DetailQuizView({ user, quiz, onBack }) {
                     <View style={[styles.tableCell, styles.questionCell]}>
                         <Text style={styles.headerText}>Question</Text>
                     </View>
-                    <View style={[styles.tableCell, styles.optionsCell]}>
-                        <Text style={styles.headerText}>Options (A/B/C/D)</Text>
-                    </View>
                     <View style={[styles.tableCell, styles.answerCell]}>
                         <Text style={styles.headerText}>Answer</Text>
                     </View>
@@ -177,11 +174,6 @@ export default function DetailQuizView({ user, quiz, onBack }) {
                                 <View style={[styles.tableCell, styles.questionCell]}>
                                     <Text style={styles.cellText} numberOfLines={2}>
                                         {qq.questionText || qq.text}
-                                    </Text>
-                                </View>
-                                <View style={[styles.tableCell, styles.optionsCell]}>
-                                    <Text style={styles.optionsText} numberOfLines={2}>
-                                        A: {opts.A || "-"} | B: {opts.B || "-"} | C: {opts.C || "-"} | D: {opts.D || "-"}
                                     </Text>
                                 </View>
                                 <View style={[styles.tableCell, styles.answerCell]}>
@@ -375,13 +367,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 4,
     },
     questionCell: {
-        width: 170,
-    },
-    optionsCell: {
-        width: 200,
+        width: 280,
     },
     answerCell: {
-        width: 80,
+        width: 100,
         alignItems: 'center',
     },
     actionsCell: {
