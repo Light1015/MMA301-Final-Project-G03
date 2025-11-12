@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { mockUsers } from '../database/db';
+import { mockUsers } from '../database/collections/users';
 
 // Simple AuthModel - mock implementation but persists user using AsyncStorage
 // Methods: login(email, password), getCurrentUser(), logout()

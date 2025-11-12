@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { mockAssignments, mockCourses } from '../../database/db';
+import { mockAssignments } from '../../database/collections/assignments';
+import { mockCourses } from '../../database/collections/courses';
 import AssignmentSubmissionModel from '../../models/AssignmentSubmissionModel';
 import CertificateModel from '../../models/CertificateModel';
 import EnrollmentModel from '../../models/EnrollmentModel';

@@ -1,7 +1,7 @@
 // Course Controller - Handles course-related business logic
 
 import CourseModel from "../models/CourseModel";
-import { mockCourses } from "../database/db";
+import { mockCourses } from "../database/collections/courses";
 
 class CourseController {
   constructor() {

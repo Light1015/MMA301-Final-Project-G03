@@ -2136,6 +2136,7 @@ export const mockQuizzes = [
     updatedAt: "2025-11-10",
   },
 ];
+
 export const mockCertificates = [
   {
     id: 1,

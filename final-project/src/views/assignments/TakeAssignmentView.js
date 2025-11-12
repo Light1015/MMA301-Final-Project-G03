@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { mockAssignments } from '../../database/db';
+import { mockAssignments } from '../../database/collections/assignments';
 import AssignmentSubmissionModel from '../../models/AssignmentSubmissionModel';
 
 const TakeAssignmentView = ({ assignmentId, user, onBack, onSubmitted }) => {

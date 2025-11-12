@@ -1,4 +1,4 @@
-import { mockCertificates } from '../database/db';
+import { mockCertificates } from '../database/collections/certificates';
 
 class CertificateModel {
     constructor() {

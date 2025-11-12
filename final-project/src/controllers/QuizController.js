@@ -1,6 +1,6 @@
 import QuizModel from "../models/QuizModel";
 import QuestionModel from "../models/QuestionModel";
-import { mockQuizzes } from "../database/db";
+import { mockQuizzes } from "../database/collections/quizzes";
 
 class QuizController {
     constructor() {

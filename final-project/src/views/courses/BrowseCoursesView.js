@@ -46,7 +46,7 @@ export default function BrowseCoursesView({ user, onBack, refreshToken = 0 }) {
         const result = CourseController.getAllCourses();
         if (result.success) {
             // Filter courses: Only show courses with published assignments for Learners
-            const { mockAssignments } = require('../../database/db');
+            const { mockAssignments } = require('../../database/collections/assignments');
             const coursesWithAssignments = result.data.filter(course => {
                 const hasAssignments = mockAssignments.some(
                     assignment => assignment.courseId === course.id && assignment.status === 'published'

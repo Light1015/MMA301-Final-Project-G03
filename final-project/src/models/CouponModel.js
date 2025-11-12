@@ -1,6 +1,6 @@
 // src/models/CouponModel.js
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { mockCoupons } from '../database/db';
+import { mockCoupons } from '../database/collections/coupons';
 
 const STORAGE_KEY = 'COUPONS_DB';
 

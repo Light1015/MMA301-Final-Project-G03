@@ -15,7 +15,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import CertificateModel from "../../models/CertificateModel";
-import { mockCourses } from "../../database/db";
+import { mockCourses } from "../../database/collections/courses";
 
 /**
  * CustomSelect - small internal component to replace default Picker with nicer modal dropdown

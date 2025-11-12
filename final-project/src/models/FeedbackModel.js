@@ -1,6 +1,6 @@
 // Feedback Model - Manages course feedbacks
 
-import { mockFeedbacks } from "../database/db";
+import { mockFeedbacks } from "../database/collections/feedbacks";
 
 const FeedbackModel = {
   // Get all feedbacks for a specific user

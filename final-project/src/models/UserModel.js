@@ -1,4 +1,4 @@
-import { mockUsers } from '../database/db';
+import { mockUsers } from '../database/collections/users';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // UserModel - manages user operations for admin

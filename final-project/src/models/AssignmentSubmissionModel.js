@@ -1,6 +1,6 @@
 // Assignment Submission Model - Manages learner assignment submissions
-
-import { mockAssignmentSubmissions } from '../database/db';
+import { saveData, loadData } from "../database/collections/assignments";
+import { mockAssignmentSubmissions } from '../database/collections/assignmentSubmissions';
 
 const AssignmentSubmissionModel = {
     // Get all submissions for a user
@@ -83,7 +83,7 @@ const AssignmentSubmissionModel = {
         return new Promise((resolve) => {
             setTimeout(() => {
                 // Get all published assignments for the course
-                const { mockAssignments } = require('../database/db');
+                const { mockAssignments } = require('../database/collections/assignments');
                 const courseAssignments = mockAssignments.filter(
                     (a) => a.courseId === courseId && a.status === 'published'
                 );
