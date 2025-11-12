@@ -455,7 +455,400 @@ export const mockAssignments = [
         ],
     },
 
-    // ... (tương tự cho các khóa còn lại)
+    // === PYTHON FOR DATA SCIENCE ===
+    {
+        id: 5,
+        title: "Python Data Structures Assignment",
+        instructor: "Teacher User",
+        courseId: 3,
+        courseName: "Python for Data Science",
+        description: "Assignment focusing on Python lists, dictionaries, and tuples.",
+        dueDate: "2025-11-28",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What is a list in Python?",
+                options: { A: "Ordered collection", B: "Unordered set", C: "Database", D: "None" },
+                correctAnswer: "A",
+                points: 10,
+            },
+            {
+                id: 2,
+                questionText: "What method adds an item to a list?",
+                options: { A: "append()", B: "push()", C: "add()", D: "insertAll()" },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+        createdAt: "2025-11-10",
+        updatedAt: "2025-11-10",
+    },
+    {
+        id: 6,
+        title: "NumPy Basics Quiz",
+        instructor: "Teacher User",
+        courseId: 3,
+        courseName: "Python for Data Science",
+        description: "Test covering NumPy arrays and vectorized operations.",
+        dueDate: "2025-12-02",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What does NumPy stand for?",
+                options: { A: "Numerical Python", B: "Numeric Parser", C: "None", D: "Network Python" },
+                correctAnswer: "A",
+                points: 10,
+            },
+            {
+                id: 2,
+                questionText: "What is np.array() used for?",
+                options: { A: "Creating arrays", B: "Plotting graphs", C: "Sorting", D: "None" },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+        createdAt: "2025-11-11",
+        updatedAt: "2025-11-11",
+    },
+
+    // === WEB DEVELOPMENT BOOTCAMP ===
+    {
+        id: 7,
+        title: "HTML & CSS Fundamentals",
+        instructor: "Teacher User",
+        courseId: 4,
+        courseName: "Web Development Bootcamp",
+        description: "Assignment testing HTML structure and CSS styling.",
+        dueDate: "2025-11-22",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What tag defines a hyperlink?",
+                options: { A: "<a>", B: "<link>", C: "<href>", D: "<h1>" },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+    {
+        id: 8,
+        title: "JavaScript DOM Manipulation",
+        instructor: "Teacher User",
+        courseId: 4,
+        courseName: "Web Development Bootcamp",
+        description: "Quiz about DOM elements and JS interaction.",
+        dueDate: "2025-12-01",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What does document.querySelector() do?",
+                options: {
+                    A: "Selects the first matching element",
+                    B: "Deletes an element",
+                    C: "Creates a tag",
+                    D: "None",
+                },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+
+    // === UI/UX DESIGN PRINCIPLES ===
+    {
+        id: 9,
+        title: "Design Thinking Principles",
+        instructor: "Teacher User",
+        courseId: 5,
+        courseName: "UI/UX Design Principles",
+        description: "Assignment covering empathy, define, ideate stages.",
+        dueDate: "2025-11-26",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "Which is the first step in design thinking?",
+                options: { A: "Empathize", B: "Define", C: "Prototype", D: "Test" },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+    {
+        id: 10,
+        title: "User Interface Patterns Quiz",
+        instructor: "Teacher User",
+        courseId: 5,
+        courseName: "UI/UX Design Principles",
+        description: "Test common UI patterns and usability heuristics.",
+        dueDate: "2025-12-03",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What is a modal?",
+                options: { A: "Popup dialog", B: "Menu bar", C: "Table", D: "Link" },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+
+    // === GRAPHIC DESIGN MASTERCLASS ===
+    {
+        id: 11,
+        title: "Color Theory Quiz",
+        instructor: "Teacher User",
+        courseId: 6,
+        courseName: "Graphic Design Masterclass",
+        description: "Understanding color harmony and contrast.",
+        dueDate: "2025-11-23",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What are complementary colors?",
+                options: {
+                    A: "Opposite on color wheel",
+                    B: "Next to each other",
+                    C: "Monochrome shades",
+                    D: "None",
+                },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+    {
+        id: 12,
+        title: "Typography Fundamentals",
+        instructor: "Teacher User",
+        courseId: 6,
+        courseName: "Graphic Design Masterclass",
+        description: "Assignment testing font pairing and hierarchy.",
+        dueDate: "2025-11-30",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What is kerning?",
+                options: {
+                    A: "Spacing between letters",
+                    B: "Line spacing",
+                    C: "Font style",
+                    D: "None",
+                },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+
+    // === DIGITAL MARKETING STRATEGY ===
+    {
+        id: 13,
+        title: "SEO Basics Assignment",
+        instructor: "Teacher User",
+        courseId: 7,
+        courseName: "Digital Marketing Strategy",
+        description: "Covers keywords, on-page and off-page SEO.",
+        dueDate: "2025-11-24",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What does SEO stand for?",
+                options: {
+                    A: "Search Engine Optimization",
+                    B: "Site Evaluation Online",
+                    C: "Server Engine Output",
+                    D: "None",
+                },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+    {
+        id: 14,
+        title: "Social Media Marketing Quiz",
+        instructor: "Teacher User",
+        courseId: 7,
+        courseName: "Digital Marketing Strategy",
+        description: "Testing social campaign metrics and engagement KPIs.",
+        dueDate: "2025-12-02",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "Which metric measures audience engagement?",
+                options: {
+                    A: "Likes and comments",
+                    B: "URL length",
+                    C: "Server speed",
+                    D: "None",
+                },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+
+    // === PROJECT MANAGEMENT PROFESSIONAL ===
+    {
+        id: 15,
+        title: "Agile Fundamentals Assignment",
+        instructor: "Teacher User",
+        courseId: 8,
+        courseName: "Project Management Professional",
+        description: "Assignment focusing on Agile methodology and Scrum roles.",
+        dueDate: "2025-11-27",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "Who owns the product backlog?",
+                options: { A: "Product Owner", B: "Scrum Master", C: "Team", D: "Client" },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+    {
+        id: 16,
+        title: "Risk Management Quiz",
+        instructor: "Teacher User",
+        courseId: 8,
+        courseName: "Project Management Professional",
+        description: "Test covering risk identification and mitigation planning.",
+        dueDate: "2025-12-05",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What is risk mitigation?",
+                options: {
+                    A: "Reducing impact of risks",
+                    B: "Ignoring risks",
+                    C: "Listing all issues",
+                    D: "None",
+                },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+
+    // === PUBLIC SPEAKING & PRESENTATION SKILLS ===
+    {
+        id: 17,
+        title: "Speech Structure Assignment",
+        instructor: "Teacher User",
+        courseId: 9,
+        courseName: "Public Speaking & Presentation Skills",
+        description: "Design a 3-minute speech with clear intro, body, conclusion.",
+        dueDate: "2025-11-26",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What part of speech grabs attention?",
+                options: { A: "Introduction", B: "Body", C: "Conclusion", D: "None" },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+    {
+        id: 18,
+        title: "Presentation Delivery Quiz",
+        instructor: "Teacher User",
+        courseId: 9,
+        courseName: "Public Speaking & Presentation Skills",
+        description: "Quiz covering body language and tone control.",
+        dueDate: "2025-12-04",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What improves stage presence?",
+                options: { A: "Eye contact", B: "Reading slides", C: "Turning away", D: "None" },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+
+    // === PHOTOGRAPHY FUNDAMENTALS ===
+    {
+        id: 19,
+        title: "Camera Settings Quiz",
+        instructor: "Teacher User",
+        courseId: 10,
+        courseName: "Photography Fundamentals",
+        description: "Quiz about ISO, shutter speed, and aperture.",
+        dueDate: "2025-11-25",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What does ISO control?",
+                options: {
+                    A: "Sensor sensitivity",
+                    B: "Lens zoom",
+                    C: "Focus",
+                    D: "None",
+                },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+    {
+        id: 20,
+        title: "Composition Techniques Assignment",
+        instructor: "Teacher User",
+        courseId: 10,
+        courseName: "Photography Fundamentals",
+        description: "Assignment applying rule of thirds and leading lines.",
+        dueDate: "2025-12-03",
+        totalPoints: 50,
+        status: "published",
+        questions: [
+            {
+                id: 1,
+                questionText: "What is the rule of thirds?",
+                options: {
+                    A: "Dividing frame into 9 equal parts",
+                    B: "Using three cameras",
+                    C: "Shooting three photos",
+                    D: "None",
+                },
+                correctAnswer: "A",
+                points: 10,
+            },
+        ],
+    },
+
 ];
 
 
