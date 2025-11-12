@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import QuizController from "../../controllers/QuizController";
-import { mockQuestionBank } from "../../database/db";
+import { mockQuestionBank } from "../../database/collections/questionBank";
 
 export default function DetailQuizView({ user, quiz, onBack }) {
     const [quizState, setQuizState] = useState(quiz);

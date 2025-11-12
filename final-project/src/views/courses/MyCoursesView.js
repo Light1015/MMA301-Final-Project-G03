@@ -13,7 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import EnrollmentModel from "../../models/EnrollmentModel";
 import FeedbackModel from "../../models/FeedbackModel";
 import AssignmentSubmissionModel from "../../models/AssignmentSubmissionModel";
-import { mockCourses } from "../../database/db";
+import { mockCourses } from "../../database/collections/courses";
 
 export default function MyCoursesView({
   user,
@@ -70,7 +70,7 @@ export default function MyCoursesView({
 
   const courseHasAssignments = (courseId) => {
     // Dynamic import to get fresh data
-    const { mockAssignments: assignments } = require('../../database/db');
+    const { mockAssignments: assignments } = require('../../database/collections/assignments');
     const hasAssignments = assignments.some(
       (a) => a.courseId === courseId && a.status === 'published'
     );

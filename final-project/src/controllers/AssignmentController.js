@@ -1,7 +1,7 @@
 // Assignment Controller - Handles assignment operations
 
 import AssignmentModel from "../models/AssignmentModel";
-import { saveData, loadData } from "../database/db";
+import { saveData, loadData } from "../database/collections/assignments";
 
 class AssignmentController {
     constructor() {

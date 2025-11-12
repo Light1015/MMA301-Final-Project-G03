@@ -11,7 +11,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import CourseController from "../../controllers/CourseController";
 import CourseDetailView from "./CourseDetailView";
-import { mockAssignments } from "../../database/db";
+import { mockAssignments } from "../../database/collections/assignments";
 
 export default function CourseCatalogView({ user, onBack }) {
   const [courses, setCourses] = useState([]);

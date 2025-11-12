@@ -1,6 +1,6 @@
 // Enrollment Model - Manages user course enrollments
 
-import { mockEnrollments } from "../database/db";
+import { mockEnrollments } from "../database/collections/enrollments";
 
 const EnrollmentModel = {
   // Get all enrollments for a specific user

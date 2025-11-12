@@ -88,10 +88,7 @@ export default function ListView({ users, onEdit, onDelete, onAdd, onView, onBac
 
       <ScrollView style={styles.content}>
         <View style={styles.usersContainer}>
-          <TouchableOpacity onPress={onAdd} style={styles.addButton}>
-            <Ionicons name="add-circle" size={20} color="#FFF" />
-            <Text style={styles.addButtonText}>Add User</Text>
-          </TouchableOpacity>
+        
           <Text style={styles.usersCount}>{filteredUsers.length} user{filteredUsers.length!==1?'s':''} found</Text>
           {filteredUsers.map((u) => (
             <View key={u.email} style={styles.userCard}>
