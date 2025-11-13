@@ -106,18 +106,7 @@ const BottomNavbar = ({
         iconActive: "people",
         action: onNavigateToUserManagement,
       },
-      {
-        id: "reports",
-        name: "Reports",
-        icon: "stats-chart-outline",
-        iconActive: "stats-chart",
-      },
-      {
-        id: "settings",
-        name: "Settings",
-        icon: "settings-outline",
-        iconActive: "settings",
-      },
+    
     ],
   };
 

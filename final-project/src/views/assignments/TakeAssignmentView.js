@@ -50,13 +50,13 @@ const TakeAssignmentView = ({ assignmentId, user, onBack, onSubmitted }) => {
     };
 
     const calculateScore = () => {
+        // Score is based on number of questions: 1 point per correct answer
         let correctCount = 0;
-        let totalPoints = 0;
+        const totalPoints = assignment.questions.length;
 
         assignment.questions.forEach((question) => {
-            totalPoints += question.points || 10;
             if (answers[question.id] === question.correctAnswer) {
-                correctCount += question.points || 10;
+                correctCount += 1;
             }
         });
 
@@ -89,6 +89,8 @@ const TakeAssignmentView = ({ assignmentId, user, onBack, onSubmitted }) => {
                     onPress: async () => {
                         const { score, totalPoints } = calculateScore();
 
+                        const percentage = totalPoints > 0 ? Math.round((score / totalPoints) * 100) : 0;
+
                         const submissionData = {
                             assignmentId: assignment.id,
                             courseId: assignment.courseId,
@@ -99,24 +101,31 @@ const TakeAssignmentView = ({ assignmentId, user, onBack, onSubmitted }) => {
                             answers,
                             score,
                             totalPoints,
-                            percentage: Math.round((score / totalPoints) * 100),
+                            percentage,
+                            submittedAt: new Date().toISOString(),
                         };
 
                         await AssignmentSubmissionModel.submitAssignment(submissionData);
 
-                        Alert.alert(
-                            'Submitted Successfully',
-                            `Your score: ${score}/${totalPoints} (${submissionData.percentage}%)`,
-                            [
-                                {
-                                    text: 'OK',
-                                    onPress: () => {
+                        // Save to local state so result is displayed immediately
+                        setExistingSubmission(submissionData);
+
+                        const title = percentage >= 50 ? 'Submitted Successfully' : 'Submission Failed';
+                        const message = `Your score: ${score}/${totalPoints} (${percentage}%)` +
+                            (percentage < 50 ? '\nYou scored below 50% and can retry the assignment.' : '');
+
+                        Alert.alert(title, message, [
+                            {
+                                text: 'OK',
+                                onPress: () => {
+                                    // If passed, go back and notify parent; if failed, stay to allow retry
+                                    if (percentage >= 50) {
                                         if (onSubmitted) onSubmitted();
                                         onBack();
-                                    },
+                                    }
                                 },
-                            ]
-                        );
+                            },
+                        ]);
                     },
                 },
             ]
@@ -141,6 +150,7 @@ const TakeAssignmentView = ({ assignmentId, user, onBack, onSubmitted }) => {
 
     // If already submitted, show results
     if (existingSubmission) {
+        const isPassed = existingSubmission.percentage >= 50;
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
@@ -152,8 +162,12 @@ const TakeAssignmentView = ({ assignmentId, user, onBack, onSubmitted }) => {
 
                 <ScrollView style={styles.content}>
                     <View style={styles.resultCard}>
-                        <Ionicons name="checkmark-circle" size={64} color="#10B981" />
-                        <Text style={styles.resultTitle}>Submitted</Text>
+                        <Ionicons
+                            name={isPassed ? 'checkmark-circle' : 'close-circle'}
+                            size={64}
+                            color={isPassed ? '#10B981' : '#EF4444'}
+                        />
+                        <Text style={styles.resultTitle}>{isPassed ? 'Submitted' : 'Failed'}</Text>
                         <Text style={styles.resultScore}>
                             {existingSubmission.score} / {existingSubmission.totalPoints}
                         </Text>
@@ -165,6 +179,39 @@ const TakeAssignmentView = ({ assignmentId, user, onBack, onSubmitted }) => {
                             {new Date(existingSubmission.submittedAt).toLocaleDateString()}
                         </Text>
                     </View>
+
+                    {/* If failed, allow retry */}
+                    {!isPassed && (
+                        <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
+                            <TouchableOpacity
+                                style={[styles.submitButton, { backgroundColor: '#EF4444' }]}
+                                onPress={async () => {
+                                    // Attempt to delete backend submission if model supports it
+                                    try {
+                                        if (typeof AssignmentSubmissionModel.deleteSubmission === 'function') {
+                                            await AssignmentSubmissionModel.deleteSubmission(
+                                                assignment.id,
+                                                user.email
+                                            );
+                                        }
+                                    } catch (e) {
+                                        // ignore deletion errors, we'll allow retry locally anyway
+                                    }
+
+                                    // Allow retry by clearing existing submission and resetting answers
+                                    setExistingSubmission(null);
+                                    const initialAnswers = {};
+                                    assignment.questions.forEach((q) => {
+                                        initialAnswers[q.id] = '';
+                                    });
+                                    setAnswers(initialAnswers);
+                                }}
+                            >
+                                <Ionicons name="refresh" size={20} color="#FFF" />
+                                <Text style={[styles.submitButtonText, { marginLeft: 8 }]}>Retry Assignment</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
 
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>{assignment.title}</Text>
@@ -228,7 +275,7 @@ const TakeAssignmentView = ({ assignmentId, user, onBack, onSubmitted }) => {
                                 })}
 
                                 <Text style={styles.pointsText}>
-                                    Points: {isCorrect ? question.points : 0} / {question.points}
+                                    Points: {isCorrect ? 1 : 0} / 1
                                 </Text>
                             </View>
                         );
@@ -261,7 +308,7 @@ const TakeAssignmentView = ({ assignmentId, user, onBack, onSubmitted }) => {
                     <View style={styles.infoRow}>
                         <Ionicons name="trophy-outline" size={20} color="#6B7280" />
                         <Text style={styles.infoText}>
-                            Total Points: {assignment.totalPoints}
+                            Total Points: {assignment.questions.length}
                         </Text>
                     </View>
                 </View>

@@ -100,6 +100,13 @@ const CourseAssignmentsView = ({ courseId, courseName, user, onBack, onTakeAssig
     const renderAssignment = ({ item }) => {
         const submission = getSubmissionForAssignment(item.id);
         const isCompleted = !!submission;
+        // determine percentage value defensively
+        const pct = submission
+            ? (typeof submission.percentage !== 'undefined'
+                ? Number(submission.percentage)
+                : (submission.totalPoints > 0 ? Math.round((submission.score / submission.totalPoints) * 100) : 0))
+            : 0;
+        const isFailed = isCompleted && pct < 50;
 
         return (
             <TouchableOpacity
@@ -109,9 +116,9 @@ const CourseAssignmentsView = ({ courseId, courseName, user, onBack, onTakeAssig
                 <View style={styles.assignmentHeader}>
                     <View style={styles.assignmentIcon}>
                         <Ionicons
-                            name={isCompleted ? 'checkmark-circle' : 'document-text'}
+                            name={isCompleted ? (isFailed ? 'close-circle' : 'checkmark-circle') : 'document-text'}
                             size={32}
-                            color={isCompleted ? '#10B981' : '#4F46E5'}
+                            color={isCompleted ? (isFailed ? '#EF4444' : '#10B981') : '#4F46E5'}
                         />
                     </View>
                     <View style={styles.assignmentInfo}>
@@ -134,11 +141,47 @@ const CourseAssignmentsView = ({ courseId, courseName, user, onBack, onTakeAssig
                     </View>
 
                     {isCompleted ? (
-                        <View style={styles.statusBadge}>
-                            <Ionicons name="checkmark" size={16} color="#FFF" />
+                        <View style={[styles.statusBadge, isFailed ? { backgroundColor: '#EF4444' } : null]}>
+                            <Ionicons name={isFailed ? 'close' : 'checkmark'} size={16} color="#FFF" />
                             <Text style={styles.statusText}>
-                                {submission.percentage}% ({submission.score}/{submission.totalPoints})
+                                {pct}% ({submission.score}/{submission.totalPoints})
                             </Text>
+                            {isFailed && (
+                                <TouchableOpacity
+                                    style={styles.retryButton}
+                                    onPress={async () => {
+                                        // Attempt to delete backend submission if supported
+                                        try {
+                                            if (typeof AssignmentSubmissionModel.deleteSubmission === 'function') {
+                                                await AssignmentSubmissionModel.deleteSubmission(item.id, user.email);
+                                            }
+                                        } catch (e) {
+                                            // ignore errors, continue to update local state
+                                        }
+
+                                        // Remove from local submissions state
+                                        setSubmissions((prev) => prev.filter((s) => s.assignmentId !== item.id));
+
+                                        // Recompute course completion and update enrollment progress so UI updates immediately
+                                        try {
+                                            const newRate = await AssignmentSubmissionModel.getCourseCompletionRate(courseId, user.email);
+                                            setCompletionRate(newRate);
+                                            const enrollments = await EnrollmentModel.getUserEnrollments(user.email);
+                                            const enrollment = enrollments.find((e) => e.courseId === courseId);
+                                            if (enrollment) {
+                                                await EnrollmentModel.updateEnrollmentProgress(enrollment.id, newRate.percentage);
+                                            }
+                                        } catch (e) {
+                                            // ignore errors
+                                        }
+
+                                        // Navigate to Take Assignment to retry
+                                        onTakeAssignment(item.id);
+                                    }}
+                                >
+                                    <Text style={[styles.retryText]}>Retry</Text>
+                                </TouchableOpacity>
+                            )}
                         </View>
                     ) : (
                         <View style={[styles.statusBadge, styles.pendingBadge]}>
@@ -365,6 +408,18 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: '600',
         marginLeft: 4,
+    },
+    retryButton: {
+        marginLeft: 12,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        backgroundColor: 'transparent',
+    },
+    retryText: {
+        color: '#FFF',
+        fontSize: 12,
+        fontWeight: '700',
+        textDecorationLine: 'underline',
     },
     emptyContainer: {
         flex: 1,

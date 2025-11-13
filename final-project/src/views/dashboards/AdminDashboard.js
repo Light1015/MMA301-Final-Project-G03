@@ -37,34 +37,7 @@ export default function AdminDashboard({
           <Text style={styles.cardText}>Create and manage certificates.</Text>
         </TouchableOpacity>
       </View>
-
-      <View style={styles.cardRow}>
-        <TouchableOpacity style={styles.card}>
-          <Ionicons name="stats-chart" size={40} color="#10B981" />
-          <Text style={styles.cardTitle}>Reports</Text>
-          <Text style={styles.cardText}>View analytics.</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.card}>
-          <Ionicons name="settings" size={40} color="#F59E0B" />
-          <Text style={styles.cardTitle}>System Settings</Text>
-          <Text style={styles.cardText}>Configure platform.</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.cardRow}>
-        <TouchableOpacity style={styles.card}>
-          <Ionicons name="shield-checkmark" size={40} color="#EF4444" />
-          <Text style={styles.cardTitle}>Security</Text>
-          <Text style={styles.cardText}>Monitor security.</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.card} onPress={onNavigateToCoupon}>
-          <Ionicons name="ticket" size={40} color="#8B5CF6" />
-          <Text style={styles.cardTitle}>Coupon</Text>
-          <Text style={styles.cardText}>Manage coupons</Text>
-        </TouchableOpacity>
-      </View>
+     
     </View>
   );
 }

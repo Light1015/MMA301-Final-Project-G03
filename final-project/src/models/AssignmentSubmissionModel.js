@@ -94,11 +94,13 @@ const AssignmentSubmissionModel = {
                 }
 
                 // Get user submissions for these assignments
+                // Count only submissions that are 'submitted' AND have a passing percentage (>=50)
                 const submissions = mockAssignmentSubmissions.filter(
                     (sub) =>
                         sub.courseId === courseId &&
                         sub.userEmail === userEmail &&
-                        sub.status === 'submitted'
+                        sub.status === 'submitted' &&
+                        (typeof sub.percentage !== 'undefined' ? sub.percentage : (sub.totalPoints > 0 ? Math.round((sub.score / sub.totalPoints) * 100) : 0)) >= 50
                 );
 
                 const completedCount = submissions.length;
@@ -122,6 +124,23 @@ const AssignmentSubmissionModel = {
                 userEmail
             );
             resolve(completion.percentage === 100);
+        });
+    },
+
+    // Delete a user's submission for an assignment
+    deleteSubmission: async (assignmentId, userEmail) => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const index = mockAssignmentSubmissions.findIndex(
+                    (sub) => sub.assignmentId === assignmentId && sub.userEmail === userEmail
+                );
+                if (index !== -1) {
+                    const removed = mockAssignmentSubmissions.splice(index, 1);
+                    resolve(removed[0]);
+                } else {
+                    resolve(null);
+                }
+            }, 300);
         });
     },
 };
