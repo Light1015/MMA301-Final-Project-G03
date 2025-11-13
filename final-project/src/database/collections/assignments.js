@@ -1,8 +1,8 @@
 export const mockAssignments = [
     // ====== Advanced JavaScript ======
     {
-        id: 1,
-        title: "JavaScript Midterm Exam",
+        id: 23,
+        title: "NumPy Basics Quiz",
         instructor: "Teacher User",
         courseId: 2,
         courseName: "Advanced JavaScript",
@@ -457,7 +457,7 @@ export const mockAssignments = [
 
     // === PYTHON FOR DATA SCIENCE ===
     {
-        id: 5,
+        id: 21,
         title: "Python Data Structures Assignment",
         instructor: "Teacher User",
         courseId: 3,
@@ -486,7 +486,7 @@ export const mockAssignments = [
         updatedAt: "2025-11-10",
     },
     {
-        id: 6,
+        id: 22,
         title: "NumPy Basics Quiz",
         instructor: "Teacher User",
         courseId: 3,
