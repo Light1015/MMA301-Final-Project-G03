@@ -49,10 +49,18 @@ export default function MyCoursesView({
           user.email
         );
 
+        // Normalize percentage to integer 0-100
+        const normalized = Number.isFinite(rate.percentage)
+          ? Math.min(100, Math.max(0, Math.round(rate.percentage)))
+          : 0;
+
         // If progress is different from actual completion rate, update it
-        if (enrollment.progress !== rate.percentage) {
-          await EnrollmentModel.updateEnrollmentProgress(enrollment.id, rate.percentage);
-          enrollment.progress = rate.percentage; // Update local data
+        if (Number(enrollment.progress) !== normalized) {
+          await EnrollmentModel.updateEnrollmentProgress(enrollment.id, normalized);
+          enrollment.progress = normalized; // Update local data
+        } else {
+          // Ensure local enrollment.progress is a number and clamped
+          enrollment.progress = Math.min(100, Math.max(0, Number(enrollment.progress) || 0));
         }
       }
 
